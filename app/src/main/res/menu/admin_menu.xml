@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/admin_icon_home"
+        android:icon="@drawable/icon_home"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/admin_icon_activity"
+        android:icon="@drawable/icon_activity"
+        android:title="Activity" />
+
+    <item
+        android:id="@+id/admin_icon_manage_accounts"
+        android:icon="@drawable/icon_manage_accounts"
+        android:title="Manage Customer" />
+
+    <item
+        android:id="@+id/admin_icon_feedback"
+        android:icon="@drawable/icon_feedback"
+        android:title="Feedback" />
+
+    <item
+        android:id="@+id/admin_icon_profile"
+        android:icon="@drawable/icon_profile"
+        android:title="Profile" />
+
+</menu>

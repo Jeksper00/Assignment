@@ -2,40 +2,42 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/user_fragment_notification"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserFragment.UserNotificationFragment">
+    tools:context=".AdminFragment.AdminNotificationViewFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="UserNotification"
+            android:text="Notification"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/userFeedbackButton"
+            android:id="@+id/adminAddNotificationButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Feedback"
+            android:text="Add"
+            app:layout_constraintBottom_toTopOf="@+id/adminNotificationRecycler"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.866"
+            app:layout_constraintStart_toEndOf="@+id/textView8" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/adminNotificationRecycler"
             android:layout_width="409dp"
-            android:layout_height="681dp"
-            android:layout_marginTop="30dp"
-            android:id="@+id/userNotificationRecycler"
+            android:layout_height="710dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
-            tools:listitem="@layout/layout_notification_list_user"/>
+            app:layout_constraintTop_toBottomOf="@+id/textView8"
+            tools:listitem="@layout/layout_notification_list_admin"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

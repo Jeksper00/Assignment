@@ -1,44 +1,44 @@
-package com.example.assignment.UserFragment
+package com.example.assignment.AdminFragment
 
-import android.content.ContentValues
+import android.content.ContentValues.TAG
+import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.Adapter.NotificationAdapter
-import com.example.assignment.AdminFragment.AdminNotificationCreateFragment
 import com.example.assignment.Model.Notification
 import com.example.assignment.R
 import com.google.firebase.firestore.FirebaseFirestore
 
+class AdminNotificationViewFragment : Fragment() {
 
-class UserNotificationFragment : Fragment() {
-
-//    lateinit var fragmentManager : FragmentManager
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NotificationAdapter
 
     override fun onCreateView(
-        inflater: android.view.LayoutInflater, container: ViewGroup?,
-        savedInstanceState: android.os.Bundle?
-    ): android.view.View? {
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.user_fragment_notification, container, false)
-
-        view.findViewById<Button>(R.id.userFeedbackButton).setOnClickListener{
-            openFragment(UserFeedbackInputFragment())
-        }
+        val view = inflater.inflate(R.layout.admin_fragment_notification_view, container, false)
 
         // Initialize Firestore
         val db = FirebaseFirestore.getInstance()
         val notificationCollection = db.collection("notification")
 
+        view.findViewById<Button>(R.id.adminAddNotificationButton).setOnClickListener{
+            openFragment(AdminNotificationCreateFragment())
+        }
 
-        recyclerView = view.findViewById(R.id.userNotificationRecycler)
+
+        recyclerView = view.findViewById(R.id.adminNotificationRecycler)
         recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
         adapter = NotificationAdapter(requireContext(),requireFragmentManager(), mutableListOf())
         recyclerView.adapter = adapter
@@ -59,7 +59,7 @@ class UserNotificationFragment : Fragment() {
                 adapter.notifyDataSetChanged()
             }
             .addOnFailureListener { exception ->
-                Log.e(ContentValues.TAG, "Error fetching Firestore data: $exception")
+                Log.e(TAG, "Error fetching Firestore data: $exception")
             }
 
         return view
@@ -68,9 +68,9 @@ class UserNotificationFragment : Fragment() {
     private fun openFragment(fragment : Fragment){
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.user_fl_wrapper, fragment)
+        fragmentTransaction.replace(R.id.admin_fl_wrapper, fragment)
         fragmentTransaction.addToBackStack(null) // Optional, to allow back navigation
         fragmentTransaction.commit()
     }
-}
 
+}

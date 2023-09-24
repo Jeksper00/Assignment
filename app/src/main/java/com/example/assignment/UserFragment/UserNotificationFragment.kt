@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.Adapter.NotificationAdapter
-import com.example.assignment.AdminFragment.AdminNotificationCreateFragment
+import com.example.assignment.Adapter.NotificationAdapter2
 import com.example.assignment.Model.Notification
 import com.example.assignment.R
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,7 +20,7 @@ class UserNotificationFragment : Fragment() {
 
 //    lateinit var fragmentManager : FragmentManager
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: NotificationAdapter
+    private lateinit var adapter: NotificationAdapter2
 
     override fun onCreateView(
         inflater: android.view.LayoutInflater, container: ViewGroup?,
@@ -40,7 +40,7 @@ class UserNotificationFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.userNotificationRecycler)
         recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
-        adapter = NotificationAdapter(requireContext(),requireFragmentManager(), mutableListOf())
+        adapter = NotificationAdapter2(requireContext(), mutableListOf())
         recyclerView.adapter = adapter
 
         // Fetch notification data from Firestore

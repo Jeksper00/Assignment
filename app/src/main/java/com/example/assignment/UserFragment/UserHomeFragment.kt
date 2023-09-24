@@ -1,60 +1,74 @@
 package com.example.assignment.UserFragment
 
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.assignment.Adapter.ActivityAdapter2
+import com.example.assignment.Adapter.NotificationAdapter
+import com.example.assignment.AdminFragment.AdminNotificationCreateFragment
+import com.example.assignment.Model.Activity
+import com.example.assignment.Model.Notification
 import com.example.assignment.R
+import com.google.firebase.firestore.FirebaseFirestore
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [UserHomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class UserHomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ActivityAdapter2
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.user_fragment_home, container, false)
+        val view = inflater.inflate(R.layout.user_fragment_home, container, false)
+
+        // Initialize Firestore
+        val db = FirebaseFirestore.getInstance()
+        val activityCollection = db.collection("activity")
+
+
+        recyclerView = view.findViewById(R.id.userHomeActivityRecycler)
+        recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
+        adapter = ActivityAdapter2(requireContext(),requireFragmentManager(), mutableListOf())
+        recyclerView.adapter = adapter
+
+        // Fetch notification data from Firestore
+        activityCollection.get()
+            .addOnSuccessListener { querySnapshot ->
+                val activityList = mutableListOf<Activity>()
+                for (document in querySnapshot) {
+                    val status = document.getString("status") ?: ""
+                    if(status == "Approve") {
+                        val id = document.reference.id
+                        val name = document.getString("name") ?: ""
+
+                        val description = document.getString("description") ?: ""
+                        val date = document.getString("date") ?: ""
+                        val totalDonationReceived = document.getString("totalDonationReceived") ?: ""
+                        val totalRequired = document.getString("totalRequired") ?: ""
+                        val userId = document.getString("userid") ?: ""
+                        val notificationItem = Activity(id, name, status, description
+                            , date, totalDonationReceived, totalRequired,  userId)
+                        activityList.add(notificationItem)
+                    }
+                }
+
+                adapter.activityList = activityList
+                adapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Log.e(ContentValues.TAG, "Error fetching Firestore data: $exception")
+            }
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment userHomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            UserHomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

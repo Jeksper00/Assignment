@@ -5,6 +5,7 @@
     android:id="@+id/user_fragment_feedback"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.User"
     tools:context=".UserFragment.UserFeedbackInputFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout

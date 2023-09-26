@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.assignment.Model.Activity
 import com.example.assignment.R
 import com.example.assignment.UserFragment.UserHomeActivityViewFragment
@@ -23,6 +25,7 @@ class ActivityAdapter2 (private val context: Context, private val fragmentManage
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val idTextView: TextView = itemView.findViewById(R.id.userListActivityIdView)
+        val imageView: ImageView = itemView.findViewById(R.id.user_home_activity_imageView)
         val activityNameTextView: TextView = itemView.findViewById(R.id.userListActivityNameView)
         val statusTextView: TextView = itemView.findViewById(R.id.userListActivityStatusView)
         val descriptionTextView: TextView = itemView.findViewById(R.id.userListActivityDescriptionView)
@@ -42,6 +45,10 @@ class ActivityAdapter2 (private val context: Context, private val fragmentManage
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val activity = activityList[position]
         holder.idTextView.text = activity.id
+        // Use Glide to load and display the image from the URL
+        Glide.with(holder.itemView)
+            .load(activity.imageUrl) // Assuming activity.imageUrl contains the image URL
+            .into(holder.imageView)
         holder.activityNameTextView.text = activity.name
         holder.statusTextView.text = activity.status
         holder.descriptionTextView.text = activity.description

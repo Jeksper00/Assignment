@@ -5,6 +5,7 @@ import android.os.Parcelable
 
 data class Activity(
     val id: String,
+    val imageUrl: String,
     val name: String,
     val status: String,
     val description: String,
@@ -22,11 +23,13 @@ data class Activity(
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
+        parcel.readString().toString(),
         parcel.readString().toString()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
+        parcel.writeString(imageUrl)
         parcel.writeString(name)
         parcel.writeString(status)
         parcel.writeString(description)

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.User"
     tools:context=".UserFragment.UserHomeActivityViewFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -11,7 +12,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/user_home_activityView_image"
             android:layout_width="328dp"
             android:layout_height="285dp"
             android:layout_marginTop="20dp"
@@ -28,7 +29,7 @@
             android:layout_marginTop="20dp"
             android:text="Name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+            app:layout_constraintTop_toBottomOf="@+id/user_home_activityView_image" />
 
         <TextView
             android:id="@+id/userActivityViewUserIdText"

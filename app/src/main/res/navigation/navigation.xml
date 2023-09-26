@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/adminHomeFragment">
+
+    <fragment
+        android:id="@+id/adminHomeFragment"
+        android:name="com.example.assignment.AdminFragment.AdminHomeFragment"
+        android:label="admin_fragment_home"
+        tools:layout="@layout/admin_fragment_home" >
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminLoginActivity"
+            app:destination="@id/navigation"
+            app:popUpTo="@id/navigation"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <activity
+        android:id="@+id/adminLoginActivity"
+        android:name="com.example.assignment.AdminLoginActivity"
+        android:label="admin_activity_login"
+        tools:layout="@layout/admin_activity_login" />
+    <fragment
+        android:id="@+id/adminProfileFragment"
+        android:name="com.example.assignment.AdminFragment.AdminProfileFragment"
+        android:label="admin_fragment_profile"
+        tools:layout="@layout/admin_fragment_profile" >
+        <action
+            android:id="@+id/action_adminProfileFragment_to_adminLoginActivity"
+            app:destination="@id/adminLoginActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminActivityFragment"
+        android:name="com.example.assignment.AdminFragment.AdminActivityFragment"
+        android:label="admin_fragment_activity"
+        tools:layout="@layout/admin_fragment_activity" >
+        <action
+            android:id="@+id/action_adminActivityFragment_to_adminLoginActivity"
+            app:destination="@id/adminLoginActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminFeedbackFragment"
+        android:name="com.example.assignment.AdminFragment.AdminFeedbackFragment"
+        android:label="admin_fragment_feedback"
+        tools:layout="@layout/admin_fragment_feedback" >
+        <action
+            android:id="@+id/action_adminFeedbackFragment_to_adminLoginActivity"
+            app:destination="@id/adminLoginActivity"
+            app:popUpTo="@id/adminLoginActivity"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminManageUserFragment"
+        android:name="com.example.assignment.AdminFragment.AdminManageUserFragment"
+        android:label="admin_fragment_manageuser"
+        tools:layout="@layout/admin_fragment_manageuser" >
+        <action
+            android:id="@+id/action_adminManageUserFragment_to_adminLoginActivity"
+            app:destination="@id/adminLoginActivity" />
+    </fragment>
+</navigation>

@@ -7,6 +7,8 @@
     android:layout_marginLeft="16dp"
     android:layout_marginTop="12dp"
     android:layout_marginRight="16dp"
+    android:background="#FFFFFF"
+    android:theme="@style/Theme.User"
     android:clickable="true"
     android:foreground="?selectableItemBackground"
     android:visibility="visible"
@@ -20,7 +22,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/user_home_activity_imageView"
             android:layout_width="332dp"
             android:layout_height="136dp"
             android:layout_marginTop="10dp"
@@ -31,13 +33,13 @@
 
         <TextView
             android:id="@+id/userListActivityNameView"
-            android:layout_width="65dp"
-            android:layout_height="14dp"
+            android:layout_width="66dp"
+            android:layout_height="18dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
             android:text="Activity Name"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/imageView" />
+            card_view:layout_constraintTop_toBottomOf="@+id/user_home_activity_imageView" />
 
         <TextView
             android:id="@+id/userListActivityCreatorView"
@@ -56,8 +58,13 @@
             android:layout_height="35dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="Donate"
-            card_view:cornerRadius="10dp"
+            android:background="@drawable/user_button"
+            android:hapticFeedbackEnabled="true"
+            android:text="@string/user_home_donateButton"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#A5A5A5"
+            android:textColorHint="#636363"
+            card_view:cornerRadius="@dimen/buttonRadius"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.824"

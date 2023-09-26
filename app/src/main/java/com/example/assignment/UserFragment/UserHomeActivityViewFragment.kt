@@ -1,15 +1,18 @@
 package com.example.assignment.UserFragment
 
 import android.app.AlertDialog
+import android.media.Image
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.assignment.Adapter.ActivityAdapter2
 import com.example.assignment.Model.Activity
 import com.example.assignment.R
@@ -23,6 +26,7 @@ class UserHomeActivityViewFragment : Fragment() {
     private lateinit var userNameText: TextView
     private lateinit var descriptionText: TextView
     private lateinit var totalDonationText: TextView
+    private lateinit var imageView: ImageView
     private lateinit var donateButton: Button
 
     override fun onCreateView(
@@ -31,7 +35,6 @@ class UserHomeActivityViewFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.user_fragment_home_activity_view, container, false)
-
 
 
         val builder = AlertDialog.Builder(requireActivity())
@@ -45,6 +48,7 @@ class UserHomeActivityViewFragment : Fragment() {
         userNameText = view.findViewById(R.id.userActivityViewUserIdText)
         descriptionText = view.findViewById(R.id.userActivityViewDescriptionText)
         totalDonationText = view.findViewById(R.id.userActivityViewTtlDonatedText)
+        imageView = view.findViewById(R.id.user_home_activityView_image)
 
         // Populate the EditText fields with the existing data
         activityDetails?.let { activity ->
@@ -53,6 +57,9 @@ class UserHomeActivityViewFragment : Fragment() {
             userNameText.text = activity.userId
             descriptionText.text = activity.description
             totalDonationText.text = activity.totalDonationReceived
+            Glide.with(this)
+                .load(activity.imageUrl) // Assuming activity.imageUrl contains the image URL
+                .into(imageView)
         }
 
         val donateButton = view.findViewById<Button>(R.id.activityViewDonateButton)

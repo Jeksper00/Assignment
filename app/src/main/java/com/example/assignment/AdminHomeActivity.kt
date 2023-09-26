@@ -1,7 +1,9 @@
 package com.example.assignment
 
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.assignment.AdminFragment.AdminActivityFragment
 import com.example.assignment.AdminFragment.AdminFeedbackFragment
@@ -9,6 +11,7 @@ import com.example.assignment.AdminFragment.AdminHomeFragment
 import com.example.assignment.AdminFragment.AdminManageUserFragment
 import com.example.assignment.AdminFragment.AdminProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.Objects
 
 class AdminHomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:theme="@style/Theme.User"
     android:padding="16dp">
 
     <RadioGroup
@@ -37,8 +38,9 @@
 
     <Button
         android:id="@+id/donateButton"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Donate" />
+        android:layout_gravity="center"
+        android:text="@string/userDonate" />
 
 </LinearLayout>

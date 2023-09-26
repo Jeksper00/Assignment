@@ -1,60 +1,117 @@
 package com.example.assignment.AdminFragment
 
-import android.os.Bundle
+import android.content.ContentValues.TAG
+import com.example.assignment.Activity
+import android.content.Intent
 import androidx.fragment.app.Fragment
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.assignment.ActivityAdapter
+import com.example.assignment.AdminActivityCreateActivity
 import com.example.assignment.R
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AdminActivityFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AdminActivityFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+
+    private lateinit var activityRecyclerView: RecyclerView
+    private lateinit var adapter: ActivityAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.admin_fragment_activity, container, false)
-    }
+        val view = inflater.inflate(R.layout.admin_fragment_activity, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment adminActivityFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AdminActivityFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        val db = FirebaseFirestore.getInstance()
+        val activityCollection = db.collection("activity")
+
+
+        view.findViewById<Button>(R.id.createActivity).setOnClickListener {
+            val intent = Intent(requireActivity(), AdminActivityCreateActivity::class.java)
+            var num = 1
+
+            val db = FirebaseFirestore.getInstance()
+            val collectionRef = db.collection("activity")
+
+            generateDocumentId(num, collectionRef) { documentId ->
+                // Document ID generation is complete
+                intent.putExtra("activityId", documentId)
+                startActivity(intent)
+            }
+        }
+
+
+
+
+
+        activityRecyclerView = view.findViewById(R.id.activityList)
+        activityRecyclerView.layoutManager = GridLayoutManager(requireContext(),1)
+        adapter = ActivityAdapter(requireContext(),requireFragmentManager(), mutableListOf())
+        activityRecyclerView.adapter = adapter
+
+        // Fetch notification data from Firestore
+        activityCollection.get()
+            .addOnSuccessListener { querySnapshot ->
+                val activityList = mutableListOf<Activity>()
+                for (document in querySnapshot) {
+                    val id = document.reference.id
+                    val name = document.getString("name") ?: ""
+                    val status = document.getString("status") ?: ""
+                    val imageUrl = document.getString("imageUrl") ?: ""
+                    val description = document.getString("description") ?: ""
+                    val date = document.getString("date") ?: ""
+                    val donationReceivedString = document.getString("donationReceived") ?: ""
+                    val donationReceived = donationReceivedString?.toDoubleOrNull() ?: 0.0
+                    val totalRequiredString = document.getString("totalRequired") ?: ""
+                    val totalRequired = totalRequiredString?.toDoubleOrNull()?: 0.0
+                    val userId = document.getString("userId") ?: ""
+                    // Check if userId is empty /////////////////////////and also check validation
+
+                        val activityItem = Activity(id, name, status, description, date, donationReceived, totalRequired, userId,imageUrl)
+                        activityList.add(activityItem)
+
+                }
+
+                adapter.activityList = activityList
+                adapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Log.e(TAG, "Error fetching Firestore data: $exception")
+            }
+
+
+        return view
+    }
+    private fun generateDocumentId(num: Int, collectionRef: CollectionReference, callback: (String) -> Unit) {
+        val formattedCounter = String.format("%04d", num)
+        val documentIdToCheck = "A$formattedCounter"
+
+        collectionRef.document(documentIdToCheck)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    // Document with this ID exists, try the next one
+                    generateDocumentId(num + 1, collectionRef, callback)
+                } else {
+                    // Document with this ID doesn't exist, callback with the ID
+                    callback(documentIdToCheck)
                 }
             }
+            .addOnFailureListener { exception ->
+                // Handle any errors that occurred while querying Firestore
+                Log.e(TAG, "Error getting document: $exception")
+            }
     }
+
+
 }

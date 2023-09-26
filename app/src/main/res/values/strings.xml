@@ -5,4 +5,6 @@
     <string name="user_home_donateButton">Donate Now</string>
     <string name="userDonate">Donate</string>
     <string name="feedbackLabel">Feedback</string>
+    <string name="donationDetailsTitle">Donation Details</string>
+    <string name="userNotificationLabel">Notification</string>
 </resources>

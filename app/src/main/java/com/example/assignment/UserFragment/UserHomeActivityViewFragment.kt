@@ -43,6 +43,10 @@ class UserHomeActivityViewFragment : Fragment() {
         val builder = AlertDialog.Builder(requireActivity())
         val inflater = LayoutInflater.from(requireActivity())
 
+        view.findViewById<ImageView>(R.id.user_home_donation_deatils_backButton).setOnClickListener{
+            requireActivity().onBackPressed()
+        }
+
         // Retrieve the notification data from the arguments bundle
         val activityDetails = arguments?.getParcelable(ActivityAdapter2.ARG_NOTIFICATION) as Activity?
 

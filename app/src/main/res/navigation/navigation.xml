@@ -113,4 +113,16 @@
         android:name="com.example.assignment.UserLoginActivity"
         android:label="user_activity_login"
         tools:layout="@layout/user_activity_login" />
+
+    <fragment
+        android:id="@+id/adminFeedbackViewFragment"
+        android:name="com.example.assignment.AdminFragment.AdminFeedbackViewFragment"
+        android:label="admin_fragment_feedback_view"
+        tools:layout="@layout/admin_fragment_feedback_view" >
+        <!-- Action to navigate back to adminFeedbackFragment -->
+        <action
+            android:id="@+id/action_adminFeedbackViewFragment_to_adminFeedbackFragment"
+            app:destination="@id/adminFeedbackFragment" />
+    </fragment>
+
 </navigation>

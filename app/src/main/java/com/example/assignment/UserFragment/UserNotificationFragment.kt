@@ -52,20 +52,21 @@ class UserNotificationFragment : Fragment() {
         val notificationCollection = db.collection("notification")
 
 
-        recyclerView = view.findViewById(R.id.userNotificationRecycler)
+        recyclerView               = view.findViewById(R.id.userNotificationRecycler)
         recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
-        adapter = NotificationAdapter2(requireContext(), mutableListOf())
-        recyclerView.adapter = adapter
+        adapter                    = NotificationAdapter2(requireContext(), mutableListOf())
+        recyclerView.adapter       = adapter
 
         // Fetch notification data from Firestore
         notificationCollection.get()
             .addOnSuccessListener { querySnapshot ->
                 val notificationList = mutableListOf<Notification>()
                 for (document in querySnapshot) {
-                    val id = document.reference.id
-                    val title = document.getString("title") ?: ""
-                    val description = document.getString("description") ?: ""
-                    val notificationItem = Notification(id, title, description)
+                    val id               = document.reference.id
+                    val title            = document.getString("title") ?: ""
+                    val description      = document.getString("description") ?: ""
+                    val date             = document.getString("date") ?: ""
+                    val notificationItem = Notification(id, title, description, date)
                     notificationList.add(notificationItem)
                 }
 

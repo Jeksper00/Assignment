@@ -4,7 +4,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="user_home_donateButton">Donate Now</string>
     <string name="userDonate">Donate</string>
+    <string name="feedbackTitle">Feedback Form</string>
     <string name="feedbackLabel">Feedback</string>
     <string name="donationDetailsTitle">Donation Details</string>
     <string name="userNotificationLabel">Notification</string>
+    <string name="notificationTitleLabel">Notification Title</string>
+    <string name="updateNotificationTitle">Update Notification</string>
+    <string name="notificationDescription">Description</string>
+    <string name="addNotificationTitle">Add Notification</string>
 </resources>

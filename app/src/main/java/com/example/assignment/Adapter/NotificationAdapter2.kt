@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.Model.Notification
@@ -21,9 +20,10 @@ class NotificationAdapter2 (private val context: Context, public var notificatio
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val idTextView: TextView = itemView.findViewById(R.id.notificationIdView)
-        val titleTextView: TextView = itemView.findViewById(R.id.notificationTitleView)
-        val descriptionTextView: TextView = itemView.findViewById(R.id.notificationDescriptionView)
+        val idTextView: TextView          = itemView.findViewById(R.id.notificationIdView)
+        val titleTextView: TextView       = itemView.findViewById(R.id.admin_notificationTitleView)
+        val descriptionTextView: TextView = itemView.findViewById(R.id.admin_notificationDescriptionView)
+        val dateTextView: TextView        = itemView.findViewById(R.id.user_notificationDateView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,10 +32,11 @@ class NotificationAdapter2 (private val context: Context, public var notificatio
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val notification = notificationList[position]
-        holder.idTextView.text = notification.id
-        holder.titleTextView.text = notification.title
+        val notification                = notificationList[position]
+        holder.idTextView.text          = notification.id
+        holder.titleTextView.text       = notification.title
         holder.descriptionTextView.text = notification.description
+        holder.dateTextView.text        = notification.date
     }
 
     override fun getItemCount(): Int {

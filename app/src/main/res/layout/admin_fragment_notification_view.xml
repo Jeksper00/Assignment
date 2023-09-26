@@ -15,33 +15,41 @@
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:text="Notification"
             android:textSize="@dimen/titleTextSize"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/adminAddNotificationButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="Add"
-            app:layout_constraintBottom_toTopOf="@+id/adminNotificationRecycler"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView8"
+            app:layout_constraintStart_toEndOf="@+id/admin_notification_view_backButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/adminNotificationRecycler"
             android:layout_width="409dp"
             android:layout_height="710dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView8"
-            tools:listitem="@layout/layout_notification_list_admin"/>
+            tools:listitem="@layout/layout_notification_list_admin" />
+
+        <ImageView
+            android:id="@+id/admin_notification_view_backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/baseline_arrow_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/admin_add_button_image"
+            android:layout_width="60dp"
+            android:layout_height="53dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            android:src="@drawable/admin_notification_add"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,7 +16,6 @@ import com.example.assignment.AdminFragment.AdminNotificationUpdateFragment
 import com.example.assignment.Model.Notification
 import com.example.assignment.R
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.android.material.snackbar.Snackbar
 
 class NotificationAdapter(private val context: Context, private val fragmentManager: FragmentManager,
                           public var notificationList: MutableList<Notification>) :
@@ -27,11 +26,12 @@ class NotificationAdapter(private val context: Context, private val fragmentMana
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val idTextView: TextView = itemView.findViewById(R.id.notificationIdView)
-        val titleTextView: TextView = itemView.findViewById(R.id.notificationTitleView)
-        val descriptionTextView: TextView = itemView.findViewById(R.id.notificationDescriptionView)
-        val editButton: Button = itemView.findViewById(R.id.editNotificationButton)
-        val deleteButton: Button = itemView.findViewById(R.id.deleteNotificationButton)
+        val idTextView: TextView          = itemView.findViewById(R.id.notificationIdView)
+        val titleTextView: TextView       = itemView.findViewById(R.id.admin_notificationTitleView)
+        val descriptionTextView: TextView = itemView.findViewById(R.id.admin_notificationDescriptionView)
+        val dateTextView: TextView        = itemView.findViewById(R.id.admin_notificationDateView)
+        val editButton: Button            = itemView.findViewById(R.id.editNotificationButton)
+        val deleteButton: Button          = itemView.findViewById(R.id.deleteNotificationButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,10 +40,11 @@ class NotificationAdapter(private val context: Context, private val fragmentMana
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val notification = notificationList[position]
-        holder.idTextView.text = notification.id
-        holder.titleTextView.text = notification.title
+        val notification                = notificationList[position]
+        holder.idTextView.text          = notification.id
+        holder.titleTextView.text       = notification.title
         holder.descriptionTextView.text = notification.description
+        holder.dateTextView.text        = notification.date
 
 
         // Set click listeners for edit and delete buttons
@@ -69,7 +70,7 @@ class NotificationAdapter(private val context: Context, private val fragmentMana
         }
 
         holder.deleteButton.setOnClickListener {
-            val positionToDelete = holder.adapterPosition
+            val positionToDelete     = holder.adapterPosition
             val notificationToDelete = notificationList[positionToDelete]
 
             // Show a confirmation dialog

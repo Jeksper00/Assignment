@@ -6,10 +6,12 @@ import android.os.Parcelable
 data class Notification(
     val id: String = "",
     val title: String = "",
-    val description: String = ""
+    val description: String = "",
+    val date: String = ""
 )
     : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString()
@@ -19,6 +21,7 @@ data class Notification(
         parcel.writeString(id)
         parcel.writeString(title)
         parcel.writeString(description)
+        parcel.writeString(date)
     }
 
     override fun describeContents(): Int {

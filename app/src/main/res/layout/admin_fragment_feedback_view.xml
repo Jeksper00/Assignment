@@ -15,8 +15,11 @@
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
             android:text="Feedback from users"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="@dimen/titleTextSize"
+            app:layout_constraintStart_toEndOf="@+id/admin_feedbackView_backButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -24,10 +27,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
-            android:layout_marginTop="30dp"
-
+            android:layout_marginTop="70dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6"
-            tools:layout_editor_absoluteX="48dp"
             tools:listitem="@layout/layout_feedback_list" />
+
+        <ImageView
+            android:id="@+id/admin_feedbackView_backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/baseline_arrow_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

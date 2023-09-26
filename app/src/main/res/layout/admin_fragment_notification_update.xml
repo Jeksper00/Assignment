@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,38 +8,85 @@
     tools:context=".AdminFragment.AdminNotificationUpdateFragment">
 
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/updateTitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Update Notification"
-            android:maxLines="1" />
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:maxLines="1"
+            android:text="@string/updateNotificationTitle"
+            android:textSize="@dimen/titleTextSize"
+            app:layout_constraintStart_toEndOf="@+id/admin_notificationUpdate_backButton"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/editTitleEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Title" />
+            android:layout_width="373dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:hint="Title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
         <EditText
             android:id="@+id/editDescriptionEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Description" />
+            android:layout_width="371dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:hint="Description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
         <Button
             android:id="@+id/updateButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Update" />
-    </LinearLayout>
+            android:layout_marginTop="50dp"
+            android:text="Update"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editDescriptionEditText" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/notificationTitleLabel"
+            android:textSize="@dimen/smallTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/updateTitle" />
+
+        <ImageView
+            android:id="@+id/admin_notificationUpdate_backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/baseline_arrow_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/notificationDescription"
+            android:textSize="@dimen/smallTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTitleEditText" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </FrameLayout>

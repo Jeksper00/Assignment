@@ -9,6 +9,7 @@ import com.example.assignment.R
 import android.app.AlertDialog
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -16,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.assignment.Adapter.NotificationAdapter.Companion.ARG_NOTIFICATION
 import com.example.assignment.Model.Notification
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Calendar
 
 
 class AdminNotificationUpdateFragment : Fragment() {
@@ -31,6 +33,9 @@ class AdminNotificationUpdateFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.admin_fragment_notification_update, container, false)
 
+        view.findViewById<ImageView>(R.id.admin_notificationUpdate_backButton).setOnClickListener{
+            requireActivity().onBackPressed()
+        }
 
         val builder = AlertDialog.Builder(requireActivity())
         val inflater = LayoutInflater.from(requireActivity())
@@ -48,9 +53,18 @@ class AdminNotificationUpdateFragment : Fragment() {
             descriptionEditText.setText(notification.description)
         }
 
+        // Get the current date
+        val calendar   = Calendar.getInstance()
+        val year       = calendar.get(Calendar.YEAR)
+        val month      = calendar.get(Calendar.MONTH) + 1 // Months are 0-based, so add 1
+        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+
+        // Create a date string in your desired format (e.g., "yyyy-MM-dd")
+        val currentDate = "$year-$month-$dayOfMonth"
+
         updateButton.setOnClickListener {
             // Handle the update button click here
-            val updatedTitle = titleEditText.text.toString()
+            val updatedTitle       = titleEditText.text.toString()
             val updatedDescription = descriptionEditText.text.toString()
 
             // Update the notification data in Firestore
@@ -61,7 +75,8 @@ class AdminNotificationUpdateFragment : Fragment() {
 //                val updatedNotification = Notification(updatedTitle, updatedDescription)
                 val newNotification = hashMapOf(
                     "title"       to updatedTitle,
-                    "description" to updatedDescription
+                    "description" to updatedDescription,
+                    "date"        to currentDate
                 )
                 notificationCollection.document(notification.id)
                     .set(newNotification)

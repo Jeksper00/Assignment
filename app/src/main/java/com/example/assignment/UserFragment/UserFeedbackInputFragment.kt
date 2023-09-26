@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.assignment.R
@@ -26,6 +27,10 @@ class UserFeedbackInputFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.user_fragment_feedback_input, container, false)
+
+        view.findViewById<ImageView>(R.id.user_feedbackInput_backButton).setOnClickListener{
+            requireActivity().onBackPressed()
+        }
 
         view.findViewById<Button>(R.id.userFeedbackSubmitBtn).setOnClickListener {
 

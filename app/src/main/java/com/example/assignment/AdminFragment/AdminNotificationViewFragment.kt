@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -31,12 +32,19 @@ class AdminNotificationViewFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.admin_fragment_notification_view, container, false)
 
+        view.findViewById<ImageView>(R.id.admin_notification_view_backButton).setOnClickListener{
+//            findNavController().navigate(R.id.action_adminFeedbackViewFragment_to_adminFeedbackFragment)
+            requireActivity().onBackPressed()
+        }
 
         // Initialize Firestore
         val db = FirebaseFirestore.getInstance()
         val notificationCollection = db.collection("notification")
 
-        view.findViewById<Button>(R.id.adminAddNotificationButton).setOnClickListener{
+//        view.findViewById<Button>(R.id.adminAddNotificationButton).setOnClickListener{
+//            openFragment(AdminNotificationCreateFragment())
+//        }
+        view.findViewById<ImageView>(R.id.admin_add_button_image).setOnClickListener{
             openFragment(AdminNotificationCreateFragment())
         }
 
@@ -51,10 +59,11 @@ class AdminNotificationViewFragment : Fragment() {
             .addOnSuccessListener { querySnapshot ->
                 val notificationList = mutableListOf<Notification>()
                 for (document in querySnapshot) {
-                    val id = document.reference.id
-                    val title = document.getString("title") ?: ""
-                    val description = document.getString("description") ?: ""
-                    val notificationItem = Notification(id, title, description)
+                    val id               = document.reference.id
+                    val title            = document.getString("title") ?: ""
+                    val description      = document.getString("description") ?: ""
+                    val date             = document.getString("date") ?: ""
+                    val notificationItem = Notification(id, title, description, date)
                     notificationList.add(notificationItem)
                 }
 

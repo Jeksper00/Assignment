@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,6 +29,9 @@ class AdminFeedbackViewFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.admin_fragment_feedback_view, container, false)
 
+        view.findViewById<ImageView>(R.id.admin_feedbackView_backButton).setOnClickListener{
+            requireActivity().onBackPressed()
+        }
 
         recyclerView = view.findViewById(R.id.adminFeedbackRecycle)
         recyclerView.layoutManager = GridLayoutManager(requireContext(),1)

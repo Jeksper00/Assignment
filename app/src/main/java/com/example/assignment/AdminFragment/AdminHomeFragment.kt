@@ -31,7 +31,6 @@ class AdminHomeFragment : Fragment() {
             }
         }
 
-
         // Add the callback to the fragment's lifecycle
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
 

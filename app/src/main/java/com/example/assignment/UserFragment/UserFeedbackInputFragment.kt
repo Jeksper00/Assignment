@@ -30,13 +30,15 @@ class UserFeedbackInputFragment : Fragment() {
         view.findViewById<Button>(R.id.userFeedbackSubmitBtn).setOnClickListener {
 
             val usergmail = view.findViewById<EditText>(R.id.userFeedbackGmail).text.toString()
+            val details = view.findViewById<EditText>(R.id.user_feedback_text).text.toString()
 
             val currentUser = FirebaseAuth.getInstance().currentUser
 
 //            if (currentUser != null) {
 //                val userId = currentUser.uid
                 val feedback = hashMapOf(
-                    "gmail" to usergmail
+                    "gmail" to usergmail,
+                    "feedback" to details
                 )
 
 //                db.collection("feedback").document("").set(feedback)

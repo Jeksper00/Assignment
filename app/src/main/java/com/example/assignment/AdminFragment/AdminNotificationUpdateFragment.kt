@@ -9,8 +9,10 @@ import com.example.assignment.R
 import android.app.AlertDialog
 import android.widget.Button
 import android.widget.EditText
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.fragment.findNavController
 import com.example.assignment.Adapter.NotificationAdapter.Companion.ARG_NOTIFICATION
 import com.example.assignment.Model.Notification
 import com.google.firebase.firestore.FirebaseFirestore
@@ -28,6 +30,7 @@ class AdminNotificationUpdateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.admin_fragment_notification_update, container, false)
+
 
         val builder = AlertDialog.Builder(requireActivity())
         val inflater = LayoutInflater.from(requireActivity())

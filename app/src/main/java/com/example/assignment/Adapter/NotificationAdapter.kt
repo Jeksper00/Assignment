@@ -16,6 +16,7 @@ import com.example.assignment.AdminFragment.AdminNotificationUpdateFragment
 import com.example.assignment.Model.Notification
 import com.example.assignment.R
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.android.material.snackbar.Snackbar
 
 class NotificationAdapter(private val context: Context, private val fragmentManager: FragmentManager,
                           public var notificationList: MutableList<Notification>) :
@@ -90,9 +91,27 @@ class NotificationAdapter(private val context: Context, private val fragmentMana
                     .delete()
                     .addOnSuccessListener {
                         Log.d(TAG, "Notification deleted from Firestore")
+
+                        // Show a success message in a dialog
+                        val successDialogBuilder = AlertDialog.Builder(context)
+                        successDialogBuilder.setTitle("Success")
+                        successDialogBuilder.setMessage("Notification deleted successfully.")
+                        successDialogBuilder.setPositiveButton("OK") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        successDialogBuilder.show()
                     }
                     .addOnFailureListener { exception ->
                         Log.e(TAG, "Error deleting notification from Firestore: $exception")
+
+                        // Show an error message in a dialog if deletion fails
+                        val errorDialogBuilder = AlertDialog.Builder(context)
+                        errorDialogBuilder.setTitle("Error")
+                        errorDialogBuilder.setMessage("Error deleting notification: $exception")
+                        errorDialogBuilder.setPositiveButton("OK") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        errorDialogBuilder.show()
                     }
             }
             alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->

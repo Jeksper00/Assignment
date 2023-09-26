@@ -4,9 +4,11 @@ import android.content.ContentValues
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.Adapter.NotificationAdapter
@@ -28,6 +30,18 @@ class UserNotificationFragment : Fragment() {
     ): android.view.View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.user_fragment_notification, container, false)
+
+        //Back button on screen
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Use the NavController to navigate to the specified action
+                findNavController().navigate(R.id.action_userNotificationFragment_to_userLoginActivity)
+
+            }
+        }
+        // Add the callback to the fragment's lifecycle
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
+
 
         view.findViewById<Button>(R.id.userFeedbackButton).setOnClickListener{
             openFragment(UserFeedbackInputFragment())

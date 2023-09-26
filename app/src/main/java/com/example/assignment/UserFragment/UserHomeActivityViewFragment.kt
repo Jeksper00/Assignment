@@ -12,11 +12,14 @@ import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.assignment.Adapter.ActivityAdapter2
 import com.example.assignment.Model.Activity
 import com.example.assignment.R
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Calendar
 
 
 class UserHomeActivityViewFragment : Fragment() {
@@ -111,11 +114,21 @@ class UserHomeActivityViewFragment : Fragment() {
                 var totalDonation = 0
                 totalDonation = donationAmount.toInt() + totalDonationText.text.toString().toInt()
 
+                // Get the current date
+                val calendar = Calendar.getInstance()
+                val year = calendar.get(Calendar.YEAR)
+                val month = calendar.get(Calendar.MONTH) + 1 // Months are 0-based, so add 1
+                val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+
+                // Create a date string in your desired format (e.g., "yyyy-MM-dd")
+                val currentDate = "$year-$month-$dayOfMonth"
+
                 // Create a new donation document with the following fields:
                 val donationData = hashMapOf(
                     "userid" to userId,
                     "activityid" to activityId,
-                    "amount_donate" to donationAmount
+                    "amount_donate" to donationAmount,
+                    "date" to currentDate
                 )
 
 //                val updateActivity = hashMapOf(

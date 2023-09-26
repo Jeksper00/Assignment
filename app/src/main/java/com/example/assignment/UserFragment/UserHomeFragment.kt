@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -30,6 +32,18 @@ class UserHomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.user_fragment_home, container, false)
+
+        //Back button on screen
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Use the NavController to navigate to the specified action
+                findNavController().navigate(R.id.action_userHomeFragment_to_userLoginActivity)
+
+            }
+        }
+        // Add the callback to the fragment's lifecycle
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
+
         val view2 = inflater.inflate(R.layout.layout_activity_list_user, container, false)
 
         // Initialize Firestore

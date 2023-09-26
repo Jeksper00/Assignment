@@ -16,7 +16,6 @@ import com.example.assignment.R
 class NotificationAdapter2 (private val context: Context, public var notificationList: MutableList<Notification>) :
     RecyclerView.Adapter<NotificationAdapter2.ViewHolder>() {
 
-
     companion object {
         const val ARG_NOTIFICATION = "notification"
     }

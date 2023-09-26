@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.assignment.R
 
@@ -26,9 +28,10 @@ class AdminFeedbackViewFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.admin_fragment_feedback_view, container, false)
 
+
         recyclerView = view.findViewById(R.id.adminFeedbackRecycle)
         recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
-        adapter = FeedbackAdapter(emptyList())
+        adapter = FeedbackAdapter(requireContext(),requireFragmentManager(), mutableListOf())
         recyclerView.adapter = adapter
 
         // Initialize Firestore
@@ -40,9 +43,10 @@ class AdminFeedbackViewFragment : Fragment() {
             .addOnSuccessListener { querySnapshot ->
                 val feedbackList = mutableListOf<Feedback>()
                 for (document in querySnapshot) {
+                    val id = document.reference.id
                     val gmail = document.getString("gmail") ?: ""
                     val feedback = document.getString("feedback") ?: ""
-                    val feedbackItem = Feedback(gmail, feedback)
+                    val feedbackItem = Feedback(id, gmail, feedback)
                     feedbackList.add(feedbackItem)
                 }
 

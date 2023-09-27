@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -72,6 +73,7 @@ class ActivityAdapter2 (private val context: Context, private val fragmentManage
             args.putParcelable(ARG_NOTIFICATION, activityDetails)
             activityViewFragment.arguments = args
 
+            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
             // Show the edit dialog using the FragmentManager
             fragmentManager.beginTransaction()
                 .replace(R.id.user_fl_wrapper, activityViewFragment)

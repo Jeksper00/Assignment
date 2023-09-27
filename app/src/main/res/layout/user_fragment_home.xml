@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/user_home_activity_fragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:theme="@style/Theme.User"
     tools:context=".UserFragment.UserHomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/user_home_activity_fragment2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/user_home_activity_fragment2">
+        android:layout_height="wrap_content">
 
         <android.widget.SearchView
             android:id="@+id/user_activityList_searchView"
@@ -24,17 +24,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userHomeActivityRecycler"
-            android:layout_width="409dp"
-            android:layout_height="710dp"
-            android:layout_marginTop="80dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/layout_activity_list_user" />
-
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="48dp"
@@ -44,5 +33,42 @@
             android:src="@drawable/icon_profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/user_home_activityList_category_tab"
+            android:layout_width="409dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/user_activityList_searchView">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Third-Party" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Official" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/userHomeActivityRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="130dp"
+            android:layout_marginBottom="80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/user_home_activityList_category_tab"
+            tools:listitem="@layout/layout_activity_list_user" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </FrameLayout>

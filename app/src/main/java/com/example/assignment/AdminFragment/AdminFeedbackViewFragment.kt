@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.assignment.R
@@ -30,7 +32,11 @@ class AdminFeedbackViewFragment : Fragment() {
         val view = inflater.inflate(R.layout.admin_fragment_feedback_view, container, false)
 
         view.findViewById<ImageView>(R.id.admin_feedbackView_backButton).setOnClickListener{
-            requireActivity().onBackPressed()
+            val notificationFragment = AdminFeedbackFragment()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.admin_fl_wrapper, notificationFragment)
+            transaction.addToBackStack(null) // Add to back stack
+            transaction.commit()
         }
 
         recyclerView = view.findViewById(R.id.adminFeedbackRecycle)

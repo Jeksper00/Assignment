@@ -33,8 +33,11 @@ class AdminNotificationViewFragment : Fragment() {
         val view = inflater.inflate(R.layout.admin_fragment_notification_view, container, false)
 
         view.findViewById<ImageView>(R.id.admin_notification_view_backButton).setOnClickListener{
-//            findNavController().navigate(R.id.action_adminFeedbackViewFragment_to_adminFeedbackFragment)
-            requireActivity().onBackPressed()
+            val notificationFragment = AdminFeedbackFragment()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.admin_fl_wrapper, notificationFragment)
+            transaction.addToBackStack(null) // Add to back stack
+            transaction.commit()
         }
 
         // Initialize Firestore

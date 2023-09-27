@@ -13,8 +13,11 @@ import com.example.assignment.Model.Feedback
 import com.example.assignment.R
 import com.google.firebase.firestore.FirebaseFirestore
 import android.content.Context
+import android.os.Handler
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
-import com.example.assignment.Model.Notification
+import com.google.android.material.snackbar.Snackbar
+import io.grpc.okhttp.internal.framed.FrameReader
 
 
 class FeedbackAdapter(private val context: Context, private val fragmentManager: FragmentManager,
@@ -38,58 +41,80 @@ class FeedbackAdapter(private val context: Context, private val fragmentManager:
         holder.gmailTextView.text = feedback.gmail
         holder.feedbackTextView.text = feedback.feedback
 
-        holder.deleteFeedbackButton.setOnClickListener{
+        holder.deleteFeedbackButton.setOnClickListener {
             val positionToDelete = holder.adapterPosition
             val feedbackToDelete = feedbackList[positionToDelete]
 
             // Show a confirmation dialog
             val alertDialogBuilder = AlertDialog.Builder(context)
-            alertDialogBuilder.setTitle("Delete Notification")
-            alertDialogBuilder.setMessage("Are you sure you want to delete this notification?")
+            alertDialogBuilder.setTitle("Delete Feedback")
+            alertDialogBuilder.setMessage("Are you sure you want to delete this feedback?")
             alertDialogBuilder.setPositiveButton("Delete") { _, _ ->
-                // Remove the notification from the list locally
+                // Remove the feedback from the list locally
                 feedbackList.remove(feedbackToDelete)
                 notifyItemRemoved(positionToDelete)
 
-                // Delete the notification from Firestore
+                // Create a Snackbar for the delete confirmation
+                val coordinatorLayout =
+                    (context as AppCompatActivity).findViewById<View>(R.id.admin_feedbackView_frame)
+                val snackbar = Snackbar.make(
+                    coordinatorLayout,
+                    "Feedback deleted successfully.",
+                    Snackbar.LENGTH_LONG
+                )
+
+                // Add an action to undo the deletion
+                snackbar.setAction("Undo") {
+                    // Restore the deleted feedback to the list
+                    feedbackList.add(positionToDelete, feedbackToDelete)
+                    notifyItemInserted(positionToDelete)
+                }
+
+                // Add an action to dismiss the Snackbar
+                snackbar.setActionTextColor(context.resources.getColor(R.color.blue))
+                snackbar.show()
+
+                // Delay the deletion of feedback in Firestore until after the Snackbar duration
                 val db = FirebaseFirestore.getInstance()
                 val feedbackCollection = db.collection("feedback")
 
-                // Use the correct document ID to delete the specific notification in Firestore
+                // Use the correct document ID to delete the specific feedback in Firestore
                 val feedbackIdToDelete = feedbackToDelete.id // Assuming id is the correct document ID
-                feedbackCollection.document(feedbackIdToDelete)
-                    .delete()
-                    .addOnSuccessListener {
-                        Log.d(ContentValues.TAG, "Feedback deleted from Firestore")
 
-                        // Show a success message in a dialog
-                        val successDialogBuilder = AlertDialog.Builder(context)
-                        successDialogBuilder.setTitle("Success")
-                        successDialogBuilder.setMessage("Feedback deleted successfully.")
-                        successDialogBuilder.setPositiveButton("OK") { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        successDialogBuilder.show()
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e(ContentValues.TAG, "Error deleting feedback from Firestore: $exception")
+                // Add a callback to detect when the Snackbar is dismissed
+                snackbar.addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        super.onDismissed(transientBottomBar, event)
 
-                        // Show an error message in a dialog if deletion fails
-                        val errorDialogBuilder = AlertDialog.Builder(context)
-                        errorDialogBuilder.setTitle("Error")
-                        errorDialogBuilder.setMessage("Error deleting feedback: $exception")
-                        errorDialogBuilder.setPositiveButton("OK") { dialog, _ ->
-                            dialog.dismiss()
+                        // Check the event to see if the Snackbar was dismissed
+                        if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                            // Snackbar was dismissed automatically (not due to user action)
+
+                            // Now you can perform actions when the Snackbar disappears
+                            // Delete the feedback from Firestore, for example
+                            val db = FirebaseFirestore.getInstance()
+                            val feedbackCollection = db.collection("feedback")
+
+                            // Use the correct document ID to delete the specific feedback in Firestore
+                            val feedbackIdToDelete = feedbackToDelete.id // Assuming id is the correct document ID
+
+                            feedbackCollection.document(feedbackIdToDelete)
+                                .delete()
+                                .addOnFailureListener { exception ->
+                                    Log.e(ContentValues.TAG, "Error deleting feedback from Firestore: $exception")
+                                }
                         }
-                        errorDialogBuilder.show()
                     }
+                })
             }
+
             alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
             alertDialogBuilder.show()
         }
     }
+
 
     override fun getItemCount(): Int {
         return feedbackList.size

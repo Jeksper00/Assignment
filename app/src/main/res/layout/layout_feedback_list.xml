@@ -18,24 +18,18 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/user_feedback_firstList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
 
             <TextView
                 android:id="@+id/feedbackGmail"
-                android:layout_width="match_parent"
+                android:layout_width="261dp"
                 android:layout_height="wrap_content"
                 android:text="Gmail"
                 android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/feedbackText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Feedback"
-                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/admin_delete_feedback"
@@ -49,6 +43,19 @@
                 android:layout_height="wrap_content"
                 android:text="FeedbackId"
                 android:visibility="gone" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@id/user_feedback_firstList">
+
+            <TextView
+                android:id="@+id/feedbackText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Feedback"
+                android:textSize="16sp" />
 
 
         </LinearLayout>

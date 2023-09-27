@@ -25,6 +25,15 @@ class AdminNotificationViewFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NotificationAdapter
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            val notificationFragment = AdminFeedbackFragment()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.admin_fl_wrapper, notificationFragment)
+            transaction.addToBackStack(null) // Add to back stack
+            transaction.commit()
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +48,9 @@ class AdminNotificationViewFragment : Fragment() {
             transaction.addToBackStack(null) // Add to back stack
             transaction.commit()
         }
+        // Register the callback
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
+
 
         // Initialize Firestore
         val db = FirebaseFirestore.getInstance()

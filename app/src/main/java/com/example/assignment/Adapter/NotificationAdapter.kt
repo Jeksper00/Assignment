@@ -1,6 +1,7 @@
 package com.example.assignment.Adapter
 
 import android.app.AlertDialog
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Bundle
@@ -10,11 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.AdminFragment.AdminNotificationUpdateFragment
 import com.example.assignment.Model.Notification
 import com.example.assignment.R
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 
     class NotificationAdapter(private val context: Context, private val fragmentManager: FragmentManager,
@@ -70,57 +73,74 @@ import com.google.firebase.firestore.FirebaseFirestore
         }
 
         holder.deleteButton.setOnClickListener {
-            val positionToDelete     = holder.adapterPosition
+            val positionToDelete = holder.adapterPosition
             val notificationToDelete = notificationList[positionToDelete]
 
-            // Show a confirmation dialog
-            val alertDialogBuilder = AlertDialog.Builder(context)
-            alertDialogBuilder.setTitle("Delete Notification")
-            alertDialogBuilder.setMessage("Are you sure you want to delete this notification?")
-            alertDialogBuilder.setPositiveButton("Delete") { _, _ ->
-                // Remove the notification from the list locally
-                notificationList.remove(notificationToDelete)
-                notifyItemRemoved(positionToDelete)
+            // Show a confirmation dialog before proceeding
+            val confirmDialogBuilder = AlertDialog.Builder(context)
+            confirmDialogBuilder.setTitle("Confirm Delete")
+            confirmDialogBuilder.setMessage("Are you sure you want to delete this notification?")
+            confirmDialogBuilder.setPositiveButton("Yes") { _, _ ->
+                // User confirmed deletion
 
-                // Delete the notification from Firestore
+                // Create a Snackbar for the delete confirmation
+                val coordinatorLayout = (context as AppCompatActivity).findViewById<View>(R.id.admin_notificationView_frame)
+                val snackbar = Snackbar.make(
+                    coordinatorLayout,
+                    "Notification deleted successfully.",
+                    Snackbar.LENGTH_LONG
+                )
+
+                // Add an action to undo the deletion
+                snackbar.setAction("Undo") {
+                    // Restore the deleted notification to the list
+                    notificationList.add(positionToDelete, notificationToDelete)
+                    notifyItemInserted(positionToDelete)
+                }
+
+                // Add an action to dismiss the Snackbar
+                snackbar.setActionTextColor(context.resources.getColor(R.color.blue))
+                snackbar.show()
+
+                // Delay the deletion of the notification in Firestore until after the Snackbar duration
                 val db = FirebaseFirestore.getInstance()
                 val notificationCollection = db.collection("notification")
 
                 // Use the correct document ID to delete the specific notification in Firestore
                 val notificationIdToDelete = notificationToDelete.id // Assuming id is the correct document ID
-                notificationCollection.document(notificationIdToDelete)
-                    .delete()
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Notification deleted from Firestore")
 
-                        // Show a success message in a dialog
-                        val successDialogBuilder = AlertDialog.Builder(context)
-                        successDialogBuilder.setTitle("Success")
-                        successDialogBuilder.setMessage("Notification deleted successfully.")
-                        successDialogBuilder.setPositiveButton("OK") { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        successDialogBuilder.show()
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e(TAG, "Error deleting notification from Firestore: $exception")
+                // Add a callback to detect when the Snackbar is dismissed
+                snackbar.addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        super.onDismissed(transientBottomBar, event)
 
-                        // Show an error message in a dialog if deletion fails
-                        val errorDialogBuilder = AlertDialog.Builder(context)
-                        errorDialogBuilder.setTitle("Error")
-                        errorDialogBuilder.setMessage("Error deleting notification: $exception")
-                        errorDialogBuilder.setPositiveButton("OK") { dialog, _ ->
-                            dialog.dismiss()
+                        // Check the event to see if the Snackbar was dismissed
+                        if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                            // Snackbar was dismissed automatically (not due to user action)
+
+                            // Now you can perform actions when the Snackbar disappears
+                            // Delete the notification from Firestore, for example
+                            notificationCollection.document(notificationIdToDelete)
+                                .delete()
+                                .addOnFailureListener { exception ->
+                                    Log.e(ContentValues.TAG, "Error deleting notification from Firestore: $exception")
+                                }
                         }
-                        errorDialogBuilder.show()
                     }
+                })
+
+                // Remove the notification from the list locally
+                notificationList.remove(notificationToDelete)
+                notifyItemRemoved(positionToDelete)
             }
-            alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+
+            confirmDialogBuilder.setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
             }
-            alertDialogBuilder.show()
+            confirmDialogBuilder.show()
         }
     }
+
 
     override fun getItemCount(): Int {
         return notificationList.size

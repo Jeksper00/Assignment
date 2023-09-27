@@ -7,15 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.assignment.R
 import android.app.AlertDialog
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
 import com.example.assignment.Adapter.NotificationAdapter.Companion.ARG_NOTIFICATION
 import com.example.assignment.Model.Notification
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
 
@@ -39,6 +43,15 @@ class AdminNotificationUpdateFragment : Fragment() {
 
         val builder = AlertDialog.Builder(requireActivity())
         val inflater = LayoutInflater.from(requireActivity())
+
+        // Set up a click listener for the main layout to close the keyboard when clicked outside
+        val mainLayout = view.findViewById<View>(R.id.admin_notification_update_frame)
+        mainLayout.setOnClickListener {
+            // Hide the keyboard
+            val imm =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
 
         // Retrieve the notification data from the arguments bundle
         val notificationToEdit = arguments?.getParcelable(ARG_NOTIFICATION) as Notification?
@@ -64,31 +77,56 @@ class AdminNotificationUpdateFragment : Fragment() {
 
         updateButton.setOnClickListener {
             // Handle the update button click here
-            val updatedTitle       = titleEditText.text.toString()
+            val updatedTitle = titleEditText.text.toString()
             val updatedDescription = descriptionEditText.text.toString()
 
-            // Update the notification data in Firestore
-            notificationToEdit?.let { notification ->
-                val db = FirebaseFirestore.getInstance()
-                val notificationCollection = db.collection("notification")
+            val titleUpdateError =
+                view.findViewById<TextInputLayout>(R.id.notificationUpdateTitleError)
+            val descriptionUpdateError =
+                view.findViewById<TextInputLayout>(R.id.notificationUpdateDescriptionError)
+
+
+            if (updatedTitle.isEmpty()) {
+                titleUpdateError.error = "Title field cannot be empty"
+            } else {
+                titleUpdateError.error = null
+            }
+            if (updatedDescription.isEmpty()) {
+                descriptionUpdateError.error = "Description field cannot be empty"
+            } else {
+                descriptionUpdateError.error = null
+            }
+
+            if (titleUpdateError.error == null && descriptionUpdateError.error == null) {
+
+                // Update the notification data in Firestore
+                notificationToEdit?.let { notification ->
+                    val db = FirebaseFirestore.getInstance()
+                    val notificationCollection = db.collection("notification")
 
 //                val updatedNotification = Notification(updatedTitle, updatedDescription)
-                val newNotification = hashMapOf(
-                    "title"       to updatedTitle,
-                    "description" to updatedDescription,
-                    "date"        to currentDate
-                )
-                notificationCollection.document(notification.id)
-                    .set(newNotification)
-                    .addOnSuccessListener {
-                        // Data updated successfully
-                        showSuccessDialog()
-                        openFragment(AdminNotificationViewFragment())
-                    }
-                    .addOnFailureListener { exception ->
-                        // Handle the failure to update data
-                        showErrorDialog(exception.message)
-                    }
+                    val newNotification = hashMapOf(
+                        "title" to updatedTitle,
+                        "description" to updatedDescription,
+                        "date" to currentDate
+                    )
+                    notificationCollection.document(notification.id)
+                        .set(newNotification)
+                        .addOnSuccessListener {
+                            // Data updated successfully
+                            //showSuccessDialog()
+                            Toast.makeText(
+                                requireContext(),
+                                "Successfully Update Notification",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            openFragment(AdminNotificationViewFragment())
+                        }
+                        .addOnFailureListener { exception ->
+                            // Handle the failure to update data
+                            showErrorDialog(exception.message)
+                        }
+                }
             }
         }
 
@@ -101,8 +139,7 @@ class AdminNotificationUpdateFragment : Fragment() {
             .setMessage("Notification updated successfully.")
             .setPositiveButton("OK") { dialog, _ ->
                 dialog.dismiss()
-                // Navigate back to your notification list fragment
-                // You can use fragmentManager.popBackStack() or other navigation methods
+
             }
             .create()
 

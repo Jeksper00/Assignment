@@ -77,8 +77,8 @@ class AdminActivityFragment : Fragment() {
                     val userId = document.getString("userId") ?: ""
                     // Check if userId is empty /////////////////////////and also check validation
 
-                        val activityItem = Activity(id, name, status, description, date, donationReceived, totalRequired, userId,imageUrl)
-                        activityList.add(activityItem)
+                    val activityItem = Activity(id, name, status, description, date, donationReceived, totalRequired, userId,imageUrl)
+                    activityList.add(activityItem)
 
                 }
 

@@ -52,14 +52,14 @@ class ActivityAdapter(
 
 
 
-        ///update delete
 
-         //Set click listeners for edit and delete buttons
+
+         //Set click listeners for Retrieve
         holder.editButton.setOnClickListener {
 //  Log.d(TAG, "Edit button clicked for activity ID: ${currentitem.activityId}")
 
             // Create an Intent to navigate to the target activity (AdminActivityUpdateActivity)
-            val intent = Intent(context, AdminActivityUpdateActivity::class.java)
+            val intent = Intent(context, AdminActivityRetrieveActivity::class.java)
 
 
 
@@ -69,56 +69,6 @@ class ActivityAdapter(
             context.startActivity(intent)
 
         }
-
-        holder.deleteButton.setOnClickListener {
-            val positionToDelete = holder.adapterPosition
-            val activityToDelete = activityList[positionToDelete]
-
-            // Show a confirmation dialog
-            val alertDialogBuilder = AlertDialog.Builder(context)
-            alertDialogBuilder.setTitle("Delete Notification")
-            alertDialogBuilder.setMessage("Are you sure you want to delete this activity?")
-            alertDialogBuilder.setPositiveButton("Delete") { _, _ ->
-                // Remove the notification from the list locally
-                activityList.remove(activityToDelete)
-                notifyItemRemoved(positionToDelete)
-
-                // Delete the notification from Firestore
-                val db = FirebaseFirestore.getInstance()
-                val activityCollection = db.collection("activity")
-
-                // Use the correct document ID to delete the specific notification in Firestore
-                val activityIdToDelete = activityToDelete.activityid
-
-                // Retrieve the image reference or URL from the activityToDelete object
-                val imageUrlToDelete = activityToDelete.imageUrl
-
-                // Delete the image from Firebase Storage
-                val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrlToDelete)
-                storageReference.delete()
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Image deleted from Firebase Storage")
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e(TAG, "Error deleting image from Firebase Storage: $exception")
-                    }
-
-                // Delete the activity document from Firestore
-                activityCollection.document(activityIdToDelete)
-                    .delete()
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Notification deleted from Firestore")
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e(TAG, "Error deleting notification from Firestore: $exception")
-                    }
-            }
-            alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            alertDialogBuilder.show()
-        }
-
 
 
     }

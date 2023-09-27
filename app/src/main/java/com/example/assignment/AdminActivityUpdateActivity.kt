@@ -58,6 +58,7 @@ class AdminActivityUpdateActivity : AppCompatActivity() {
 
         // Initialize EditText and Button views
         nameText = findViewById(R.id.name)
+        nameText.setText(activityId)
         descriptionText = findViewById(R.id.description)
         totalRequireText = findViewById(R.id.totalRequire)
         calendarView = findViewById(R.id.calendarView)

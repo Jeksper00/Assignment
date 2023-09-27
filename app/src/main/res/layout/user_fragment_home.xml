@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_home_activity_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.User"
@@ -9,25 +10,39 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/user_home_activity_fragment2">
 
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="User Home"
-            app:layout_constraintStart_toStartOf="parent"
+        <android.widget.SearchView
+            android:id="@+id/user_activityList_searchView"
+            android:layout_width="207dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="5dp"
+            android:iconifiedByDefault="false"
+            android:queryHint="Search Activities"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/userHomeActivityRecycler"
             android:layout_width="409dp"
             android:layout_height="710dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="80dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView12"
+            app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/layout_activity_list_user" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="48dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/icon_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

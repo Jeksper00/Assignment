@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.example.assignment.R
@@ -49,13 +50,15 @@ class UserFeedbackInputFragment : Fragment() {
 //                db.collection("feedback").document("").set(feedback)
                 db.collection("feedback").add(feedback)
                     .addOnSuccessListener {
-                        //Toast.makeText(this, "Successfully Create Food!", Toast.LENGTH_SHORT).show()
+                        showToast("Successfully Create Food!")
+                        requireActivity().onBackPressed()
                     }
                     .addOnFailureListener {
                         //Toast.makeText(this, "Failed To Create Food!", Toast.LENGTH_SHORT).show()
                     }
 
-                    openFragment(UserNotificationFragment())
+                    //openFragment(UserNotificationFragment())
+
 //            } else {
 //                // Handle the case where the user is not signed in
 //                //Toast.makeText(this, "User not signed in", Toast.LENGTH_SHORT).show()
@@ -63,6 +66,13 @@ class UserFeedbackInputFragment : Fragment() {
 
         }
         return view
+    }
+
+    // Function to display a Toast message
+    private fun showToast(message: String) {
+        context?.let {
+            Toast.makeText(it, message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun openFragment(fragment : Fragment){

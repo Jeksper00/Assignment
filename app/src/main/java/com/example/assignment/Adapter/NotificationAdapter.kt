@@ -17,7 +17,7 @@ import com.example.assignment.Model.Notification
 import com.example.assignment.R
 import com.google.firebase.firestore.FirebaseFirestore
 
-class NotificationAdapter(private val context: Context, private val fragmentManager: FragmentManager,
+    class NotificationAdapter(private val context: Context, private val fragmentManager: FragmentManager,
                           public var notificationList: MutableList<Notification>) :
     RecyclerView.Adapter<NotificationAdapter.ViewHolder>() {
 

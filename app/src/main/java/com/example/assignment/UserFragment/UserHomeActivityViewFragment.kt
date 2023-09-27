@@ -79,8 +79,7 @@ class UserHomeActivityViewFragment : Fragment() {
     }
 
     private fun showDonationDialog(activityIdText: TextView, totalDonationText: TextView) {
-        val dialogView =
-            LayoutInflater.from(requireContext()).inflate(R.layout.layout_donation_dialog, null)
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.layout_donation_dialog, null)
         val donationDialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setTitle("Please select amount to donate")
@@ -88,6 +87,15 @@ class UserHomeActivityViewFragment : Fragment() {
 
         val radioGroup = dialogView.findViewById<RadioGroup>(R.id.donationRadioGroup)
         val donateButton = dialogView.findViewById<Button>(R.id.donateButton)
+        val closeButton = dialogView.findViewById<ImageView>(R.id.user_donateDialog_closeButton)
+
+        // Auto-select the first radio button
+        radioGroup.check(radioGroup.getChildAt(0).id)
+
+        // Set a click listener for the "Close" image
+        closeButton.setOnClickListener {
+            donationDialog.dismiss() // Dismiss the dialog when Cancel is clicked
+        }
 
         // Set a click listener for the "Donate" button
         donateButton.setOnClickListener {

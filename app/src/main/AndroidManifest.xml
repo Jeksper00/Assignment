@@ -12,28 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Assignment"
         tools:targetApi="31">
-        <!--Wui Teck-->
-        <activity
-            android:name=".AdminActivityCreateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AdminActivityUpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AdminActivityRetrieveActivity"
-            android:exported="false" />
-        <activity
-            android:name=".UserActivityCreateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".UserActivityUpdateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".UserActivityRetrieveActivity"
-            android:exported="false" />
-
-
-        <!--Main-->
         <activity
             android:name=".AdminHomeActivity"
             android:exported="false" />

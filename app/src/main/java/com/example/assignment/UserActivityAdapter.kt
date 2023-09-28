@@ -13,16 +13,16 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 
-class ActivityAdapter(
+class UserActivityAdapter(
     private val context: Context,
     private val requireFragmentManager: FragmentManager,
     public var activityList: MutableList<Activity>
-) : RecyclerView.Adapter<ActivityAdapter.ActivityViewHolder>() {
+) : RecyclerView.Adapter<UserActivityAdapter.ActivityViewHolder>() {
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivityViewHolder {
-       val itemView =LayoutInflater.from(parent.context).inflate(R.layout.admin_activity_retrieve_list,parent,false)
+       val itemView =LayoutInflater.from(parent.context).inflate(R.layout.user_activity_retrieve_list,parent,false)
         return ActivityViewHolder(itemView)
     }
 
@@ -52,8 +52,8 @@ class ActivityAdapter(
         holder.editButton.setOnClickListener {
 //  Log.d(TAG, "Edit button clicked for activity ID: ${currentitem.activityId}")
 
-            // Create an Intent to navigate to the target activity (AdminActivityUpdateActivity)
-            val intent = Intent(context, AdminActivityRetrieveActivity::class.java)
+            // Create an Intent to navigate to the target activity (UserActivityUpdateActivity)
+            val intent = Intent(context, UserActivityRetrieveActivity::class.java)
 
 
 

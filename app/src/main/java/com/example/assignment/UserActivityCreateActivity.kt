@@ -1,4 +1,4 @@
-// AdminActivityCreateActivity.kt
+// UserActivityCreateActivity.kt
 
 package com.example.assignment
 
@@ -15,7 +15,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.example.assignment.AdminFragment.AdminActivityFragment
+import com.example.assignment.UserFragment.UserActivityFragment
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -24,7 +24,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
-class AdminActivityCreateActivity : AppCompatActivity() {
+class UserActivityCreateActivity : AppCompatActivity() {
 
     private var db = Firebase.firestore
     private var storageRef = Firebase.storage
@@ -43,7 +43,7 @@ class AdminActivityCreateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.admin_activity_create_activity)
+        setContentView(R.layout.user_activity_create_activity)
 
         nameText = findViewById(R.id.name)
         descriptionText = findViewById(R.id.description)
@@ -60,9 +60,6 @@ class AdminActivityCreateActivity : AppCompatActivity() {
                 if (it != null) {
                     uri = it
                 }
-                else{
-                    Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
-                }
             }
         )
         val btnBack = findViewById<ImageButton>(R.id.btnBack)
@@ -76,7 +73,7 @@ class AdminActivityCreateActivity : AppCompatActivity() {
 
         createButton.setOnClickListener {
             val name = nameText.text.toString()
-            val status = "admin"
+            val status = "pending"
             val description = descriptionText.text.toString()
             val totalDonationReceived = "0"
             val totalRequire = totalRequireText.text.toString()
@@ -118,7 +115,7 @@ class AdminActivityCreateActivity : AppCompatActivity() {
         }
     }
 
-    fun setActivityCreationCallback(callback: AdminActivityFragment) {
+    fun setActivityCreationCallback(callback: UserActivityFragment) {
         activityCreationCallback = callback
     }
 
@@ -131,10 +128,6 @@ class AdminActivityCreateActivity : AppCompatActivity() {
         totalRequire: String,
         userId: String
     ) {
-        if (uri == null) {
-            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
-            return
-        }
         if (uri != null) {
             val imageFileName = "${UUID.randomUUID()}.jpg"
             val imageRef = storageRef.reference.child("images/$imageFileName")

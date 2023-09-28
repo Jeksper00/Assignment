@@ -1,7 +1,6 @@
 package com.example.assignment
 
 import android.content.ContentValues
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class AdminActivityUpdateActivity : AppCompatActivity() {
+class UserActivityUpdateActivity : AppCompatActivity() {
     private var db = Firebase.firestore
     private var storageRef = Firebase.storage
 
@@ -53,7 +53,7 @@ class AdminActivityUpdateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.admin_activity_update_activity)
+        setContentView(R.layout.user_activity_update_activity)
 
         val activityId = intent.getStringExtra("activityId")
 

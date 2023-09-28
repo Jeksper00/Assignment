@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
@@ -54,7 +53,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Name EditText -->
-    <EditText
+    <TextView
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -64,7 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Description EditText -->
-    <EditText
+    <TextView
         android:id="@+id/description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -84,7 +83,7 @@
         app:srcCompat="@android:drawable/ic_menu_add" />
 
     <!-- Total Required EditText -->
-    <EditText
+    <TextView
         android:id="@+id/totalRequire"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -114,11 +113,20 @@
 
     <!-- Send Button -->
     <Button
-        android:id="@+id/updatebtn"
+        android:id="@+id/editbtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send"
+        android:text="Edit"
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/deletebtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        app:layout_constraintTop_toBottomOf="@+id/editbtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -1,33 +1,33 @@
 package com.example.assignment
 
+import android.app.AlertDialog
 import android.content.ContentValues
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CalendarView
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
-class AdminActivityUpdateActivity : AppCompatActivity() {
+class UserActivityRetrieveActivity : AppCompatActivity() {
     private var db = Firebase.firestore
     private var storageRef = Firebase.storage
 
-    private lateinit var nameText: EditText
-    private lateinit var descriptionText: EditText
-    private lateinit var totalRequireText: EditText
+    private lateinit var nameText: TextView
+    private lateinit var descriptionText: TextView
+    private lateinit var totalRequireText: TextView
     private lateinit var calendarView: CalendarView
     private lateinit var userIdText: TextView
     private lateinit var activityIdText: TextView
@@ -36,7 +36,8 @@ class AdminActivityUpdateActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
 
 
-    private lateinit var updateButton: Button
+    private lateinit var editButton: Button
+    private lateinit var deleteButton: Button
 
 
     // Declare public properties for Firestore document fields
@@ -53,13 +54,12 @@ class AdminActivityUpdateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.admin_activity_update_activity)
+        setContentView(R.layout.user_activity_retrieve_activity)
 
         val activityId = intent.getStringExtra("activityId")
 
         // Initialize EditText and Button views
         nameText = findViewById(R.id.name)
-        nameText.setText(activityId)
         descriptionText = findViewById(R.id.description)
         totalRequireText = findViewById(R.id.totalRequire)
         calendarView = findViewById(R.id.calendarView)
@@ -68,8 +68,8 @@ class AdminActivityUpdateActivity : AppCompatActivity() {
         activityIdText = findViewById(R.id.activityIdTextView)
         totalReceiveText = findViewById(R.id.totalReceive)
         statusText = findViewById(R.id.statusTextView)
-        updateButton = findViewById(R.id.updatebtn)
-
+        editButton = findViewById(R.id.editbtn)
+        deleteButton = findViewById(R.id.deletebtn)
 
         val btnBack = findViewById<ImageButton>(R.id.btnBack)
         btnBack.setOnClickListener {
@@ -137,67 +137,76 @@ class AdminActivityUpdateActivity : AppCompatActivity() {
 
 //
             // Set a click listener for the Send button
-            updateButton.setOnClickListener(View.OnClickListener {
-                // Retrieve user input from EditText fields
-                val name = nameText.text.toString()
-                val description = descriptionText.text.toString()
-                val totalRequire = totalRequireText.text.toString()
+            editButton.setOnClickListener(View.OnClickListener {
+                val intent = Intent(this, UserActivityUpdateActivity::class.java)
 
-                // Check for input validation
-                if (name.isEmpty() || description.isEmpty() || totalRequire.isEmpty() || calendarView.date == 0L) {
-                    Toast.makeText(this, "Please fill in all fields and select a date", Toast.LENGTH_SHORT).show()
-                    return@OnClickListener // Exit the function if validation fails
-                }
+                intent.putExtra("activityId", activityId)
 
-                // Validate totalRequire as a numeric value
-                try {
-                    val totalRequireValue = totalRequire.toInt()
-                    if (totalRequireValue <= 0) {
-                        Toast.makeText(this, "Total Required must be a positive number", Toast.LENGTH_SHORT).show()
-                        return@OnClickListener
-                    }
-                } catch (e: NumberFormatException) {
-                    Toast.makeText(this, "Total Required must be a valid number", Toast.LENGTH_SHORT).show()
-                    return@OnClickListener
-                }
+                this.startActivity(intent)
 
-                // If all input is valid, proceed to update the Firestore document
-                val selectedDateMilliseconds = calendarView.date
-                val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.US)
-                val date = dateFormat.format(Date(selectedDateMilliseconds))
-
-                // Prepare the data to update the Firestore document
-                val activityUpdateData = hashMapOf(
-                    "name" to name,
-                    "description" to description,
-                    "date" to date,
-                    "totalRequired" to totalRequire
-                )
-
-                // Update the Firestore document with the new data
-                val activityId = intent.getStringExtra("activityId")
-                if (activityId != null) {
-                    db.collection("activity").document(activityId).update(activityUpdateData as Map<String, Any>)
-                        .addOnSuccessListener {
-                            Toast.makeText(this, "Activity updated successfully", Toast.LENGTH_SHORT).show()
-                        ///not yet done
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(this, "Failed to update activity", Toast.LENGTH_SHORT).show()
-                        }
-                }
             })
 
+            deleteButton.setOnClickListener(View.OnClickListener {
 
+                val alertDialogBuilder = AlertDialog.Builder(this)
+                alertDialogBuilder.setTitle("Delete Activity")
+                alertDialogBuilder.setMessage("Are you sure you want to delete this activity?")
+                alertDialogBuilder.setPositiveButton("Delete") { _, _ ->
+                    // Delete the activity from Firestore and Firebase Storage
+                    deleteActivityFromFirestore(activityId)
+                }
+                alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                alertDialogBuilder.show()
 
-
-
+            })
 
         }
 
 
     }
-    interface ActivityCreationCallback {
-        fun onActivityCreated(activity: Activity)
+
+
+    private fun deleteActivityFromFirestore(activityId: String) {
+        // Delete the activity document from Firestore
+        val db = FirebaseFirestore.getInstance()
+        val activityCollection = db.collection("activity")
+
+        // Delete the activity from Firestore
+        activityCollection.document(activityId)
+            .delete()
+            .addOnSuccessListener {
+                // Activity deleted successfully from Firestore
+                Log.d(ContentValues.TAG, "Activity deleted from Firestore")
+
+                // Now delete the image from Firebase Storage
+                deleteImageFromStorage(activityId)
+                finish()
+            }
+            .addOnFailureListener { exception ->
+                // Handle any errors that occurred while deleting from Firestore
+                Log.e(ContentValues.TAG, "Error deleting activity from Firestore: $exception")
+            }
     }
+
+    private fun deleteImageFromStorage(activityId: String) {
+        // Retrieve the image reference or URL from the activity object
+        // Here, assuming you have the image path in Firebase Storage related to the activity
+        val storageReference = FirebaseStorage.getInstance().getReference("images/$activityId.jpg")
+
+        // Delete the image from Firebase Storage
+        storageReference.delete()
+            .addOnSuccessListener {
+                // Image deleted successfully from Firebase Storage
+                Log.d(ContentValues.TAG, "Image deleted from Firebase Storage")
+                finish() // Finish the activity after successful deletion
+            }
+            .addOnFailureListener { exception ->
+                // Handle any errors that occurred while deleting image from Firebase Storage
+                Log.e(ContentValues.TAG, "Error deleting image from Firebase Storage: $exception")
+            }
+    }
+
+
 }

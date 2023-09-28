@@ -22,6 +22,15 @@
         <activity
             android:name=".AdminActivityRetrieveActivity"
             android:exported="false" />
+        <activity
+            android:name=".UserActivityCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserActivityUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserActivityRetrieveActivity"
+            android:exported="false" />
 
 
         <!--Main-->

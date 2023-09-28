@@ -1,5 +1,3 @@
-// AdminActivityCreateActivity.kt
-
 package com.example.assignment
 
 import android.content.ContentValues
@@ -15,7 +13,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.example.assignment.AdminFragment.AdminActivityFragment
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -36,10 +34,7 @@ class AdminActivityCreateActivity : AppCompatActivity() {
     private lateinit var calendarView: CalendarView
     private lateinit var imageView: ImageView
     private lateinit var uri: Uri
-    private lateinit var imageButton: Button
-
     private var activityCreationCallback: ActivityCreationCallback? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +45,12 @@ class AdminActivityCreateActivity : AppCompatActivity() {
         totalRequireText = findViewById(R.id.totalRequire)
         calendarView = findViewById(R.id.calendarView)
         imageView = findViewById(R.id.imageView)
-        imageButton = findViewById(R.id.imageButton)
         createButton = findViewById(R.id.btn)
+
+        // Generate activity ID immediately
+        generateDocumentId(0, db.collection("activity")) { documentId ->
+            intent.putExtra("activityId", documentId)
+        }
 
         val galleryImage = registerForActivityResult(
             ActivityResultContracts.GetContent(),
@@ -60,17 +59,15 @@ class AdminActivityCreateActivity : AppCompatActivity() {
                 if (it != null) {
                     uri = it
                 }
-                else{
-                    Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
-                }
             }
         )
+
         val btnBack = findViewById<ImageButton>(R.id.btnBack)
         btnBack.setOnClickListener {
-            finish() // 返回到前一个界面
+            finish() // Go back to the previous screen
         }
 
-        imageButton.setOnClickListener {
+        imageView.setOnClickListener {
             galleryImage.launch("image/*")
         }
 
@@ -86,8 +83,13 @@ class AdminActivityCreateActivity : AppCompatActivity() {
             val date = dateFormat.format(Date(selectedDateMilliseconds))
             val userId = "U0003"
 
-            if (name.isEmpty() || description.isEmpty() || totalRequire.isEmpty() || uri == null) {
-                Toast.makeText(this, "Please fill in all fields and select an image", Toast.LENGTH_SHORT).show()
+            if (name.isEmpty() || description.isEmpty() || totalRequire.isEmpty()) {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (uri == null) {
+                Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -102,24 +104,38 @@ class AdminActivityCreateActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (uri != null) {
-                uploadImageAndSaveData(
-                    name,
-                    status,
-                    description,
-                    date,
-                    totalDonationReceived,
-                    totalRequire,
-                    userId
-                )
-            } else {
-                Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
-            }
+            uploadImageAndSaveData(
+                name,
+                status,
+                description,
+                date,
+                totalDonationReceived,
+                totalRequire,
+                userId
+            )
         }
     }
 
-    fun setActivityCreationCallback(callback: AdminActivityFragment) {
+    fun setActivityCreationCallback(callback: ActivityCreationCallback) {
         activityCreationCallback = callback
+    }
+
+    private fun generateDocumentId(num: Int, collectionRef: CollectionReference, callback: (String) -> Unit) {
+        val formattedCounter = String.format("%04d", num)
+        val documentIdToCheck = "A$formattedCounter"
+
+        collectionRef.document(documentIdToCheck)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    generateDocumentId(num + 1, collectionRef, callback)
+                } else {
+                    callback(documentIdToCheck)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e(ContentValues.TAG, "Error getting document: $exception")
+            }
     }
 
     private fun uploadImageAndSaveData(
@@ -131,10 +147,6 @@ class AdminActivityCreateActivity : AppCompatActivity() {
         totalRequire: String,
         userId: String
     ) {
-        if (uri == null) {
-            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
-            return
-        }
         if (uri != null) {
             val imageFileName = "${UUID.randomUUID()}.jpg"
             val imageRef = storageRef.reference.child("images/$imageFileName")
@@ -175,7 +187,9 @@ class AdminActivityCreateActivity : AppCompatActivity() {
                                     imageUrl
                                 )
 
+                                // Notify the callback (if set)
                                 activityCreationCallback?.onActivityCreated(activity)
+
                                 finish()
                             }
                             .addOnFailureListener { e ->

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "49444552072",
+    "firebase_url": "https://fundraising-application-74394-default-rtdb.firebaseio.com",
+    "project_id": "fundraising-application-74394",
+    "storage_bucket": "fundraising-application-74394.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49444552072:android:d02b41a9bfdd389146ce3d",
+        "android_client_info": {
+          "package_name": "com.example.assignment"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqYLsRjFGO7KQ0qrDxLtRieyJmG7B4wZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

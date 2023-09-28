@@ -2,7 +2,6 @@ package com.example.assignment.AdminFragment
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,24 +10,26 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.example.assignment.R
-import com.example.assignment.UserFragment.UserNotificationFragment
+import com.example.assignment.Room.NotificationDao
+import com.example.assignment.Room.NotificationDatabase
+import com.example.assignment.Room.NotificationEntity
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
 import java.util.Calendar
-import java.util.UUID
 
 
 class AdminNotificationCreateFragment : Fragment() {
 
     private var db = Firebase.firestore
-
+    private lateinit var dbRoom: NotificationDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +37,18 @@ class AdminNotificationCreateFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.admin_fragment_notification_create, container, false)
+
+
+        // Define variables for the database and DAO
+        var notificationDao: NotificationDao
+
+        var notificationDatabase: NotificationDatabase =
+            Room.databaseBuilder(requireContext(), NotificationDatabase::class.java, "notifications") //new a database
+                .allowMainThreadQueries()
+                .build()
+
+        notificationDao = notificationDatabase.notificationDao()
+
 
         // Set up a click listener for the main layout to close the keyboard when clicked outside
         val mainLayout = view.findViewById<View>(R.id.admin_notification_create_frame)
@@ -60,11 +73,10 @@ class AdminNotificationCreateFragment : Fragment() {
             val titleInputError = view.findViewById<TextInputLayout>(R.id.notificationInputTitleError)
             val descriptionInputError = view.findViewById<TextInputLayout>(R.id.notificationInputDescriptionError)
 
-
             if (notificationTitle.isEmpty()) {
-                titleInputError.error    = "Title field cannot be empty"
+                titleInputError.error = "Title field cannot be empty"
             } else {
-                titleInputError.error    = null
+                titleInputError.error = null
             }
             if (notificationDetails.isEmpty()) {
                 descriptionInputError.error = "Description field cannot be empty"
@@ -72,12 +84,7 @@ class AdminNotificationCreateFragment : Fragment() {
                 descriptionInputError.error = null
             }
 
-            if(titleInputError.error == null && descriptionInputError.error == null) {
-
-                val currentUser = FirebaseAuth.getInstance().currentUser
-
-//            if (currentUser != null) {
-//                val userId = currentUser.uid
+            if (titleInputError.error == null && descriptionInputError.error == null) {
 
                 // Get the current date
                 val calendar = Calendar.getInstance()
@@ -88,13 +95,23 @@ class AdminNotificationCreateFragment : Fragment() {
                 // Create a date string in your desired format (e.g., "yyyy-MM-dd")
                 val currentDate = "$year-$month-$dayOfMonth"
 
+                // Create a NotificationEntity instance
+                val newNotification = NotificationEntity(
+                    title = notificationTitle,
+                    description = notificationDetails,
+                    date = currentDate
+                )
+
+                // Insert the new notification into the Room database
+                insertNotification(newNotification)
+
+                // Optionally, you can also add this notification to Firestore here
                 val notification = hashMapOf(
                     "title" to notificationTitle,
                     "description" to notificationDetails,
                     "date" to currentDate
                 )
 
-//                db.collection("feedback").document("").set(feedback)
                 db.collection("notification").add(notification)
                     .addOnSuccessListener {
                         Toast.makeText(
@@ -111,15 +128,29 @@ class AdminNotificationCreateFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-
-
-//            } else {
-//                // Handle the case where the user is not signed in
-//                //Toast.makeText(this, "User not signed in", Toast.LENGTH_SHORT).show()
-//            }
             }
         }
         return view
+    }
+
+    // Function to insert a notification into the Room database
+    private fun insertNotification(notification: NotificationEntity) {
+        lifecycleScope.launch {
+//            // Insert the notification into the Room database
+//            if (::dbRoom.isInitialized) {
+//                dbRoom.notificationDao().insert(notification)
+//            } else {
+//                Log.e("Database", "dbRoom is not initialized")
+//                // Initialize the Room database using a coroutine
+//                lifecycleScope.launch {
+//                    dbRoom = Room.databaseBuilder(
+//                        requireContext().applicationContext,
+//                        NotificationDatabase::class.java, "NotificationDatabase"
+//                    ).build()
+//                    Log.d("Database", "Room database initialized")
+//                }
+//            }
+        }
     }
 
     private fun openFragment(fragment : Fragment){
@@ -128,5 +159,13 @@ class AdminNotificationCreateFragment : Fragment() {
         fragmentTransaction.replace(R.id.admin_fl_wrapper, fragment)
         fragmentTransaction.addToBackStack(null) // Optional, to allow back navigation
         fragmentTransaction.commit()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Close the database when the view is destroyed
+        if (::dbRoom.isInitialized) {
+            dbRoom.close()
+        }
     }
 }

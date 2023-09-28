@@ -35,7 +35,6 @@ class UserHomeFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ActivityAdapter2
     private lateinit var tabLayout: TabLayout
-    private lateinit var text1: TextView
 
     // Declare a list to hold all activities
     private var allActivities: MutableList<Activity> = mutableListOf()
@@ -152,6 +151,7 @@ class UserHomeFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 // Check which tab is selected and update the text accordingly
                 when (tab?.position) {
+                    //For Third-Party Tab
                     0 -> // Fetch activity data from Firestore
                         activityCollection.get()
                             .addOnSuccessListener { querySnapshot ->
@@ -184,6 +184,7 @@ class UserHomeFragment : Fragment() {
                             .addOnFailureListener { exception ->
                                 Log.e(ContentValues.TAG, "Error fetching Firestore data: $exception")
                             }
+                    //For Official Tab
                     1 -> // Fetch activity data from Firestore
                         activityCollection.get()
                             .addOnSuccessListener { querySnapshot ->

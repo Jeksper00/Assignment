@@ -22,6 +22,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.assignment.Adapter.ActivityAdapter2
+import com.example.assignment.AdminFragment.AdminHomeFragment
 import com.example.assignment.Model.Activity
 import com.example.assignment.R
 import com.google.android.material.textfield.TextInputLayout
@@ -37,8 +38,10 @@ class UserHomeActivityViewFragment : Fragment() {
     private lateinit var userNameText: TextView
     private lateinit var descriptionText: TextView
     private lateinit var totalDonationText: TextView
+    private lateinit var totalRequiredText: TextView
+    private lateinit var statusText: TextView
     private lateinit var imageView: ImageView
-    private lateinit var donateButton: Button
+    private lateinit var payButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,26 +55,37 @@ class UserHomeActivityViewFragment : Fragment() {
         val inflater = LayoutInflater.from(requireActivity())
 
         view.findViewById<ImageView>(R.id.user_home_donation_deatils_backButton).setOnClickListener{
+//            if(statusText.text == "admin"){
+//                val bundle = Bundle()
+//                bundle.putString("activityCategory", "admin") // Put the data you want to pass here
+//
+//                val receiverFragment = UserHomeFragment()
+//                receiverFragment.arguments = bundle
+//            }
             requireActivity().onBackPressed()
         }
 
         // Retrieve the notification data from the arguments bundle
         val activityDetails = arguments?.getParcelable(ActivityAdapter2.ARG_NOTIFICATION) as Activity?
 
-        activityIdText = view.findViewById(R.id.userHomeActivityIdView)
-        activityNameText = view.findViewById(R.id.userActivityDonateNameText)
-        userNameText = view.findViewById(R.id.userActivityViewUserIdText)
-        descriptionText = view.findViewById(R.id.userActivityViewDescriptionText)
+        activityIdText    = view.findViewById(R.id.userHomeActivityIdView)
+        activityNameText  = view.findViewById(R.id.userActivityDonateNameText)
+        userNameText      = view.findViewById(R.id.userActivityViewUserIdText)
+        descriptionText   = view.findViewById(R.id.userActivityViewDescriptionText)
         totalDonationText = view.findViewById(R.id.userActivityViewTtlDonatedText)
-        imageView = view.findViewById(R.id.user_home_activityView_image)
+        totalRequiredText = view.findViewById(R.id.userActivityViewTtlRequiredText)
+        statusText        = view.findViewById(R.id.user_homeView_activityStatus)
+        imageView         = view.findViewById(R.id.user_home_activityView_image)
 
         // Populate the EditText fields with the existing data
         activityDetails?.let { activity ->
-            activityIdText.text = activity.id
-            activityNameText.text = activity.name
-            userNameText.text = activity.userId
-            descriptionText.text = activity.description
+            activityIdText.text    = activity.id
+            activityNameText.text  = activity.name
+            userNameText.text      = activity.userId
+            descriptionText.text   = activity.description
             totalDonationText.text = activity.totalDonationReceived
+            totalRequiredText.text = activity.totalRequired
+            statusText.text        = activity.status
             Glide.with(this)
                 .load(activity.imageUrl) // Assuming activity.imageUrl contains the image URL
                 .into(imageView)

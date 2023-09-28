@@ -17,20 +17,20 @@ class UserActivityAdapter(
     private val context: Context,
     private val requireFragmentManager: FragmentManager,
     public var activityList: MutableList<Activity>
-) : RecyclerView.Adapter<UserActivityAdapter.ActivityViewHolder>() {
+) : RecyclerView.Adapter<UserActivityAdapter.UserActivityViewHolder>() {
 
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivityViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserActivityViewHolder {
        val itemView =LayoutInflater.from(parent.context).inflate(R.layout.user_activity_retrieve_list,parent,false)
-        return ActivityViewHolder(itemView)
+        return UserActivityViewHolder(itemView)
     }
 
     override fun getItemCount(): Int {
         return activityList.size
     }
 
-    override fun onBindViewHolder(holder: ActivityViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UserActivityViewHolder, position: Int) {
         val currentitem = activityList[position]
         holder.activityId.text = currentitem.activityid
         holder.name.text = currentitem.name
@@ -67,7 +67,7 @@ class UserActivityAdapter(
 
     }
 
-    inner class ActivityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class UserActivityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val activityId: TextView = itemView.findViewById(R.id.activityIdTextView)
 
         val name: TextView = itemView.findViewById(R.id.nameTextView)

@@ -1,8 +1,7 @@
-// UserActivityCreateActivity.kt
-
 package com.example.assignment
 
 import android.content.ContentValues
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -15,13 +14,12 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.assignment.UserFragment.UserActivityFragment
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import java.util.UUID
 
 class UserActivityCreateActivity : AppCompatActivity() {
@@ -35,10 +33,7 @@ class UserActivityCreateActivity : AppCompatActivity() {
     private lateinit var createButton: Button
     private lateinit var calendarView: CalendarView
     private lateinit var imageView: ImageView
-    private lateinit var uri: Uri
-    private lateinit var imageButton: Button
-
-    private var activityCreationCallback: ActivityCreationCallback? = null
+    private  var uri: Uri? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,8 +45,12 @@ class UserActivityCreateActivity : AppCompatActivity() {
         totalRequireText = findViewById(R.id.totalRequire)
         calendarView = findViewById(R.id.calendarView)
         imageView = findViewById(R.id.imageView)
-        imageButton = findViewById(R.id.imageButton)
         createButton = findViewById(R.id.btn)
+
+        // Generate activity ID immediately
+        generateDocumentId(0, db.collection("activity")) { documentId ->
+            intent.putExtra("activityId", documentId)
+        }
 
         val galleryImage = registerForActivityResult(
             ActivityResultContracts.GetContent(),
@@ -62,13 +61,23 @@ class UserActivityCreateActivity : AppCompatActivity() {
                 }
             }
         )
+
         val btnBack = findViewById<ImageButton>(R.id.btnBack)
         btnBack.setOnClickListener {
-            finish() // 返回到前一个界面
+            finish() // Go back to the previous screen
         }
 
-        imageButton.setOnClickListener {
+        imageView.setOnClickListener {
             galleryImage.launch("image/*")
+        }
+
+        var date = ""
+        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            // Adjust month as CalendarView months are zero-based
+            date = String.format("%02d-%02d-%d", dayOfMonth, month + 1, year)
+            Toast.makeText(this, "Selected date: $date", Toast.LENGTH_SHORT).show()
+
+
         }
 
         createButton.setOnClickListener {
@@ -78,13 +87,16 @@ class UserActivityCreateActivity : AppCompatActivity() {
             val totalDonationReceived = "0"
             val totalRequire = totalRequireText.text.toString()
 
-            val selectedDateMilliseconds = calendarView.date
-            val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.US)
-            val date = dateFormat.format(Date(selectedDateMilliseconds))
+
             val userId = "U0003"
 
-            if (name.isEmpty() || description.isEmpty() || totalRequire.isEmpty() || uri == null) {
-                Toast.makeText(this, "Please fill in all fields and select an image", Toast.LENGTH_SHORT).show()
+            if (name.isEmpty() || description.isEmpty() || totalRequire.isEmpty()) {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (uri == null) {
+                Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -99,24 +111,39 @@ class UserActivityCreateActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (uri != null) {
-                uploadImageAndSaveData(
-                    name,
-                    status,
-                    description,
-                    date,
-                    totalDonationReceived,
-                    totalRequire,
-                    userId
-                )
-            } else {
-                Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
-            }
+            uploadImageAndSaveData(
+                name,
+                status,
+                description,
+                date,
+                totalDonationReceived,
+                totalRequire,
+                userId
+            )
+
+
+
         }
     }
 
-    fun setActivityCreationCallback(callback: UserActivityFragment) {
-        activityCreationCallback = callback
+
+
+    private fun generateDocumentId(num: Int, collectionRef: CollectionReference, callback: (String) -> Unit) {
+        val formattedCounter = String.format("%04d", num)
+        val documentIdToCheck = "A$formattedCounter"
+
+        collectionRef.document(documentIdToCheck)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    generateDocumentId(num + 1, collectionRef, callback)
+                } else {
+                    callback(documentIdToCheck)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e(ContentValues.TAG, "Error getting document: $exception")
+            }
     }
 
     private fun uploadImageAndSaveData(
@@ -131,6 +158,7 @@ class UserActivityCreateActivity : AppCompatActivity() {
         if (uri != null) {
             val imageFileName = "${UUID.randomUUID()}.jpg"
             val imageRef = storageRef.reference.child("images/$imageFileName")
+
 
             val uploadTask = imageRef.putFile(uri!!)
 
@@ -168,8 +196,8 @@ class UserActivityCreateActivity : AppCompatActivity() {
                                     imageUrl
                                 )
 
-                                activityCreationCallback?.onActivityCreated(activity)
-                                finish()
+                                // Notify the callback
+                                openFragment(UserActivityFragment())
                             }
                             .addOnFailureListener { e ->
                                 Log.e(ContentValues.TAG, "Error adding document", e)
@@ -184,8 +212,12 @@ class UserActivityCreateActivity : AppCompatActivity() {
             Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
         }
     }
+    private fun openFragment(fragment : Fragment){
+        val intent = Intent(this, UserHomeActivity::class.java)
 
-    interface ActivityCreationCallback {
-        fun onActivityCreated(activity: Activity)
+        // Optionally, pass data to the new activity (fragment)
+        intent.putExtra("fragmentToOpen", "Activity")
+        startActivity(intent)
+        finish() // This will close the current activity
     }
 }

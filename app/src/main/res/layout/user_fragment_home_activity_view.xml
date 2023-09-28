@@ -46,7 +46,7 @@
             android:layout_width="313dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="50dp"
             android:text="Description"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,16 +60,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginTop="15dp"
-            android:text="Total Donation"
+            android:text="@string/user_home_activityView_totalDonate_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userActivityViewDescriptionText" />
+            app:layout_constraintTop_toBottomOf="@+id/userActivityViewTtlRequiredText" />
 
         <TextView
             android:id="@+id/userActivityViewTtlDonatedText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="15dp"
             android:text="RM 1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userActivityViewTtlDonatedLabel" />
@@ -113,6 +112,34 @@
             android:text="@string/donationDetailsTitle"
             android:textSize="@dimen/titleTextSize"
             app:layout_constraintStart_toEndOf="@+id/user_home_donation_deatils_backButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/user_home_activityView_totalRequired_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/userActivityViewDescriptionText" />
+
+        <TextView
+            android:id="@+id/userActivityViewTtlRequiredText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:text="RM1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+        <TextView
+            android:id="@+id/user_homeView_activityStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@+id/userHomeActivityIdView"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

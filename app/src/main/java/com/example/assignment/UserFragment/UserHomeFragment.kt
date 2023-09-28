@@ -147,6 +147,8 @@ class UserHomeFragment : Fragment() {
                 Log.e(ContentValues.TAG, "Error fetching Firestore data: $exception")
             }
 
+
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 // Check which tab is selected and update the text accordingly
@@ -180,6 +182,7 @@ class UserHomeFragment : Fragment() {
 
                                 adapter.activityList = activityList
                                 adapter.notifyDataSetChanged()
+
                             }
                             .addOnFailureListener { exception ->
                                 Log.e(ContentValues.TAG, "Error fetching Firestore data: $exception")
@@ -213,6 +216,7 @@ class UserHomeFragment : Fragment() {
 
                                 adapter.activityList = activityList
                                 adapter.notifyDataSetChanged()
+
                             }
                             .addOnFailureListener { exception ->
                                 Log.e(ContentValues.TAG, "Error fetching Firestore data: $exception")

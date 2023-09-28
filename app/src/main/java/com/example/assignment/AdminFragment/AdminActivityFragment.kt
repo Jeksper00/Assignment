@@ -19,7 +19,7 @@ import com.example.assignment.R
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
-class AdminActivityFragment : Fragment(), AdminActivityCreateActivity.ActivityCreationCallback {
+class AdminActivityFragment : Fragment(){
     private lateinit var activityRecyclerView: RecyclerView
     private lateinit var adapter: ActivityAdapter
     private var allActivities: MutableList<Activity> = mutableListOf()
@@ -45,8 +45,7 @@ class AdminActivityFragment : Fragment(), AdminActivityCreateActivity.ActivityCr
         view.findViewById<Button>(R.id.createActivity).setOnClickListener {
 
 
-            val adminActivityFragment = this@AdminActivityFragment
-            (activity as? AdminActivityCreateActivity)?.setActivityCreationCallback(adminActivityFragment)
+
             startActivity(intent)
         }
 
@@ -106,22 +105,6 @@ class AdminActivityFragment : Fragment(), AdminActivityCreateActivity.ActivityCr
         return view
     }
 
-    override fun onActivityCreated(activity: Activity) {
-        val newActivity = Activity(
-            activity.userId,
-            activity.name,
-            activity.status,
-            activity.description,
-            activity.date,
-            activity.totalDonationReceived,
-            activity.totalRequired,
-            activity.userId,
-            activity.imageUrl
-        )
-
-        adapter.activityList.add(newActivity)
-        adapter.notifyDataSetChanged()
-    }
 
     private fun generateDocumentId(num: Int, collectionRef: CollectionReference, callback: (String) -> Unit) {
         val formattedCounter = String.format("%04d", num)

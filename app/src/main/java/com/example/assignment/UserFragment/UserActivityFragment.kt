@@ -1,5 +1,3 @@
-// UserActivityFragment.kt
-
 package com.example.assignment.UserFragment
 
 import android.content.ContentValues
@@ -21,7 +19,7 @@ import com.example.assignment.UserActivityCreateActivity
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
-class UserActivityFragment : Fragment(), UserActivityCreateActivity.ActivityCreationCallback {
+class UserActivityFragment : Fragment(){
     private lateinit var activityRecyclerView: RecyclerView
     private lateinit var adapter: UserActivityAdapter
     private var allActivities: MutableList<Activity> = mutableListOf()
@@ -32,22 +30,23 @@ class UserActivityFragment : Fragment(), UserActivityCreateActivity.ActivityCrea
     ): View? {
         val view = inflater.inflate(R.layout.user_fragment_activity, container, false)
 
+        var num = 0
+
+
         val db = FirebaseFirestore.getInstance()
         val activityCollection = db.collection("activity")
+        val intent = Intent(requireActivity(), UserActivityCreateActivity::class.java)
+        generateDocumentId(num, activityCollection) { documentId ->
+
+            intent.putExtra("activityId", documentId)
+
+        }
 
         view.findViewById<Button>(R.id.createActivity).setOnClickListener {
-            val intent = Intent(requireActivity(), UserActivityCreateActivity::class.java)
 
-            var num = 0
-            val db = FirebaseFirestore.getInstance()
-            val collectionRef = db.collection("activity")
 
-            generateDocumentId(num, collectionRef) { documentId ->
-                val userActivityFragment = this@UserActivityFragment
-                (activity as? UserActivityCreateActivity)?.setActivityCreationCallback(userActivityFragment)
-                intent.putExtra("activityId", documentId)
-                startActivity(intent)
-            }
+
+            startActivity(intent)
         }
 
         activityRecyclerView = view.findViewById(R.id.activityList)
@@ -74,23 +73,26 @@ class UserActivityFragment : Fragment(), UserActivityCreateActivity.ActivityCrea
                 val activityList = mutableListOf<Activity>()
                 for (document in querySnapshot) {
                     val status = document.getString("status") ?: ""
+                    val userId = document.getString("userId") ?: ""
+                    if (status != "admin") {
 
-                    val id = document.reference.id
-                    val name = document.getString("name") ?: ""
-                    val imageUrl = document.getString("imageUrl") ?: ""
-                    val description = document.getString("description") ?: ""
-                    val date = document.getString("date") ?: ""
-                    val donationReceivedString = document.getString("totalDonationReceived") ?: ""
-                    val donationReceived = donationReceivedString?.toDoubleOrNull() ?: 0.0
-                    val totalRequiredString = document.getString("totalRequired") ?: ""
-                    val totalRequired = totalRequiredString?.toDoubleOrNull() ?: 0.0
-                    val userId = document.getString("userid") ?: ""
+                        val id = document.reference.id
+                        val name = document.getString("name") ?: ""
+                        val imageUrl = document.getString("imageUrl") ?: ""
+                        val description = document.getString("description") ?: ""
+                        val date = document.getString("date") ?: ""
+                        val donationReceivedString = document.getString("donationReceived") ?: ""
+                        val donationReceived = donationReceivedString?.toDoubleOrNull() ?: 0.0
+                        val totalRequiredString = document.getString("totalRequired") ?: ""
+                        val totalRequired = totalRequiredString?.toDoubleOrNull() ?: 0.0
 
-                    val activityItem = Activity(
-                        id, name, status, description, date, donationReceived, totalRequired, userId, imageUrl
-                    )
-                    activityList.add(activityItem)
 
+                        val activityItem = Activity(
+                            id, name, status, description, date, donationReceived, totalRequired, userId, imageUrl
+                        )
+                        activityList.add(activityItem)
+
+                    }
                 }
 
                 allActivities.clear()
@@ -106,22 +108,6 @@ class UserActivityFragment : Fragment(), UserActivityCreateActivity.ActivityCrea
         return view
     }
 
-    override fun onActivityCreated(activity: Activity) {
-        val newActivity = Activity(
-            activity.userId,
-            activity.name,
-            activity.status,
-            activity.description,
-            activity.date,
-            activity.totalDonationReceived,
-            activity.totalRequired,
-            activity.userId,
-            activity.imageUrl
-        )
-
-        adapter.activityList.add(newActivity)
-        adapter.notifyDataSetChanged()
-    }
 
     private fun generateDocumentId(num: Int, collectionRef: CollectionReference, callback: (String) -> Unit) {
         val formattedCounter = String.format("%04d", num)

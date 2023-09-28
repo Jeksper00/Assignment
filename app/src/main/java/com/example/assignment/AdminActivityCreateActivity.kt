@@ -15,17 +15,11 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import com.example.assignment.AdminFragment.AdminActivityFragment
-import com.example.assignment.AdminFragment.AdminHomeFragment
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import java.util.UUID
 
 class AdminActivityCreateActivity : AppCompatActivity() {
@@ -40,7 +34,7 @@ class AdminActivityCreateActivity : AppCompatActivity() {
     private lateinit var calendarView: CalendarView
     private lateinit var imageView: ImageView
     private  var uri: Uri? = null
-    private var activityCreationCallback: ActivityCreationCallback? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +71,15 @@ class AdminActivityCreateActivity : AppCompatActivity() {
             galleryImage.launch("image/*")
         }
 
+        var date = ""
+        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            // Adjust month as CalendarView months are zero-based
+            date = String.format("%02d-%02d-%d", dayOfMonth, month + 1, year)
+            Toast.makeText(this, "Selected date: $date", Toast.LENGTH_SHORT).show()
+
+
+        }
+
         createButton.setOnClickListener {
             val name = nameText.text.toString()
             val status = "admin"
@@ -84,9 +87,7 @@ class AdminActivityCreateActivity : AppCompatActivity() {
             val totalDonationReceived = "0"
             val totalRequire = totalRequireText.text.toString()
 
-            val selectedDateMilliseconds = calendarView.date
-            val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.US)
-            val date = dateFormat.format(Date(selectedDateMilliseconds))
+
             val userId = "U0003"
 
             if (name.isEmpty() || description.isEmpty() || totalRequire.isEmpty()) {
@@ -119,12 +120,13 @@ class AdminActivityCreateActivity : AppCompatActivity() {
                 totalRequire,
                 userId
             )
+
+
+
         }
     }
 
-    fun setActivityCreationCallback(callback: ActivityCreationCallback) {
-        activityCreationCallback = callback
-    }
+
 
     private fun generateDocumentId(num: Int, collectionRef: CollectionReference, callback: (String) -> Unit) {
         val formattedCounter = String.format("%04d", num)
@@ -194,10 +196,7 @@ class AdminActivityCreateActivity : AppCompatActivity() {
                                     imageUrl
                                 )
 
-                                // Notify the callback (if set)
-//                                activityCreationCallback?.onActivityCreated(activity)
-
-//                                finish()
+                                // Notify the callback
                                 openFragment(AdminActivityFragment())
                             }
                             .addOnFailureListener { e ->
@@ -213,11 +212,6 @@ class AdminActivityCreateActivity : AppCompatActivity() {
             Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
         }
     }
-
-    interface ActivityCreationCallback {
-        fun onActivityCreated(activity: Activity)
-        }
-
     private fun openFragment(fragment : Fragment){
         val intent = Intent(this, AdminHomeActivity::class.java)
 

@@ -12,7 +12,9 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.example.assignment.UserFragment.UserActivityFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -182,7 +184,7 @@ class AdminActivityRetrieveActivity : AppCompatActivity() {
 
                 // Now delete the image from Firebase Storage
                 deleteImageFromStorage(activityId)
-                finish()
+                openFragment(UserActivityFragment())
             }
             .addOnFailureListener { exception ->
                 // Handle any errors that occurred while deleting from Firestore
@@ -200,12 +202,21 @@ class AdminActivityRetrieveActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 // Image deleted successfully from Firebase Storage
                 Log.d(ContentValues.TAG, "Image deleted from Firebase Storage")
-                finish() // Finish the activity after successful deletion
+
             }
             .addOnFailureListener { exception ->
                 // Handle any errors that occurred while deleting image from Firebase Storage
                 Log.e(ContentValues.TAG, "Error deleting image from Firebase Storage: $exception")
             }
+    }
+
+    private fun openFragment(fragment : Fragment){
+        val intent = Intent(this, AdminHomeActivity::class.java)
+
+        // Optionally, pass data to the new activity (fragment)
+        intent.putExtra("fragmentToOpen", "Activity")
+        startActivity(intent)
+        finish() // This will close the current activity
     }
 
 

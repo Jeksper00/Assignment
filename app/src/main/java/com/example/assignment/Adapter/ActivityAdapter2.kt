@@ -25,16 +25,16 @@ class ActivityAdapter2 (private val context: Context, private val fragmentManage
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val idTextView: TextView = itemView.findViewById(R.id.userListActivityIdView)
-        val imageView: ImageView = itemView.findViewById(R.id.user_home_activity_imageView)
-        val activityNameTextView: TextView = itemView.findViewById(R.id.userListActivityNameView)
-        val statusTextView: TextView = itemView.findViewById(R.id.userListActivityStatusView)
-        val descriptionTextView: TextView = itemView.findViewById(R.id.userListActivityDescriptionView)
-        val dateTextView: TextView = itemView.findViewById(R.id.userListActivityDateView)
-        val totalDonationView: TextView = itemView.findViewById(R.id.userListActivityDonationReceivedView)
+        val idTextView: TextView            = itemView.findViewById(R.id.userListActivityIdView)
+        val imageView: ImageView            = itemView.findViewById(R.id.user_home_activity_imageView)
+        val activityNameTextView: TextView  = itemView.findViewById(R.id.userListActivityNameView)
+        val statusTextView: TextView        = itemView.findViewById(R.id.userListActivityStatusView)
+        val descriptionTextView: TextView   = itemView.findViewById(R.id.userListActivityDescriptionView)
+        val dateTextView: TextView          = itemView.findViewById(R.id.userListActivityDateView)
+        val totalDonationView: TextView     = itemView.findViewById(R.id.userListActivityDonationReceivedView)
         val totalRequiredTextView: TextView = itemView.findViewById(R.id.userListActivityTtlRequiredView)
-        val userIdTextView: TextView = itemView.findViewById(R.id.userListActivityCreatorView)
-        val showActivityButton: Button = itemView.findViewById(R.id.userListActivityDonateButton)
+        val userIdTextView: TextView        = itemView.findViewById(R.id.userListActivityCreatorView)
+        val showActivityButton: Button      = itemView.findViewById(R.id.userListActivityDonateButton)
 
     }
 
@@ -50,13 +50,13 @@ class ActivityAdapter2 (private val context: Context, private val fragmentManage
         Glide.with(holder.itemView)
             .load(activity.imageUrl) // Assuming activity.imageUrl contains the image URL
             .into(holder.imageView)
-        holder.activityNameTextView.text = activity.name
-        holder.statusTextView.text = activity.status
-        holder.descriptionTextView.text = activity.description
-        holder.dateTextView.text = activity.date
-        holder.totalDonationView.text = activity.totalDonationReceived
+        holder.activityNameTextView.text  = activity.name
+        holder.statusTextView.text        = activity.status
+        holder.descriptionTextView.text   = activity.description
+        holder.dateTextView.text          = activity.date
+        holder.totalDonationView.text     = activity.totalDonationReceived
         holder.totalRequiredTextView.text = activity.totalRequired
-        holder.userIdTextView.text = activity.userId
+        holder.userIdTextView.text        = activity.userId
 
 
         // Set click listeners for buttons

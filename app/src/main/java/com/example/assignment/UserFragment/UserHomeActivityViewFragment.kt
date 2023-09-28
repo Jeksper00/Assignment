@@ -54,16 +54,6 @@ class UserHomeActivityViewFragment : Fragment() {
         val builder = AlertDialog.Builder(requireActivity())
         val inflater = LayoutInflater.from(requireActivity())
 
-        view.findViewById<ImageView>(R.id.user_home_donation_deatils_backButton).setOnClickListener{
-//            if(statusText.text == "admin"){
-//                val bundle = Bundle()
-//                bundle.putString("activityCategory", "admin") // Put the data you want to pass here
-//
-//                val receiverFragment = UserHomeFragment()
-//                receiverFragment.arguments = bundle
-//            }
-            requireActivity().onBackPressed()
-        }
 
         // Retrieve the notification data from the arguments bundle
         val activityDetails = arguments?.getParcelable(ActivityAdapter2.ARG_NOTIFICATION) as Activity?
@@ -94,6 +84,22 @@ class UserHomeActivityViewFragment : Fragment() {
         val donateButton = view.findViewById<Button>(R.id.activityViewDonateButton)
         donateButton.setOnClickListener {
             showDonationDialog(activityIdText,totalDonationText)
+        }
+
+        view.findViewById<ImageView>(R.id.user_home_donation_deatils_backButton).setOnClickListener{
+            if(statusText.text == "admin"){
+                val bundle = Bundle()
+                bundle.putString("activityCategory", "admin") // Put the data you want to pass here
+
+                val receiverFragment = UserHomeFragment()
+                receiverFragment.arguments = bundle
+
+//                // Perform the fragment transaction to navigate to the receiving fragment
+//                val transaction = fragmentManager?.beginTransaction()
+//                transaction?.replace(R.id.user_fl_wrapper, receiverFragment)
+//                transaction?.commit()
+            }
+            requireActivity().onBackPressed()
         }
 
 

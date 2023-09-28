@@ -25,8 +25,8 @@ class FeedbackAdapter(private val context: Context, private val fragmentManager:
     RecyclerView.Adapter<FeedbackAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val gmailTextView: TextView = itemView.findViewById(R.id.feedbackGmail)
-        val feedbackTextView: TextView = itemView.findViewById(R.id.feedbackText)
+        val gmailTextView: TextView       = itemView.findViewById(R.id.feedbackGmail)
+        val feedbackTextView: TextView    = itemView.findViewById(R.id.feedbackText)
         val deleteFeedbackButton : Button = itemView.findViewById(R.id.admin_delete_feedback)
 
     }
@@ -37,8 +37,8 @@ class FeedbackAdapter(private val context: Context, private val fragmentManager:
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val feedback = feedbackList[position]
-        holder.gmailTextView.text = feedback.gmail
+        val feedback                 = feedbackList[position]
+        holder.gmailTextView.text    = feedback.gmail
         holder.feedbackTextView.text = feedback.feedback
 
         holder.deleteFeedbackButton.setOnClickListener {

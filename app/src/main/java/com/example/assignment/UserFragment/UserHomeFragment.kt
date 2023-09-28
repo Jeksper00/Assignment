@@ -55,6 +55,8 @@ class UserHomeFragment : Fragment() {
         recyclerView.adapter       = adapter
 
 
+
+
         //Back button on screen
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -114,7 +116,7 @@ class UserHomeFragment : Fragment() {
         // Get a reference to the root layout (assuming it's a ConstraintLayout)
         val rootLayout = view.findViewById<ConstraintLayout>(R.id.user_home_activity_fragment2)
 
-        // Fetch activity data from Firestore
+        /// Fetch activity data from Firestore
         activityCollection.get()
             .addOnSuccessListener { querySnapshot ->
                 val activityList = mutableListOf<Activity>()
@@ -147,6 +149,18 @@ class UserHomeFragment : Fragment() {
                 Log.e(ContentValues.TAG, "Error fetching Firestore data: $exception")
             }
 
+
+//        val receivedData = arguments?.getString("activityCategory") // Replace "key" with the key you used
+//        if (receivedData == "admin") {
+//            val bundle = Bundle()
+////            bundle.putString("activityCategory", "") // Put the data you want to pass here
+//            //Set the default tab position (e.g., select the second tab)
+//            val defaultTabPosition = 1 // Index of the tab you want to select
+//            val tab = tabLayout.getTabAt(defaultTabPosition)
+//            tab?.select()
+//        }else{
+//
+//        }
 
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -225,13 +239,14 @@ class UserHomeFragment : Fragment() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                // Do nothing here
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // Do nothing here
             }
         })
+
 
         return view
     }

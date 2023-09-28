@@ -30,22 +30,24 @@ class AdminActivityFragment : Fragment(), AdminActivityCreateActivity.ActivityCr
     ): View? {
         val view = inflater.inflate(R.layout.admin_fragment_activity, container, false)
 
+        var num = 0
+
+
         val db = FirebaseFirestore.getInstance()
         val activityCollection = db.collection("activity")
+        val intent = Intent(requireActivity(), AdminActivityCreateActivity::class.java)
+        generateDocumentId(num, activityCollection) { documentId ->
+
+            intent.putExtra("activityId", documentId)
+
+        }
 
         view.findViewById<Button>(R.id.createActivity).setOnClickListener {
-            val intent = Intent(requireActivity(), AdminActivityCreateActivity::class.java)
 
-            var num = 0
-            val db = FirebaseFirestore.getInstance()
-            val collectionRef = db.collection("activity")
 
-            generateDocumentId(num, collectionRef) { documentId ->
-                val adminActivityFragment = this@AdminActivityFragment
-                (activity as? AdminActivityCreateActivity)?.setActivityCreationCallback(adminActivityFragment)
-                intent.putExtra("activityId", documentId)
-                startActivity(intent)
-            }
+            val adminActivityFragment = this@AdminActivityFragment
+            (activity as? AdminActivityCreateActivity)?.setActivityCreationCallback(adminActivityFragment)
+            startActivity(intent)
         }
 
         activityRecyclerView = view.findViewById(R.id.activityList)

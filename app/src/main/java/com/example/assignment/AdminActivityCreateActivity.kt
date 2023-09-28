@@ -1,6 +1,7 @@
 package com.example.assignment
 
 import android.content.ContentValues
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,11 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import com.example.assignment.AdminFragment.AdminActivityFragment
+import com.example.assignment.AdminFragment.AdminHomeFragment
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -33,7 +39,7 @@ class AdminActivityCreateActivity : AppCompatActivity() {
     private lateinit var createButton: Button
     private lateinit var calendarView: CalendarView
     private lateinit var imageView: ImageView
-    private lateinit var uri: Uri
+    private  var uri: Uri? = null
     private var activityCreationCallback: ActivityCreationCallback? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -151,6 +157,7 @@ class AdminActivityCreateActivity : AppCompatActivity() {
             val imageFileName = "${UUID.randomUUID()}.jpg"
             val imageRef = storageRef.reference.child("images/$imageFileName")
 
+
             val uploadTask = imageRef.putFile(uri!!)
 
             uploadTask.addOnSuccessListener { taskSnapshot ->
@@ -188,9 +195,10 @@ class AdminActivityCreateActivity : AppCompatActivity() {
                                 )
 
                                 // Notify the callback (if set)
-                                activityCreationCallback?.onActivityCreated(activity)
+//                                activityCreationCallback?.onActivityCreated(activity)
 
-                                finish()
+//                                finish()
+                                openFragment(AdminActivityFragment())
                             }
                             .addOnFailureListener { e ->
                                 Log.e(ContentValues.TAG, "Error adding document", e)
@@ -208,5 +216,14 @@ class AdminActivityCreateActivity : AppCompatActivity() {
 
     interface ActivityCreationCallback {
         fun onActivityCreated(activity: Activity)
+        }
+
+    private fun openFragment(fragment : Fragment){
+        val intent = Intent(this, AdminHomeActivity::class.java)
+
+        // Optionally, pass data to the new activity (fragment)
+        intent.putExtra("fragmentToOpen", "Activity")
+        startActivity(intent)
+        finish() // This will close the current activity
     }
 }

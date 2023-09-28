@@ -15,6 +15,25 @@
         <activity
             android:name=".UserFragment.UserHomeActivityShowActivity"
             android:exported="false" />
+        <!--Wui Teck-->
+        <activity
+            android:name=".AdminActivityCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivityUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminActivityRetrieveActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserActivityCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserActivityUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserActivityRetrieveActivity"
+            android:exported="false"/>
         <activity
             android:name=".AdminHomeActivity"
             android:exported="false" />

@@ -1,38 +1,160 @@
+// UserActivityFragment.kt
+
 package com.example.assignment.UserFragment
 
+import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
-import androidx.navigation.fragment.findNavController
+import android.widget.Button
+import android.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.assignment.Activity
 import com.example.assignment.R
+import com.example.assignment.UserActivityAdapter
+import com.example.assignment.UserActivityCreateActivity
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 
-
-class UserActivityFragment : Fragment() {
-
+class UserActivityFragment : Fragment(), UserActivityCreateActivity.ActivityCreationCallback {
+    private lateinit var activityRecyclerView: RecyclerView
+    private lateinit var adapter: UserActivityAdapter
+    private var allActivities: MutableList<Activity> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.user_fragment_activity, container, false)
 
-        //Back button on screen
-        val onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                // Use the NavController to navigate to the specified action
-                findNavController().navigate(R.id.action_userActivityFragment_to_userLoginActivity)
+        val db = FirebaseFirestore.getInstance()
+        val activityCollection = db.collection("activity")
 
+        view.findViewById<Button>(R.id.createActivity).setOnClickListener {
+            val intent = Intent(requireActivity(), UserActivityCreateActivity::class.java)
+
+            var num = 0
+            val db = FirebaseFirestore.getInstance()
+            val collectionRef = db.collection("activity")
+
+            generateDocumentId(num, collectionRef) { documentId ->
+                val userActivityFragment = this@UserActivityFragment
+                (activity as? UserActivityCreateActivity)?.setActivityCreationCallback(userActivityFragment)
+                intent.putExtra("activityId", documentId)
+                startActivity(intent)
             }
         }
-        // Add the callback to the fragment's lifecycle
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
+
+        activityRecyclerView = view.findViewById(R.id.activityList)
+        activityRecyclerView.layoutManager = GridLayoutManager(requireContext(), 1)
+        adapter = UserActivityAdapter(requireContext(), requireFragmentManager(), mutableListOf())
+        activityRecyclerView.adapter = adapter
+
+        val searchView = view.findViewById<SearchView>(R.id.searchView)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val filteredActivities = filterActivities(newText)
+                adapter.activityList = filteredActivities
+                adapter.notifyDataSetChanged()
+                return true
+            }
+        })
+
+        activityCollection.get()
+            .addOnSuccessListener { querySnapshot ->
+                val activityList = mutableListOf<Activity>()
+                for (document in querySnapshot) {
+                    val status = document.getString("status") ?: ""
+
+                    val id = document.reference.id
+                    val name = document.getString("name") ?: ""
+                    val imageUrl = document.getString("imageUrl") ?: ""
+                    val description = document.getString("description") ?: ""
+                    val date = document.getString("date") ?: ""
+                    val donationReceivedString = document.getString("totalDonationReceived") ?: ""
+                    val donationReceived = donationReceivedString?.toDoubleOrNull() ?: 0.0
+                    val totalRequiredString = document.getString("totalRequired") ?: ""
+                    val totalRequired = totalRequiredString?.toDoubleOrNull() ?: 0.0
+                    val userId = document.getString("userid") ?: ""
+
+                    val activityItem = Activity(
+                        id, name, status, description, date, donationReceived, totalRequired, userId, imageUrl
+                    )
+                    activityList.add(activityItem)
+
+                }
+
+                allActivities.clear()
+                allActivities.addAll(activityList)
+
+                adapter.activityList = activityList
+                adapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Log.e(ContentValues.TAG, "Error fetching Firestore data: $exception")
+            }
 
         return view
     }
 
+    override fun onActivityCreated(activity: Activity) {
+        val newActivity = Activity(
+            activity.userId,
+            activity.name,
+            activity.status,
+            activity.description,
+            activity.date,
+            activity.totalDonationReceived,
+            activity.totalRequired,
+            activity.userId,
+            activity.imageUrl
+        )
 
+        adapter.activityList.add(newActivity)
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun generateDocumentId(num: Int, collectionRef: CollectionReference, callback: (String) -> Unit) {
+        val formattedCounter = String.format("%04d", num)
+        val documentIdToCheck = "A$formattedCounter"
+
+        collectionRef.document(documentIdToCheck)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    generateDocumentId(num + 1, collectionRef, callback)
+                } else {
+                    callback(documentIdToCheck)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e(ContentValues.TAG, "Error getting document: $exception")
+            }
+    }
+
+    private fun filterActivities(query: String?): MutableList<Activity> {
+        val filteredList = mutableListOf<Activity>()
+        query?.let { searchText ->
+            for (activity in allActivities) {
+                val idMatch = activity.activityid.toLowerCase().contains(searchText.toLowerCase())
+                val nameMatch = activity.name.toLowerCase().contains(searchText.toLowerCase())
+                val userMatch = activity.userId.toLowerCase().contains(searchText.toLowerCase())
+                val dateMatch = activity.date.toLowerCase().contains(searchText.toLowerCase())
+
+                if (nameMatch || userMatch || dateMatch || idMatch) {
+                    filteredList.add(activity)
+                }
+            }
+        }
+        return filteredList
+    }
 }

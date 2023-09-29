@@ -22,7 +22,7 @@ class UserActivityAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserActivityViewHolder {
-       val itemView =LayoutInflater.from(parent.context).inflate(R.layout.user_activity_retrieve_list,parent,false)
+        val itemView =LayoutInflater.from(parent.context).inflate(R.layout.user_activity_retrieve_list,parent,false)
         return UserActivityViewHolder(itemView)
     }
 
@@ -48,7 +48,7 @@ class UserActivityAdapter(
 
 
 
-         //Set click listeners for Retrieve
+        //Set click listeners for Retrieve
         holder.editButton.setOnClickListener {
 //  Log.d(TAG, "Edit button clicked for activity ID: ${currentitem.activityId}")
 

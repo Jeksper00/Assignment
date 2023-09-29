@@ -1,39 +1,135 @@
 package com.example.assignment.UserFragment
 
+
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
-import androidx.navigation.fragment.findNavController
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.assignment.R
+import com.example.assignment.UserEditProfileFragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class UserProfileFragment : Fragment() {
 
+    private lateinit var userNameTextView: TextView
+    private lateinit var userEmailTextView: TextView
+    private lateinit var userProfileImageView: ImageView
+    private lateinit var userEditDetails: TextView
+    private lateinit var editBtn: ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.user_fragment_profile, container, false)
 
-        //Back button on screen
-        val onBackPressedCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                // Use the NavController to navigate to the specified action
-                findNavController().navigate(R.id.action_userProfileFragment_to_userLoginActivity)
+        userNameTextView = view.findViewById(R.id.username)
+        userEmailTextView = view.findViewById(R.id.userEmailAddress)
+        userProfileImageView = view.findViewById(R.id.userProfilePic)
+        userEditDetails = view.findViewById(R.id.textEditDetails)
+        editBtn = view.findViewById(R.id.editBtn)
 
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid
+        val firestore = FirebaseFirestore.getInstance()
+
+        if (user != null) {
+            // Retrieve user's name and email from Firebase Authentication
+            val userName = user.displayName
+            val userEmail = user.email
+
+
+
+            if (userEmail != null) {
+
+                // Query Firestore to get the user with the matching email
+                firestore.collection("user")
+                    .whereEqualTo("email", userEmail)
+                    .get()
+                    .addOnSuccessListener { querySnapshot ->
+                        for (document in querySnapshot) {
+                            // Get the user's ID from the document
+                            val userIdFromFirestore = document.id
+
+                            if (userId != null) {
+                                firestore.collection("user").document(userId)
+                                    .get()
+                                    .addOnSuccessListener { document ->
+                                        if (document != null) {
+                                            // Update UI with user's name and email
+                                            userNameTextView.text = document.getString("name")
+                                            userEmailTextView.text = userEmail
+                                            val profilePictureUrl = document.getString("profilePictureUrl")
+                                            if (profilePictureUrl != null && profilePictureUrl.isNotEmpty()) {
+                                                // Load and display the profile picture using Glide
+                                                Glide.with(requireContext())
+                                                    .load(profilePictureUrl)
+                                                    .into(userProfileImageView)
+                                            } else {
+                                                // User hasn't set a profile picture, display default image
+                                                userProfileImageView.setImageResource(R.drawable.icon_add_photo)
+                                            }
+                                        } else {
+                                            // Handle the case where the document does not exist
+                                        }
+                                    }
+                                    .addOnFailureListener { e ->
+                                        // Handle any errors that may occur during data retrieval
+                                    }
+                            }
+
+
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        // Handle any errors that may occur during the query
+                    }
             }
-        }
-        // Add the callback to the fragment's lifecycle
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
 
+        }
+        editBtn.setOnClickListener{
+//            val intent = Intent(requireContext(), UserEditProfileFragment::class.java)
+//            intent.putExtra("userId", userId)
+//            this.startActivity(intent)
+//            fragmentManager.beginTransaction()
+//                .replace(R.id.user_fl_wrapper, UserEditProfileFragment())
+//                .addToBackStack(null)
+//                .commit()
+
+            val bundle = Bundle()
+            bundle.putString("userId", userId)
+
+            val fragment = UserEditProfileFragment()
+            fragment.setArguments(bundle)
+
+            // Get the FragmentManager for the parent Activity
+            val fragmentManager = requireActivity().supportFragmentManager
+
+            // Create a FragmentTransaction
+            val fragmentTransaction = fragmentManager.beginTransaction()
+
+            // Replace the current fragment with the new fragment
+//            val newFragment = UserEditProfileFragment()
+//            fragmentTransaction.replace(R.id.user_fl_wrapper, newFragment)
+
+            fragmentTransaction.replace(R.id.user_fl_wrapper, fragment)
+
+            // Add the transaction to the back stack (optional)
+            fragmentTransaction.addToBackStack(null)
+
+            // Commit the transaction
+            fragmentTransaction.commit()
+
+
+        }
 
         return view
     }
-
-
 }

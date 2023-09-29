@@ -79,11 +79,11 @@ class AdminActivityFragment : Fragment(){
                         val imageUrl = document.getString("imageUrl") ?: ""
                         val description = document.getString("description") ?: ""
                         val date = document.getString("date") ?: ""
-                        val donationReceivedString = document.getString("donationReceived") ?: ""
+                        val donationReceivedString = document.getString("totalDonationReceived") ?: ""
                         val donationReceived = donationReceivedString?.toDoubleOrNull() ?: 0.0
                         val totalRequiredString = document.getString("totalRequired") ?: ""
                         val totalRequired = totalRequiredString?.toDoubleOrNull() ?: 0.0
-                        val userId = document.getString("userId") ?: ""
+                        val userId = document.getString("userid") ?: ""
 
                         val activityItem = Activity(
                             id, name, status, description, date, donationReceived, totalRequired, userId, imageUrl

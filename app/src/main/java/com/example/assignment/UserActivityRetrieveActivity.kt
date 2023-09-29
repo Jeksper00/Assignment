@@ -93,17 +93,17 @@ class UserActivityRetrieveActivity : AppCompatActivity() {
                         status = documentSnapshot.getString("status") ?: ""
                         description = documentSnapshot.getString("description") ?: ""
                         dateExist =documentSnapshot.getString("date") ?: ""
-                        donationReceivedString = documentSnapshot.getString("donationReceived") ?: ""
+                        donationReceivedString = documentSnapshot.getString("totalDonationReceived") ?: ""
                         imageUrl = documentSnapshot.getString("imageUrl") ?: ""
 
                         totalRequiredString = documentSnapshot.getString("totalRequired") ?: ""
 
-                        userId = documentSnapshot.getString("userId") ?: ""
+                        userId = documentSnapshot.getString("userid") ?: ""
 
 
 //                        // Now you have the existing activity data, you can populate your UI elements
 //                        // Populate EditText fields with existing data
-                        userIdText.setText(userId)
+
                         activityIdText.setText(id)
                         nameText.setText(name)
                         statusText.setText(status)
@@ -126,8 +126,9 @@ class UserActivityRetrieveActivity : AppCompatActivity() {
                                 calendarView.date = dateMilliseconds
                             }
                         }
-                        totalRequireText.setText(totalRequiredString)
-                        totalReceiveText.setText(donationReceivedString)
+                        totalRequireText.setText("Total Require : RM ${totalRequiredString}")
+                        totalReceiveText.setText("Total Received : RM ${donationReceivedString}")
+                        userIdText.setText("Create By:  ${userId}")
                     } else {
                         // Document does not exist
                         // Handle the case where the activity with the given ID does not exist
@@ -209,6 +210,7 @@ class UserActivityRetrieveActivity : AppCompatActivity() {
                 Log.e(ContentValues.TAG, "Error deleting image from Firebase Storage: $exception")
             }
     }
+
     private fun openFragment(fragment : Fragment){
         val intent = Intent(this, UserHomeActivity::class.java)
 
@@ -217,5 +219,6 @@ class UserActivityRetrieveActivity : AppCompatActivity() {
         startActivity(intent)
         finish() // This will close the current activity
     }
+
 
 }

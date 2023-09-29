@@ -1,63 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:theme="@style/Theme.Admin"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-tools:context=".AdminFragment.AdminActivityFragment"
-android:id="@+id/layoutAdminActivity">
-
-<!-- Title -->
-<TextView
-    android:id="@+id/text"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Admin Activity"
-    android:textSize="24sp"
-    android:textStyle="bold"
-    android:gravity="center"
-    android:layout_gravity="top"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp" />
-
-<!-- SearchView -->
-
-<!-- Create Button -->
-<android.widget.SearchView
-    android:id="@+id/searchView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="top|start"
-    android:iconifiedByDefault="false"
-    android:queryHint="Search activities"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    />
-
-
-
-<Button
-    android:id="@+id/createActivity"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="top|end"
-    android:text="Create"
-    android:paddingStart="32dp"
-    android:paddingEnd="32dp"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp"
-    android:textSize="18sp"
-    android:textStyle="bold"
-    android:textColor="#FFFFFF"
-    android:elevation="4dp" />
-
-<!-- RecyclerView -->
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/activityList"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="fill"
-    android:layout_marginTop="72dp" />
+    android:theme="@style/Theme.Admin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AdminFragment.AdminActivityFragment"
+    android:id="@+id/layoutAdminActivity">
+
+    <!-- Title -->
+
+    <!-- SearchView -->
+
+
+    <!-- Create Button -->
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:gravity="center"
+        android:text="Admin Activity"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- RecyclerView -->
+
+    <Button
+        android:id="@+id/createActivity"
+        android:layout_width="63dp"
+        android:layout_height="38dp"
+        android:layout_gravity="top|end"
+        android:elevation="4dp"
+        android:paddingStart="5dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="6dp"
+        android:text="+"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <android.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="46dp"
+        android:paddingBottom="16dp"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search activities"
+        app:layout_constraintTop_toBottomOf="@id/text"
+
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/activityList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="fill"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="72dp"/>
 
 </FrameLayout>

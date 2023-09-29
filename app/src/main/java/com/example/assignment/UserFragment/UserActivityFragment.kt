@@ -43,9 +43,6 @@ class UserActivityFragment : Fragment(){
         }
 
         view.findViewById<Button>(R.id.createActivity).setOnClickListener {
-
-
-
             startActivity(intent)
         }
 
@@ -73,24 +70,35 @@ class UserActivityFragment : Fragment(){
                 val activityList = mutableListOf<Activity>()
                 for (document in querySnapshot) {
                     val status = document.getString("status") ?: ""
-                    val userId = document.getString("userId") ?: ""
+                    val userId = document.getString("userid") ?: ""
                     if (status != "admin") {
+                        if (userId==userId) {//auth
 
-                        val id = document.reference.id
-                        val name = document.getString("name") ?: ""
-                        val imageUrl = document.getString("imageUrl") ?: ""
-                        val description = document.getString("description") ?: ""
-                        val date = document.getString("date") ?: ""
-                        val donationReceivedString = document.getString("donationReceived") ?: ""
-                        val donationReceived = donationReceivedString?.toDoubleOrNull() ?: 0.0
-                        val totalRequiredString = document.getString("totalRequired") ?: ""
-                        val totalRequired = totalRequiredString?.toDoubleOrNull() ?: 0.0
+                            val id = document.reference.id
+                            val name = document.getString("name") ?: ""
+                            val imageUrl = document.getString("imageUrl") ?: ""
+                            val description = document.getString("description") ?: ""
+                            val date = document.getString("date") ?: ""
+                            val donationReceivedString =
+                                document.getString("totalDonationReceived") ?: ""
+                            val donationReceived = donationReceivedString?.toDoubleOrNull() ?: 0.0
+                            val totalRequiredString = document.getString("totalRequired") ?: ""
+                            val totalRequired = totalRequiredString?.toDoubleOrNull() ?: 0.0
 
 
-                        val activityItem = Activity(
-                            id, name, status, description, date, donationReceived, totalRequired, userId, imageUrl
-                        )
-                        activityList.add(activityItem)
+                            val activityItem = Activity(
+                                id,
+                                name,
+                                status,
+                                description,
+                                date,
+                                donationReceived,
+                                totalRequired,
+                                userId,
+                                imageUrl
+                            )
+                            activityList.add(activityItem)
+                        }
 
                     }
                 }

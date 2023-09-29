@@ -15,6 +15,8 @@ import com.bumptech.glide.Glide
 import com.example.assignment.Model.Activity
 import com.example.assignment.R
 import com.example.assignment.UserFragment.UserHomeActivityViewFragment
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class ActivityAdapter2 (private val context: Context, private val fragmentManager: FragmentManager,
                         public var activityList: MutableList<Activity>) :
@@ -56,6 +58,7 @@ class ActivityAdapter2 (private val context: Context, private val fragmentManage
         holder.dateTextView.text          = activity.date
         holder.totalDonationView.text     = activity.totalDonationReceived
         holder.totalRequiredTextView.text = activity.totalRequired
+
         holder.userIdTextView.text        = activity.userId
 
 

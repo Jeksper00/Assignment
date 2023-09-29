@@ -12,9 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Assignment"
         tools:targetApi="31">
-        <activity
-            android:name=".UserFragment.UserHomeActivityShowActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".UserFragment.UserHomeActivityShowActivity"-->
+<!--            android:exported="false" />-->
         <!--Wui Teck-->
         <activity
             android:name=".AdminActivityCreateActivity"

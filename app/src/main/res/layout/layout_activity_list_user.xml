@@ -48,8 +48,11 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
             android:text="Name"
+            android:visibility="gone"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/userListActivityNameView" />
+
+
 
 
         <Button

@@ -24,6 +24,7 @@ import com.example.assignment.Adapter.NotificationAdapter
 import com.example.assignment.AdminFragment.AdminNotificationCreateFragment
 import com.example.assignment.Model.Activity
 import com.example.assignment.Model.Notification
+import com.example.assignment.Model.User2
 import com.example.assignment.R
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
@@ -44,6 +45,7 @@ class UserHomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.user_fragment_home, container, false)
+        val view2 = inflater.inflate(R.layout.layout_activity_list_user, container, false)
         // Initialize Firestore
         val db = FirebaseFirestore.getInstance()
         val activityCollection = db.collection("activity")
@@ -131,6 +133,12 @@ class UserHomeFragment : Fragment() {
                         val totalDonationReceived = document.getString("totalDonationReceived") ?: ""
                         val totalRequired         = document.getString("totalRequired") ?: ""
                         val userId                = document.getString("userid") ?: ""
+                        val user = User2()
+                        val userCollection = db.collection("user")
+                        userCollection.document(userId).get().addOnSuccessListener{ userDocument ->
+                                val userName = userDocument.getString("name")?:""
+                                val user = User2(userName)
+                        }
                         val notificationItem      = Activity(id, imageUrl, name, status, description
                             , date, totalDonationReceived, totalRequired,  userId)
                         activityList.add(notificationItem)
@@ -216,13 +224,15 @@ class UserHomeFragment : Fragment() {
                                         val date                  = document.getString("date") ?: ""
                                         val totalDonationReceived = document.getString("totalDonationReceived") ?: ""
                                         val totalRequired         = document.getString("totalRequired") ?: ""
-                                        val userId                = document.getString("userid") ?: ""
+                                        val userId                = "Official"
                                         val notificationItem      = Activity(id, imageUrl, name, status, description
                                             , date, totalDonationReceived, totalRequired,  userId)
                                         activityList.add(notificationItem)
 
                                     }
                                 }
+
+
 
                                 // Update the allActivities list
                                 allActivities.clear()
@@ -246,6 +256,7 @@ class UserHomeFragment : Fragment() {
                 // Do nothing here
             }
         })
+
 
 
         return view

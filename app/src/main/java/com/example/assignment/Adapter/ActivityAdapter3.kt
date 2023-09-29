@@ -15,11 +15,12 @@ import com.bumptech.glide.Glide
 import com.example.assignment.Model.Activity
 import com.example.assignment.R
 import com.example.assignment.UserFragment.UserHomeActivityViewFragment
+import com.google.firebase.firestore.FirebaseFirestore
 
 
-class ActivityAdapter2 (private val context: Context, private val fragmentManager: FragmentManager,
-                                 public var activityList: MutableList<Activity>) :
-    RecyclerView.Adapter<ActivityAdapter2.ViewHolder>() {
+class ActivityAdapter3 (private val context: Context, private val fragmentManager: FragmentManager,
+                        public var activityList: MutableList<Activity>) :
+    RecyclerView.Adapter<ActivityAdapter3.ViewHolder>() {
 
     companion object {
         const val ARG_NOTIFICATION = "notification"
@@ -35,12 +36,14 @@ class ActivityAdapter2 (private val context: Context, private val fragmentManage
         val totalDonationView: TextView     = itemView.findViewById(R.id.userListActivityDonationReceivedView)
         val totalRequiredTextView: TextView = itemView.findViewById(R.id.userListActivityTtlRequiredView)
         val userIdTextView: TextView        = itemView.findViewById(R.id.userListActivityCreatorView)
-        val showActivityButton: Button      = itemView.findViewById(R.id.userListActivityDonateButton)
+        val approveActivityButton: Button   = itemView.findViewById(R.id.userListActivityAproveButton)
+        val rejectActivityButton: Button    = itemView.findViewById(R.id.userListActivityRejectButton)
+
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_activity_list_user, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_adminhome_activitylist, parent, false)
         return ViewHolder(view)
     }
 
@@ -62,25 +65,22 @@ class ActivityAdapter2 (private val context: Context, private val fragmentManage
 
 
         // Set click listeners for buttons
-        holder.showActivityButton.setOnClickListener {
+        holder.approveActivityButton.setOnClickListener {
             // Handle button click here
-            // You can open an edit dialog/fragment here
-            val activityDetails = activityList[position]
+            val db = FirebaseFirestore.getInstance()
+            val activityCollection = db.collection("activity")
+            holder.idTextView.text = activity.id
+            activityCollection.document(activity.id)
+                .update("status", "approve")
 
-            // Create a new instance of the EditNotificationDialogFragment
-            val activityViewFragment = UserHomeActivityViewFragment()
-
-            // Pass the notification data to the fragment
-            val args = Bundle()
-            args.putParcelable(ARG_NOTIFICATION, activityDetails)
-            activityViewFragment.arguments = args
-
-            val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-            // Show the edit dialog using the FragmentManager
-            fragmentManager.beginTransaction()
-                .replace(R.id.user_fl_wrapper, activityViewFragment)
-                .addToBackStack(null)
-                .commit()
+        }
+        holder.rejectActivityButton.setOnClickListener {
+            // Handle button click here
+            val db = FirebaseFirestore.getInstance()
+            val activityCollection = db.collection("activity")
+            holder.idTextView.text = activity.id
+            activityCollection.document(activity.id)
+                .update("status", "reject")
         }
 
 

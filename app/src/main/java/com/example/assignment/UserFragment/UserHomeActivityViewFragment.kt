@@ -1,34 +1,23 @@
 package com.example.assignment.UserFragment
 
 import android.app.AlertDialog
-import android.content.Context
-import android.graphics.Rect
-import android.media.Image
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.assignment.Adapter.ActivityAdapter2
-import com.example.assignment.AdminFragment.AdminHomeFragment
 import com.example.assignment.Model.Activity
 import com.example.assignment.R
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
-import kotlin.math.exp
 
 
 class UserHomeActivityViewFragment : Fragment() {

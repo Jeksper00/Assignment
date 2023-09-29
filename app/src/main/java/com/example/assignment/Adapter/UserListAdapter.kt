@@ -1,7 +1,10 @@
 package com.example.assignment.Adapter
 
+import android.app.AlertDialog
+import android.content.ContentValues
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +19,7 @@ import com.example.assignment.AdminFragment.AdminUpdateUserDetailsFragment
 import com.example.assignment.AdminFragment.AdminViewUserDetailsFragment
 import com.example.assignment.Model.User
 import com.example.assignment.R
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class UserListAdapter(private val context: Context, private val fragmentManager: FragmentManager,
@@ -91,10 +95,64 @@ class UserListAdapter(private val context: Context, private val fragmentManager:
                                 .addToBackStack(null)
                                 .commit()
                 }
+                // Set click listeners for delete button
+                holder.deleteButton.setOnClickListener {
+                        val positionToDelete     = holder.adapterPosition
+                        val userToDelete = userList[positionToDelete]
+
+                        // Show a confirmation dialog
+                        val alertDialogBuilder = AlertDialog.Builder(context)
+                        alertDialogBuilder.setTitle("Delete User")
+                        alertDialogBuilder.setMessage("Are you sure you want to delete this user?")
+                        alertDialogBuilder.setPositiveButton("Delete") { _, _ ->
+                                // Remove the user from the list locally
+                                userList.remove(userToDelete)
+                                notifyItemRemoved(positionToDelete)
+
+                                // Delete the user from Firestore
+                                val db = FirebaseFirestore.getInstance()
+                                val userCollection = db.collection("user")
+
+                                // Use the correct document ID to delete the specific user in Firestore
+                                val userIdToDelete = userToDelete.id // Assuming id is the correct document ID
+                                userCollection.document(userIdToDelete)
+                                        .delete()
+                                        .addOnSuccessListener {
+                                                Log.d(ContentValues.TAG, "User deleted from Firestore")
+
+                                                // Show a success message in a dialog
+                                                val successDialogBuilder = AlertDialog.Builder(context)
+                                                successDialogBuilder.setTitle("Success")
+                                                successDialogBuilder.setMessage("User deleted successfully.")
+                                                successDialogBuilder.setPositiveButton("OK") { dialog, _ ->
+                                                        dialog.dismiss()
+                                                }
+                                                successDialogBuilder.show()
+                                        }
+                                        .addOnFailureListener { exception ->
+                                                Log.e(ContentValues.TAG, "Error deleting user from Firestore: $exception")
+
+                                                // Show an error message in a dialog if deletion fails
+                                                val errorDialogBuilder = AlertDialog.Builder(context)
+                                                errorDialogBuilder.setTitle("Error")
+                                                errorDialogBuilder.setMessage("Error deleting user: $exception")
+                                                errorDialogBuilder.setPositiveButton("OK") { dialog, _ ->
+                                                        dialog.dismiss()
+                                                }
+                                                errorDialogBuilder.show()
+                                        }
+                        }
+                        alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+                                dialog.dismiss()
+                        }
+                        alertDialogBuilder.show()
+                        }
         }
 
         override fun getItemCount(): Int {
                 return userList.size
         }
+
+
 
 }

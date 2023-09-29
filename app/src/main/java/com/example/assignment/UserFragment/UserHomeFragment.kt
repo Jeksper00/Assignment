@@ -1,34 +1,24 @@
 package com.example.assignment.UserFragment
 
 import android.content.ContentValues
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.SearchView
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.assignment.Adapter.ActivityAdapter2
-import com.example.assignment.Adapter.NotificationAdapter
-import com.example.assignment.AdminFragment.AdminNotificationCreateFragment
 import com.example.assignment.Model.Activity
-import com.example.assignment.Model.Notification
 import com.example.assignment.Model.User2
 import com.example.assignment.R
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
-import org.w3c.dom.Text
 
 
 class UserHomeFragment : Fragment() {
@@ -51,7 +41,7 @@ class UserHomeFragment : Fragment() {
         val activityCollection = db.collection("activity")
         val userCollection = db.collection("user")
 
-        recyclerView               = view.findViewById(R.id.userHomeActivityRecycler)
+        recyclerView               = view.findViewById(R.id.adminHomeActivityRecycler)
         recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
         adapter                    = ActivityAdapter2(requireContext(),requireFragmentManager(), mutableListOf())
         recyclerView.adapter       = adapter

@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.assignment.AdminFragment.AdminHomeFragment
 import com.example.assignment.Model.Activity
 import com.example.assignment.R
 import com.example.assignment.UserFragment.UserHomeActivityViewFragment
@@ -73,6 +76,13 @@ class ActivityAdapter3 (private val context: Context, private val fragmentManage
             activityCollection.document(activity.id)
                 .update("status", "approve")
 
+            val toast = Toast.makeText(context, "Approve Successful", Toast.LENGTH_SHORT)
+            toast.show()
+
+            fragmentManager.beginTransaction()
+                .replace(R.id.admin_fl_wrapper, AdminHomeFragment())
+                .addToBackStack(null)
+                .commit()
         }
         holder.rejectActivityButton.setOnClickListener {
             // Handle button click here
@@ -81,6 +91,14 @@ class ActivityAdapter3 (private val context: Context, private val fragmentManage
             holder.idTextView.text = activity.id
             activityCollection.document(activity.id)
                 .update("status", "reject")
+
+            val toast = Toast.makeText(context, "Reject Successful", Toast.LENGTH_SHORT)
+            toast.show()
+
+            fragmentManager.beginTransaction()
+                .replace(R.id.admin_fl_wrapper, AdminHomeFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
 

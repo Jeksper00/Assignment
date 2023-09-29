@@ -2,12 +2,14 @@ package com.example.assignment.AdminFragment
 
 import android.content.ContentValues
 import android.graphics.drawable.ColorDrawable
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -21,6 +23,7 @@ import com.example.assignment.Model.Activity
 import com.example.assignment.Model.User2
 import com.example.assignment.R
 import com.google.firebase.firestore.FirebaseFirestore
+import org.w3c.dom.Text
 
 
 class AdminHomeFragment : Fragment() {
@@ -55,12 +58,14 @@ class AdminHomeFragment : Fragment() {
         adapter                    = ActivityAdapter3(requireContext(),requireFragmentManager(), mutableListOf())
         recyclerView.adapter       = adapter
 
+        var num = 0
 
         /// Fetch activity data from Firestore
         activityCollection.get()
             .addOnSuccessListener { querySnapshot ->
                 val activityList = mutableListOf<Activity>()
                 for (document in querySnapshot) {
+                    num++
                     val status = document.getString("status") ?: ""
                     if(status == "pending") {
                         val id                    = document.reference.id
@@ -91,7 +96,12 @@ class AdminHomeFragment : Fragment() {
                 Log.e(ContentValues.TAG, "Error fetching Firestore data: $exception")
             }
 
-
+        val activityControltext = view.findViewById<TextView>(R.id.adminActivityControlView)
+        if(num > 1){
+            activityControltext.visibility = View.VISIBLE
+        }else{
+            activityControltext.visibility = View.GONE
+        }
         return view
     }
 

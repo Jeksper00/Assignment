@@ -14,4 +14,5 @@
     <string name="addNotificationTitle">Add Notification</string>
     <string name="user_home_activityView_totalRequired_label">Total Required</string>
     <string name="user_home_activityView_totalDonate_label">Total Donation Received</string>
+    <string name="noActivityMessage">No Activity</string>
 </resources>

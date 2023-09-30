@@ -129,9 +129,9 @@ class UserHomeFragment : Fragment() {
                                 val userName = userDocument.getString("name")?:""
                                 val user = User2(userName)
                         }
-                        val notificationItem      = Activity(id, imageUrl, name, status, description
+                        val activityItem      = Activity(id, imageUrl, name, status, description
                             , date, totalDonationReceived, totalRequired,  userId)
-                        activityList.add(notificationItem)
+                        activityList.add(activityItem)
 
                     }
                 }
@@ -181,9 +181,9 @@ class UserHomeFragment : Fragment() {
                                         val totalDonationReceived = document.getString("totalDonationReceived") ?: ""
                                         val totalRequired         = document.getString("totalRequired") ?: ""
                                         val userId                = document.getString("userid") ?: ""
-                                        val notificationItem      = Activity(id, imageUrl, name, status, description
+                                        val activityItem      = Activity(id, imageUrl, name, status, description
                                             , date, totalDonationReceived, totalRequired,  userId)
-                                        activityList.add(notificationItem)
+                                        activityList.add(activityItem)
 
                                     }
                                 }
@@ -215,9 +215,9 @@ class UserHomeFragment : Fragment() {
                                         val totalDonationReceived = document.getString("totalDonationReceived") ?: ""
                                         val totalRequired         = document.getString("totalRequired") ?: ""
                                         val userId                = "Official"
-                                        val notificationItem      = Activity(id, imageUrl, name, status, description
+                                        val activityItem      = Activity(id, imageUrl, name, status, description
                                             , date, totalDonationReceived, totalRequired,  userId)
-                                        activityList.add(notificationItem)
+                                        activityList.add(activityItem)
 
                                     }
                                 }

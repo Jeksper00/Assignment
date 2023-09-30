@@ -25,8 +25,9 @@
         android:layout_height="match_parent"
         android:id="@+id/admin_manageuser_constraint_fragment">
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_bar"
+
+        <SearchView
+            android:id="@+id/admin_searchuser_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -38,7 +39,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.114"
-            app:queryHint="Search username or user email" />
+            android:queryHint="Search username or user email"
+            android:iconifiedByDefault="false"/>
 
         <TextView
             android:id="@+id/user_info"

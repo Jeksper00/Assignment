@@ -54,8 +54,8 @@ class UserLoginActivity : AppCompatActivity() {
 //        }
 
         registerPage.setOnClickListener {
-//            val intent = Intent(this, UserRegisterActivity::class.java)
-//            startActivity(intent)
+            val intent = Intent(this, UserRegisterActivity::class.java)
+            startActivity(intent)
         }
     }
 }

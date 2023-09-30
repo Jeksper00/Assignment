@@ -57,26 +57,19 @@ class ActivityAdapter2 (private val context: Context, private val fragmentManage
         holder.dateTextView.text          = activity.date
         holder.totalDonationView.text     = activity.totalDonationReceived
         holder.totalRequiredTextView.text = activity.totalRequired
-
         holder.userIdTextView.text        = activity.userId
 
 
-        // Set click listeners for buttons
         holder.showActivityButton.setOnClickListener {
-            // Handle button click here
-            // You can open an edit dialog/fragment here
-            val activityDetails = activityList[position]
 
-            // Create a new instance of the EditNotificationDialogFragment
+            val activityDetails = activityList[position]
             val activityViewFragment = UserHomeActivityViewFragment()
 
-            // Pass the notification data to the fragment
             val args = Bundle()
             args.putParcelable(ARG_NOTIFICATION, activityDetails)
             activityViewFragment.arguments = args
 
             val fragmentManager = (context as AppCompatActivity).supportFragmentManager
-            // Show the edit dialog using the FragmentManager
             fragmentManager.beginTransaction()
                 .replace(R.id.user_fl_wrapper, activityViewFragment)
                 .addToBackStack(null)

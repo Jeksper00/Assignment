@@ -12,13 +12,11 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.assignment.R
 
-class UserEditProfileFragment : Fragment() {
+class AdminEditProfileFragment : Fragment() {
 
     private lateinit var firestore: FirebaseFirestore
-    private lateinit var userNameEditText: EditText
-    private lateinit var userEmailEditText: TextView
-    private lateinit var userContactEditText: EditText
-    private lateinit var userGenderEditText: EditText
+    private lateinit var adminNameEditText: EditText
+    private lateinit var adminEmailEditText: TextView
     private lateinit var changePasswordTextView: TextView
     private lateinit var saveChangesButton: Button
 
@@ -26,43 +24,34 @@ class UserEditProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.user_fragment_edit_profile, container, false)
+        val view = inflater.inflate(R.layout.admin_fragment_edit_profile, container, false)
 
         firestore = FirebaseFirestore.getInstance()
 
-        userNameEditText = view.findViewById(R.id.userName)
-        userEmailEditText = view.findViewById(R.id.userEmailAdd)
-        userContactEditText = view.findViewById(R.id.userContact)
-        userGenderEditText = view.findViewById(R.id.userGender)
-        changePasswordTextView = view.findViewById(R.id.changePasswordPage)
-        saveChangesButton = view.findViewById(R.id.saveButton)
+        adminNameEditText = view.findViewById(R.id.adminUsername)
+        adminEmailEditText = view.findViewById(R.id.adminEmailAddress)
+        changePasswordTextView = view.findViewById(R.id.changePwdPage)
+        saveChangesButton = view.findViewById(R.id.saveChangesBtn)
 
-        // Retrieve the userId from the arguments
-        var userId = arguments?.getString("userid")
-//        val userName = arguments?.getString("userName")
-//        val userEmail = arguments?.getString("userEmail")
-//        val userProfilePicUri = arguments?.getString("userProfilePicUri")
+         //Retrieve the adminId from the arguments
+        var adminId = arguments?.getString("adminid")
 
-//        userNameEditText.setText(userId)
-        if (userId != null) {
-            // Retrieve user data from Firestore
-            firestore.collection("user")
-                .document(userId)
+       adminNameEditText.setText(adminId)
+        if (adminId != null) {
+            // Retrieve admin data from Firestore
+            firestore.collection("admin")
+                .document(adminId)
                 .get()
                 .addOnSuccessListener { documentSnapshot ->
                     if (documentSnapshot.exists()) {
-                        // Get user data from Firestore
+                       //  Get admin data from Firestore
                         val username = documentSnapshot.getString("name")
                         val email = documentSnapshot.getString("email")
-                        val contact = documentSnapshot.getString("contact")
-                        val gender = documentSnapshot.getString("gender")
 
-                        // Set retrieved data to the EditTexts
-                        userNameEditText.setText(username)
-                        userEmailEditText.setText(email)
-                        userContactEditText.setText(contact)
-                        userGenderEditText.setText(gender)
-                    }
+//                        // Set retrieved data to the EditTexts
+                        adminNameEditText.setText(username)
+                        adminEmailEditText.setText(email)
+                   }
                 }
                 .addOnFailureListener { e ->
                     // Handle any errors that may occur during data retrieval
@@ -71,7 +60,7 @@ class UserEditProfileFragment : Fragment() {
 
         changePasswordTextView.setOnClickListener {
             // Create an instance of the UserChangePasswordFragment
-            val changePasswordFragment = UserChangePasswordFragment()
+            val changePasswordFragment = AdminChangePasswordFragment()
 
             // Use the FragmentManager to replace the current fragment with the UserChangePasswordFragment
             val fragmentManager = requireActivity().supportFragmentManager
@@ -88,21 +77,16 @@ class UserEditProfileFragment : Fragment() {
         }
 
 
-        // Handle the "Save Changes" button click
+         //Handle the "Save Changes" button click
         saveChangesButton.setOnClickListener {
-            val newName = userNameEditText.text.toString()
-            val newContact = userContactEditText.text.toString()
-            val newGender = userGenderEditText.text.toString()
+            val newName = adminNameEditText.text.toString()
 
-
-            // Update user data in Firestore
-            if (userId != null) {
-                firestore.collection("user")
-                    .document(userId)
+            // Update admin data in Firestore
+            if (adminId != null) {
+                firestore.collection("admin")
+                    .document(adminId)
                     .update(
-                        "name" ,newName,
-                        "contact", newContact,
-                        "gender", newGender
+                        "name", newName,
                     )
                     .addOnSuccessListener {
                         Toast.makeText(context, "Updated Successfully.", Toast.LENGTH_SHORT).show()

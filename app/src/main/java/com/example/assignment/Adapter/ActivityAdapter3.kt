@@ -66,10 +66,8 @@ class ActivityAdapter3 (private val context: Context, private val fragmentManage
 
         holder.userIdTextView.text        = activity.userId
 
-
-        // Set click listeners for buttons
         holder.approveActivityButton.setOnClickListener {
-            // Handle button click here
+
             val db = FirebaseFirestore.getInstance()
             val activityCollection = db.collection("activity")
             holder.idTextView.text = activity.id
@@ -85,7 +83,7 @@ class ActivityAdapter3 (private val context: Context, private val fragmentManage
                 .commit()
         }
         holder.rejectActivityButton.setOnClickListener {
-            // Handle button click here
+
             val db = FirebaseFirestore.getInstance()
             val activityCollection = db.collection("activity")
             holder.idTextView.text = activity.id

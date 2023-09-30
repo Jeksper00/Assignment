@@ -90,7 +90,7 @@ class FeedbackAdapter(private val context: Context, private val fragmentManager:
                         if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
                             // Snackbar was dismissed automatically (not due to user action)
 
-                            // Now you can perform actions when the Snackbar disappears
+                            // Perform actions when the Snackbar disappears
                             // Delete the feedback from Firestore, for example
                             val db = FirebaseFirestore.getInstance()
                             val feedbackCollection = db.collection("feedback")

@@ -50,21 +50,15 @@ import com.google.firebase.firestore.FirebaseFirestore
         holder.dateTextView.text        = notification.date
 
 
-        // Set click listeners for edit and delete buttons
         holder.editButton.setOnClickListener {
-            // Handle edit button click here
-            // You can open an edit dialog/fragment here
-            val notificationToEdit = notificationList[position]
 
-            // Create a new instance of the EditNotificationDialogFragment
+            val notificationToEdit = notificationList[position]
             val editDialogFragment = AdminNotificationUpdateFragment()
 
-            // Pass the notification data to the fragment
             val args = Bundle()
             args.putParcelable(ARG_NOTIFICATION, notificationToEdit)
             editDialogFragment.arguments = args
 
-            // Show the edit dialog using the FragmentManager
             fragmentManager.beginTransaction()
                 .replace(R.id.admin_fl_wrapper, editDialogFragment)
                 .addToBackStack(null)
@@ -81,8 +75,8 @@ import com.google.firebase.firestore.FirebaseFirestore
             confirmDialogBuilder.setTitle("Confirm Delete")
             confirmDialogBuilder.setMessage("Are you sure you want to delete this notification?")
             confirmDialogBuilder.setPositiveButton("Yes") { _, _ ->
-                // User confirmed deletion
 
+                // User confirmed deletion
                 // Create a Snackbar for the delete confirmation
                 val coordinatorLayout = (context as AppCompatActivity).findViewById<View>(R.id.admin_notificationView_frame)
                 val snackbar = Snackbar.make(
@@ -118,8 +112,7 @@ import com.google.firebase.firestore.FirebaseFirestore
                         if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
                             // Snackbar was dismissed automatically (not due to user action)
 
-                            // Now you can perform actions when the Snackbar disappears
-                            // Delete the notification from Firestore, for example
+                            // Delete the notification from Firestore
                             notificationCollection.document(notificationIdToDelete)
                                 .delete()
                                 .addOnFailureListener { exception ->

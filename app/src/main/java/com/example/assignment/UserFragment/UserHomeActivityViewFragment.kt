@@ -222,7 +222,7 @@ class UserHomeActivityViewFragment : Fragment() {
             .setMessage("Donate successfully.")
             .setPositiveButton("OK") { dialog, _ ->
                 dialog.dismiss()
-                // Navigate back to your notification list fragment
+                // Navigate back to your activity list fragment
                 // You can use fragmentManager.popBackStack() or other navigation methods
 
                 // Refresh the fragment by popping it from the back stack and navigating to it again

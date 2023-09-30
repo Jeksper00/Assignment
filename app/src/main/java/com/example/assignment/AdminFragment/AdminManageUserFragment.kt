@@ -9,14 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.assignment.Adapter.UserListAdapter
-import com.example.assignment.Model.Activity
 import com.example.assignment.Model.User
 import com.example.assignment.R
 import com.google.firebase.firestore.FirebaseFirestore
@@ -46,39 +43,39 @@ class AdminManageUserFragment : Fragment() {
         adapter = UserListAdapter(requireContext(),requireFragmentManager(), mutableListOf())
         recyclerView.adapter = adapter
 
-//        // Search function
-//        val searchView = view.findViewById<SearchView>(R.id.search_bar)
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                // Handle query submission if needed
-//                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//                imm.hideSoftInputFromWindow(searchView.windowToken, 0)
-//
-//                if (query.isNullOrEmpty()) {
-//                    // If the text is empty or null, clear the query and show all users
-//                    adapter.userList = allUsers
-//                    adapter.notifyDataSetChanged()
-//                }
-//                // Close the keyboard
-//                searchView.clearFocus()
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                // Filter the user list based on the search query
-//                val filteredUsers = filterUsers(newText)
-//                adapter.userList = filteredUsers
-//                adapter.notifyDataSetChanged()
-//
-//                return true
-//            }
-//        })
-//
-//        // Set up a click listener for the main layout to close the keyboard when clicked outside
-//        val mainLayout = view.findViewById<View>(R.id.admin_manageuser_frame_fragment)
-//        mainLayout.setOnClickListener {
-//            searchView.clearFocus()
-//        }
+        // Search function
+        val searchView = view.findViewById<SearchView>(R.id.admin_searchuser_bar)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Handle query submission if needed
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(searchView.windowToken, 0)
+
+                if (query.isNullOrEmpty()) {
+                    // If the text is empty or null, clear the query and show all users
+                    adapter.userList = allUsers
+                    adapter.notifyDataSetChanged()
+                }
+                // Close the keyboard
+                searchView.clearFocus()
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Filter the user list based on the search query
+                val filteredUsers = filterUsers(newText)
+                adapter.userList = filteredUsers
+                adapter.notifyDataSetChanged()
+
+                return true
+            }
+        })
+
+        // Set up a click listener for the main layout to close the keyboard when clicked outside
+        val mainLayout = view.findViewById<View>(R.id.admin_manageuser_frame_fragment)
+        mainLayout.setOnClickListener {
+            searchView.clearFocus()
+        }
 
         // Get a reference to the root layout (assuming it's a ConstraintLayout)
         val rootLayout = view.findViewById<ConstraintLayout>(R.id.admin_manageuser_constraint_fragment)
@@ -99,6 +96,10 @@ class AdminManageUserFragment : Fragment() {
                     userList.add(user)
                 }
 
+                // Update the allActivities list
+                allUsers.clear()
+                allUsers.addAll(userList)
+
                 adapter.userList = userList
                 adapter.notifyDataSetChanged()
             }
@@ -109,19 +110,19 @@ class AdminManageUserFragment : Fragment() {
         return view
     }
 
-//    // Filter users within search function
-//    private fun filterUsers(query: String?): MutableList<User> {
-//        val filteredList = mutableListOf<User>()
-//        query?.let { searchText ->
-//            for (user in allUsers) {
-//                val nameMatch = user.name.toLowerCase().contains(searchText.toLowerCase())
-//                val emailMatch = user.email.toLowerCase().contains(searchText.toLowerCase())
-//
-//                if (nameMatch || emailMatch) {
-//                    filteredList.add(user)
-//                }
-//            }
-//        }
-//        return filteredList
-//    }
+    // Filter users within search function
+    private fun filterUsers(query: String?): MutableList<User> {
+        val filteredList = mutableListOf<User>()
+        query?.let { searchText ->
+            for (user in allUsers) {
+                val nameMatch = user.name.toLowerCase().contains(searchText.toLowerCase())
+                val emailMatch = user.email.toLowerCase().contains(searchText.toLowerCase())
+
+                if (nameMatch || emailMatch) {
+                    filteredList.add(user)
+                }
+            }
+        }
+        return filteredList
+    }
 }

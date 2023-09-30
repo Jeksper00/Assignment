@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="buttonRadius">16dp</dimen>
+    <dimen name="titleTextSize">25sp</dimen>
+    <dimen name="smallTitle">20sp</dimen>
+    <dimen name="errorMessage">10dp</dimen>
+</resources>

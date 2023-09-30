@@ -1,60 +1,128 @@
 package com.example.assignment.AdminFragment
 
+import android.content.ContentValues
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.assignment.Adapter.UserListAdapter
+import com.example.assignment.Model.User
 import com.example.assignment.R
+import com.google.firebase.firestore.FirebaseFirestore
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AdminManageUserFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AdminManageUserFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: UserListAdapter
+
+    // Declare a list to hold all activities
+    private var allUsers: MutableList<User> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.admin_fragment_manageuser, container, false)
+        val view = inflater.inflate(R.layout.admin_fragment_manageuser, container, false)
+
+        // Initialize Firestore
+        val db = FirebaseFirestore.getInstance()
+        val userCollection = db.collection("user")
+
+        recyclerView = view.findViewById(R.id.userListRecycler)
+        recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
+        adapter = UserListAdapter(requireContext(),requireFragmentManager(), mutableListOf())
+        recyclerView.adapter = adapter
+
+        // Search function
+        val searchView = view.findViewById<SearchView>(R.id.admin_searchuser_bar)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // Handle query submission if needed
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(searchView.windowToken, 0)
+
+                if (query.isNullOrEmpty()) {
+                    // If the text is empty or null, clear the query and show all users
+                    adapter.userList = allUsers
+                    adapter.notifyDataSetChanged()
+                }
+                // Close the keyboard
+                searchView.clearFocus()
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Filter the user list based on the search query
+                val filteredUsers = filterUsers(newText)
+                adapter.userList = filteredUsers
+                adapter.notifyDataSetChanged()
+
+                return true
+            }
+        })
+
+        // Set up a click listener for the main layout to close the keyboard when clicked outside
+        val mainLayout = view.findViewById<View>(R.id.admin_manageuser_frame_fragment)
+        mainLayout.setOnClickListener {
+            searchView.clearFocus()
+        }
+
+        // Get a reference to the root layout (assuming it's a ConstraintLayout)
+        val rootLayout = view.findViewById<ConstraintLayout>(R.id.admin_manageuser_constraint_fragment)
+
+        // Fetch notification data from Firestore
+        userCollection.get()
+            .addOnSuccessListener { querySnapshot ->
+                val userList = mutableListOf<User>()
+                for (document in querySnapshot) {
+                    val id               = document.reference.id
+                    val profile_img      = document.getString("personal_img") ?: ""
+                    val name             = document.getString("name") ?: ""
+                    val email            = document.getString("email") ?: ""
+                    val contact_no       = document.getString("contact") ?: ""
+                    val gender           = document.getString("gender") ?: ""
+                    val password         = document.getString("password") ?: ""
+                    val user = User(id, profile_img, name, email, contact_no, gender, password)
+                    userList.add(user)
+                }
+
+                // Update the allActivities list
+                allUsers.clear()
+                allUsers.addAll(userList)
+
+                adapter.userList = userList
+                adapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Log.e(ContentValues.TAG, "Error fetching Firestore data: $exception")
+            }
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment adminManageUserFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AdminManageUserFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    // Filter users within search function
+    private fun filterUsers(query: String?): MutableList<User> {
+        val filteredList = mutableListOf<User>()
+        query?.let { searchText ->
+            for (user in allUsers) {
+                val nameMatch = user.name.toLowerCase().contains(searchText.toLowerCase())
+                val emailMatch = user.email.toLowerCase().contains(searchText.toLowerCase())
+
+                if (nameMatch || emailMatch) {
+                    filteredList.add(user)
                 }
             }
+        }
+        return filteredList
     }
 }

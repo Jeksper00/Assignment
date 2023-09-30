@@ -4,14 +4,52 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+
+import com.google.firebase.auth.FirebaseAuth
 
 class AdminLoginActivity : AppCompatActivity() {
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_activity_login)
 
-        findViewById<Button>(R.id.adminLoginButton2).setOnClickListener{
-            val intent = Intent(this, AdminHomeActivity::class.java)
+        auth = FirebaseAuth.getInstance()
+
+        val adminEmail = findViewById<EditText>(R.id.adminEmail)
+        val adminPassword = findViewById<EditText>(R.id.adminPassword)
+        val adminLoginButton = findViewById<Button>(R.id.adminLoginButton2)
+        val adminRegisterPage = findViewById<TextView>(R.id.adminRegisterPage)
+
+        adminLoginButton.setOnClickListener {
+            val enteredEmail = adminEmail.text.toString()
+            val enteredPassword = adminPassword.text.toString()
+
+            // Check if email and password are empty
+            if (enteredEmail.isEmpty() || enteredPassword.isEmpty()) {
+                Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Use Firebase Authentication to sign in
+            auth.signInWithEmailAndPassword(enteredEmail, enteredPassword)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Successful login, navigate to the admin home activity
+                        val intent = Intent(this, AdminHomeActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        // Display an error message if login fails
+                        Toast.makeText(this, "Login failed. Please check your credentials.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+
+        adminRegisterPage.setOnClickListener {
+            val intent = Intent(this, AdminRegisterActivity::class.java)
             startActivity(intent)
         }
     }

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginRight="16dp"
+    android:background="#FFFFFF"
+    android:clickable="true"
+    android:foreground="?selectableItemBackground"
+    android:theme="@style/Theme.Admin"
+    android:visibility="visible"
+    card_view:cardBackgroundColor="#FFFF"
+    card_view:cardCornerRadius="8dp"
+    card_view:contentPadding="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/user_home_activity_imageView2"
+            android:layout_width="332dp"
+            android:layout_height="136dp"
+            android:layout_marginTop="10dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+
+        <TextView
+            android:id="@+id/userListActivityNameView"
+            android:layout_width="66dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:text="Activity Name"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/user_home_activity_imageView2" />
+
+        <TextView
+            android:id="@+id/userListActivityCreatorView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:text="Name"
+            android:visibility="gone"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/userListActivityNameView" />
+
+
+        <Button
+            android:id="@+id/userListActivityAproveButton"
+            android:layout_width="109dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/user_button"
+            android:hapticFeedbackEnabled="true"
+            android:text="Approve"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#A5A5A5"
+            android:textColorHint="#636363"
+            card_view:cornerRadius="@dimen/buttonRadius"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/userListActivityTtlRequiredView" />
+
+        <Button
+            android:id="@+id/userListActivityRejectButton"
+            android:layout_width="110dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/user_button"
+            android:hapticFeedbackEnabled="true"
+            android:text="Reject"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#A5A5A5"
+            android:textColorHint="#636363"
+            card_view:cornerRadius="@dimen/buttonRadius"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/userListActivityAproveButton" />
+
+        <TextView
+            android:id="@+id/userListActivityIdView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Id"
+            android:visibility="gone"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/userListActivityDonateButton" />
+
+        <TextView
+            android:id="@+id/userListActivityDateView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:visibility="gone"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/userListActivityDonateButton" />
+
+        <TextView
+            android:id="@+id/userListActivityStatusView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            android:visibility="gone"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/userListActivityDonateButton" />
+
+        <TextView
+            android:id="@+id/userListActivityDescriptionView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="1dp"
+            android:text="Description"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/userListActivityNameView" />
+
+
+        <TextView
+            android:id="@+id/userListActivityTtlRequiredViewLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="Total Required"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/userListActivityDescriptionView" />
+
+        <TextView
+            android:id="@+id/userListActivityTtlRequiredView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="Total Required"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/userListActivityTtlRequiredViewLabel" />
+
+        <TextView
+            android:id="@+id/userListActivityDonationReceivedView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Donation Received"
+            android:visibility="gone"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

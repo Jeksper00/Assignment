@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/Theme.User"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,34 +12,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_media_previous"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
+
     <!-- Title -->
+
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="UserUpdateActivity"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.375"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- User ID -->
-    <TextView
-        android:id="@+id/userIdTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="UserUpdateActivity"
-        app:layout_constraintTop_toBottomOf="@+id/text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Activity ID -->
     <TextView
         android:id="@+id/activityIdTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="UserUpdateActivity"
-        app:layout_constraintTop_toBottomOf="@+id/userIdTextView"
+        android:text="Activity ID:"
+        android:textSize="22sp"
+        app:layout_constraintTop_toBottomOf="@+id/text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -47,60 +48,83 @@
         android:id="@+id/statusTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="UserUpdateActivity"
+        android:text="Status:"
+        android:textSize="20dp"
         app:layout_constraintTop_toBottomOf="@+id/activityIdTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"/>
 
-    <!-- Name EditText -->
+    <!-- NameText -->
     <TextView
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Enter name here"
+        android:text="Name:"
+        android:textSize="40dp"
         app:layout_constraintTop_toBottomOf="@+id/statusTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Description EditText -->
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Enter description here"
-        app:layout_constraintTop_toBottomOf="@+id/name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- ImageView -->
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="160dp"
-        android:layout_height="122dp"
-        app:layout_constraintTop_toBottomOf="@+id/description"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="249dp"
+        android:layout_height="191dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name"
         app:srcCompat="@android:drawable/ic_menu_add" />
 
-    <!-- Total Required EditText -->
+
+    <!-- Description Text -->
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Description:"
+        android:textSize="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- Total Required Text -->
     <TextView
         android:id="@+id/totalRequire"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Enter total fundraising require here"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        android:text="Total Required:"
+        android:textSize="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Total Receive -->
     <TextView
         android:id="@+id/totalReceive"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="UserUpdateActivity"
+        android:text="Total Received:"
+        android:textSize="16dp"
         app:layout_constraintTop_toBottomOf="@+id/totalRequire"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- User ID -->
+    <TextView
+        android:id="@+id/userIdTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="User ID:"
+        android:textSize="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/totalReceive"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
 
     <!-- CalendarView -->
     <CalendarView
@@ -114,20 +138,20 @@
     <!-- Send Button -->
     <Button
         android:id="@+id/editbtn"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Edit"
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/deletebtn" />
 
     <Button
         android:id="@+id/deletebtn"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Delete"
-        app:layout_constraintTop_toBottomOf="@+id/editbtn"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarView"
+        app:layout_constraintStart_toEndOf="@id/editbtn"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

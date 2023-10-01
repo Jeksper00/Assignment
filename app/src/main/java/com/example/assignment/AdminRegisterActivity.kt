@@ -52,12 +52,13 @@ class AdminRegisterActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Registration successful
                         val user = auth.currentUser
+                        val adminUid= auth.uid
 
                         // Generate an admin ID
                         generateAdminId { adminId ->
                             // Save admin data to Firestore
                             val adminData = hashMapOf(
-                                "id" to adminId,
+                                "id" to adminUid,
                                 "name" to name,
                                 "email" to email
                             )

@@ -9,6 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class AdminLoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -34,13 +36,34 @@ class AdminLoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            val db = Firebase.firestore
+            val adminCollection = db.collection("admin")
+
             // Use Firebase Authentication to sign in
             auth.signInWithEmailAndPassword(enteredEmail, enteredPassword)
                 .addOnCompleteListener(this) { task ->
+
+
                     if (task.isSuccessful) {
-                        // Successful login, navigate to the admin home activity
-                        val intent = Intent(this, AdminHomeActivity::class.java)
-                        startActivity(intent)
+//                        // Successful login, navigate to the admin home activity
+//                        val intent = Intent(this, AdminHomeActivity::class.java)
+//                        startActivity(intent)
+                        adminCollection.get().addOnSuccessListener { querySnapshot ->
+                            var emailFound = false
+                            for (document in querySnapshot) {
+                                val email            = document.getString("email") ?: ""
+                                if(email == enteredEmail){
+                                    // Successful login, navigate to the admin home activity
+                                    val intent = Intent(this, AdminHomeActivity::class.java)
+                                    startActivity(intent)
+                                    emailFound = true
+                                    break
+                                }
+                            }
+                            if (!emailFound) {
+                                Toast.makeText(this, "Login failed. Please check your credentials.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     } else {
                         // Display an error message if login fails
                         Toast.makeText(this, "Login failed. Please check your credentials.", Toast.LENGTH_SHORT).show()

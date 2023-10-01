@@ -88,7 +88,7 @@ class AdminActivityCreateActivity : AppCompatActivity() {
             val totalRequire = totalRequireText.text.toString()
 
 
-            val userId = "U0003"
+            val userId = "A0001"
 
             if (name.isEmpty() || description.isEmpty() || totalRequire.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
@@ -212,7 +212,7 @@ class AdminActivityCreateActivity : AppCompatActivity() {
             Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
         }
     }
-    private fun openFragment(fragment : Fragment){
+    private fun openFragment(fragment : Fragment) {
         val intent = Intent(this, AdminHomeActivity::class.java)
 
         // Optionally, pass data to the new activity (fragment)

@@ -57,10 +57,11 @@ class UserRegisterActivity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             // Registration successful
                             val user = auth.currentUser
+                            val userUid= auth.uid
 
                             // Save user data to Firestore
                             val userData = hashMapOf(
-                                "id" to userId,
+                                "id" to userUid,
                                 "name" to name,
                                 "email" to email,
                                 "contact" to contact,
@@ -92,7 +93,6 @@ class UserRegisterActivity : AppCompatActivity() {
         loginPage.setOnClickListener {
             val intent = Intent(this, UserLoginActivity::class.java)
             startActivity(intent)
-            finish()
         }
     }
 

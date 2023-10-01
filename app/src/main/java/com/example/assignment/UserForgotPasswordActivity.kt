@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.example.assignment.R
 
-class EmailVerificationActivity : AppCompatActivity() {
+class UserForgotPasswordActivityActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var userEmailEditText: EditText

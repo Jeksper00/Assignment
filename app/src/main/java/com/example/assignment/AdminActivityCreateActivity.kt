@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.assignment.AdminFragment.AdminActivityFragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -25,7 +26,7 @@ import java.util.UUID
 class AdminActivityCreateActivity : AppCompatActivity() {
 
     private var db = Firebase.firestore
-    private var storageRef = Firebase.storage
+    private var storageRef = Firebase.storage.reference
 
     private lateinit var nameText: EditText
     private lateinit var descriptionText: EditText
@@ -33,8 +34,7 @@ class AdminActivityCreateActivity : AppCompatActivity() {
     private lateinit var createButton: Button
     private lateinit var calendarView: CalendarView
     private lateinit var imageView: ImageView
-    private  var uri: Uri? = null
-
+    private var uri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,8 +76,6 @@ class AdminActivityCreateActivity : AppCompatActivity() {
             // Adjust month as CalendarView months are zero-based
             date = String.format("%02d-%02d-%d", dayOfMonth, month + 1, year)
             Toast.makeText(this, "Selected date: $date", Toast.LENGTH_SHORT).show()
-
-
         }
 
         createButton.setOnClickListener {
@@ -87,8 +85,8 @@ class AdminActivityCreateActivity : AppCompatActivity() {
             val totalDonationReceived = "0"
             val totalRequire = totalRequireText.text.toString()
 
-
-            val userId = "U0003"
+            val user = FirebaseAuth.getInstance().currentUser
+            val userUid = user?.uid
 
             if (name.isEmpty() || description.isEmpty() || totalRequire.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
@@ -100,33 +98,12 @@ class AdminActivityCreateActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            try {
-                val totalRequireValue = totalRequire.toInt()
-                if (totalRequireValue <= 0) {
-                    Toast.makeText(this, "Total Required must be a positive number", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-            } catch (e: NumberFormatException) {
-                Toast.makeText(this, "Total Required must be a valid number", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+            // Generate a unique image URL using UUID
+            val imageUrl = "images/${UUID.randomUUID()}.jpg"
 
-            uploadImageAndSaveData(
-                name,
-                status,
-                description,
-                date,
-                totalDonationReceived,
-                totalRequire,
-                userId
-            )
-
-
-
+            uploadImageAndSaveData(name, status, description, date, totalDonationReceived, totalRequire, userUid, imageUrl)
         }
     }
-
-
 
     private fun generateDocumentId(num: Int, collectionRef: CollectionReference, callback: (String) -> Unit) {
         val formattedCounter = String.format("%04d", num)
@@ -153,68 +130,68 @@ class AdminActivityCreateActivity : AppCompatActivity() {
         date: String,
         totalDonationReceived: String,
         totalRequire: String,
-        userId: String
+        userUid: String?,
+        imageUrl: String
     ) {
-        if (uri != null) {
-            val imageFileName = "${UUID.randomUUID()}.jpg"
-            val imageRef = storageRef.reference.child("images/$imageFileName")
-
-
-            val uploadTask = imageRef.putFile(uri!!)
-
-            uploadTask.addOnSuccessListener { taskSnapshot ->
-                imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
-                    val imageUrl = downloadUri.toString()
-
-                    val activities = hashMapOf(
-                        "name" to name,
-                        "status" to status,
-                        "description" to description,
-                        "imageUrl" to imageUrl,
-                        "date" to date,
-                        "totalDonationReceived" to totalDonationReceived,
-                        "totalRequired" to totalRequire,
-                        "userid" to userId
-                    )
-
-                    val activityId = intent.getStringExtra("activityId")
-
-                    if (activityId != null) {
-                        db.collection("activity").document(activityId).set(activities)
-                            .addOnSuccessListener {
-                                Toast.makeText(this, "Activity added successfully", Toast.LENGTH_SHORT).show()
-
-                                val activity = Activity(
-                                    activityId,
-                                    name,
-                                    status,
-                                    description,
-                                    date,
-                                    totalDonationReceived.toDoubleOrNull() ?: 0.0,
-                                    totalRequire.toDoubleOrNull() ?: 0.0,
-                                    userId,
-                                    imageUrl
-                                )
-
-                                // Notify the callback
-                                openFragment(AdminActivityFragment())
-                            }
-                            .addOnFailureListener { e ->
-                                Log.e(ContentValues.TAG, "Error adding document", e)
-                            }
-                    }
-                }
-            }
-                .addOnFailureListener { e ->
-                    Log.e(ContentValues.TAG, "Error uploading image", e)
-                }
-        } else {
-            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
-        }
+//        if (uri != null) {
+//            val imageFileName = "${UUID.randomUUID()}.jpg"
+//            val imageRef = storageRef.child(imageUrl)
+//
+//            val uploadTask = imageRef.putFile(uri!!)
+//
+//            uploadTask.addOnSuccessListener { taskSnapshot ->
+//                imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
+//                    val downloadUrl = downloadUri.toString()
+//
+//                    val activities = hashMapOf(
+//                        "name" to name,
+//                        "status" to status,
+//                        "description" to description,
+//                        "imageUrl" to downloadUrl,
+//                        "date" to date,
+//                        "totalDonationReceived" to totalDonationReceived,
+//                        "totalRequired" to totalRequire,
+//                        "userid" to userUid
+//                    )
+//
+//                    val activityId = intent.getStringExtra("activityId")
+//
+//                    if (activityId != null) {
+//                        db.collection("activity").document(activityId).set(activities)
+//                            .addOnSuccessListener {
+//                                Toast.makeText(this, "Activity added successfully", Toast.LENGTH_SHORT).show()
+//
+//                                val activity = Activity(
+//                                    activityId,
+//                                    name,
+//                                    status,
+//                                    description,
+//                                    date,
+//                                    totalDonationReceived.toDoubleOrNull() ?: 0.0,
+//                                    totalRequire.toDoubleOrNull() ?: 0.0,
+//                                    userUid ?: "",
+//                                    downloadUrl
+//                                )
+//
+//                                // Notify the callback
+//                                openFragment(AdminActivityFragment())
+//                            }
+//                            .addOnFailureListener { e ->
+//                                Log.e(ContentValues.TAG, "Error adding document", e)
+//                            }
+//                    }
+//                }
+//            }
+//                .addOnFailureListener { e ->
+//                    Log.e(ContentValues.TAG, "Error uploading image", e)
+//                }
+//        } else {
+//            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
+//        }
     }
-    private fun openFragment(fragment : Fragment){
-        val intent = Intent(this, AdminHomeActivity::class.java)
 
+    private fun openFragment(fragment: Fragment) {
+        val intent = Intent(this, AdminHomeActivity::class.java)
         // Optionally, pass data to the new activity (fragment)
         intent.putExtra("fragmentToOpen", "Activity")
         startActivity(intent)

@@ -1,22 +1,21 @@
 package com.example.assignment
 
-import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.assignment.UserFragment.UserActivityFragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -24,8 +23,8 @@ import java.util.UUID
 
 class UserActivityCreateActivity : AppCompatActivity() {
 
-    private var db = Firebase.firestore
-    private var storageRef = Firebase.storage
+    private val db = Firebase.firestore
+    private val storageRef = Firebase.storage.reference
 
     private lateinit var nameText: EditText
     private lateinit var descriptionText: EditText
@@ -33,34 +32,36 @@ class UserActivityCreateActivity : AppCompatActivity() {
     private lateinit var createButton: Button
     private lateinit var calendarView: CalendarView
     private lateinit var imageView: ImageView
-    private  var uri: Uri? = null
-
+    private var uri: Uri? = null
+    private var selectedDate: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_activity_create_activity)
 
+        initializeViews()
+        setupListeners()
+        generateActivityId()
+    }
+
+    private fun initializeViews() {
         nameText = findViewById(R.id.name)
         descriptionText = findViewById(R.id.description)
         totalRequireText = findViewById(R.id.totalRequire)
         calendarView = findViewById(R.id.calendarView)
         imageView = findViewById(R.id.imageView)
         createButton = findViewById(R.id.btn)
+    }
 
-        // Generate activity ID immediately
-        generateDocumentId(0, db.collection("activity")) { documentId ->
-            intent.putExtra("activityId", documentId)
-        }
-
+    private fun setupListeners() {
         val galleryImage = registerForActivityResult(
-            ActivityResultContracts.GetContent(),
-            ActivityResultCallback {
+            ActivityResultContracts.GetContent()
+        ) {
+            it?.let {
                 imageView.setImageURI(it)
-                if (it != null) {
-                    uri = it
-                }
+                uri = it
             }
-        )
+        }
 
         val btnBack = findViewById<ImageButton>(R.id.btnBack)
         btnBack.setOnClickListener {
@@ -71,94 +72,85 @@ class UserActivityCreateActivity : AppCompatActivity() {
             galleryImage.launch("image/*")
         }
 
-        var date = ""
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             // Adjust month as CalendarView months are zero-based
-            date = String.format("%02d-%02d-%d", dayOfMonth, month + 1, year)
-            Toast.makeText(this, "Selected date: $date", Toast.LENGTH_SHORT).show()
-
-
+            selectedDate = String.format("%02d-%02d-%d", dayOfMonth, month + 1, year)
+            Toast.makeText(this, "Selected date: $selectedDate", Toast.LENGTH_SHORT).show()
         }
 
         createButton.setOnClickListener {
-            val name = nameText.text.toString()
-            val status = "pending"
-            val description = descriptionText.text.toString()
-            val totalDonationReceived = "0"
-            val totalRequire = totalRequireText.text.toString()
-
-
-            val userId = "U0003"
-
-            if (name.isEmpty() || description.isEmpty() || totalRequire.isEmpty()) {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (uri == null) {
-                Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            try {
-                val totalRequireValue = totalRequire.toInt()
-                if (totalRequireValue <= 0) {
-                    Toast.makeText(this, "Total Required must be a positive number", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-            } catch (e: NumberFormatException) {
-                Toast.makeText(this, "Total Required must be a valid number", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            uploadImageAndSaveData(
-                name,
-                status,
-                description,
-                date,
-                totalDonationReceived,
-                totalRequire,
-                userId
-            )
-
-
-
+            handleCreateButtonClick()
         }
     }
 
+    private fun handleCreateButtonClick() {
+        val name = nameText.text.toString()
+        val status = "pending"
+        val description = descriptionText.text.toString()
+        val totalDonationReceived = "0"
+        val totalRequire = totalRequireText.text.toString()
 
+        val user = FirebaseAuth.getInstance().currentUser
+        val userUid = user?.uid
 
-    private fun generateDocumentId(num: Int, collectionRef: CollectionReference, callback: (String) -> Unit) {
-        val formattedCounter = String.format("%04d", num)
-        val documentIdToCheck = "A$formattedCounter"
+        if (name.isEmpty() || description.isEmpty() || totalRequire.isEmpty()) {
+            showToast("Please fill in all fields")
+            return
+        }
 
-        collectionRef.document(documentIdToCheck)
+        if (selectedDate.isNullOrEmpty()) {
+            showToast("Please select a date")
+            return
+        }
+
+        if (uri == null) {
+            showToast("Please select an image")
+            return
+        }
+
+        try {
+            val totalRequireValue = totalRequire.toInt()
+            if (totalRequireValue <= 0) {
+                showToast("Total Required must be a positive number")
+                return
+            }
+        } catch (e: NumberFormatException) {
+            showToast("Total Required must be a valid number")
+            return
+        }
+
+        if (userUid != null) {
+            fetchUserAndUploadData(userUid, name, status, description, totalDonationReceived, totalRequire, selectedDate!!)
+        }
+    }
+
+    private fun fetchUserAndUploadData(userUid: String, name: String, status: String, description: String,
+                                       totalDonationReceived: String, totalRequire: String, selectedDate: String) {
+        val firestore = FirebaseFirestore.getInstance()
+        val userCollection = firestore.collection("user")
+
+        userCollection.whereEqualTo("id", userUid)
             .get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    generateDocumentId(num + 1, collectionRef, callback)
+            .addOnSuccessListener { userQuerySnapshot ->
+                if (!userQuerySnapshot.isEmpty) {
+                    val userDocument = userQuerySnapshot.documents[0]
+                    val userId = userDocument.id
+
+                    uploadImageAndSaveData(name, status, description, totalDonationReceived, totalRequire, userId, selectedDate)
                 } else {
-                    callback(documentIdToCheck)
+                    showToast("No user found with this UID.")
                 }
             }
             .addOnFailureListener { exception ->
-                Log.e(ContentValues.TAG, "Error getting document: $exception")
+                showError("Error fetching user data: ${exception.message}")
             }
     }
 
-    private fun uploadImageAndSaveData(
-        name: String,
-        status: String,
-        description: String,
-        date: String,
-        totalDonationReceived: String,
-        totalRequire: String,
-        userId: String
-    ) {
+    private fun uploadImageAndSaveData(name: String, status: String, description: String,
+                                       totalDonationReceived: String, totalRequire: String, userId: String, date: String) {
         if (uri != null) {
             val imageFileName = "${UUID.randomUUID()}.jpg"
-            val imageRef = storageRef.reference.child("images/$imageFileName")
-
+            val imageRef = storageRef.child("images/$imageFileName")
 
             val uploadTask = imageRef.putFile(uri!!)
 
@@ -182,42 +174,63 @@ class UserActivityCreateActivity : AppCompatActivity() {
                     if (activityId != null) {
                         db.collection("activity").document(activityId).set(activities)
                             .addOnSuccessListener {
-                                Toast.makeText(this, "Activity added successfully", Toast.LENGTH_SHORT).show()
-
-                                val activity = Activity(
-                                    activityId,
-                                    name,
-                                    status,
-                                    description,
-                                    date,
-                                    totalDonationReceived.toDoubleOrNull() ?: 0.0,
-                                    totalRequire.toDoubleOrNull() ?: 0.0,
-                                    userId,
-                                    imageUrl
-                                )
+                                showToast("Activity added successfully")
 
                                 // Notify the callback
                                 openFragment(UserActivityFragment())
                             }
                             .addOnFailureListener { e ->
-                                Log.e(ContentValues.TAG, "Error adding document", e)
+                                showError("Error adding document: ${e.message}")
                             }
                     }
                 }
             }
                 .addOnFailureListener { e ->
-                    Log.e(ContentValues.TAG, "Error uploading image", e)
+                    showError("Error uploading image: ${e.message}")
                 }
         } else {
-            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
+            showToast("Please select an image")
         }
     }
-    private fun openFragment(fragment : Fragment){
+
+    private fun generateActivityId() {
+        generateDocumentId(0, db.collection("activity")) { documentId ->
+            intent.putExtra("activityId", documentId)
+        }
+    }
+
+    private fun generateDocumentId(num: Int, collectionRef: CollectionReference, callback: (String) -> Unit) {
+        val formattedCounter = String.format("%04d", num)
+        val documentIdToCheck = "A$formattedCounter"
+
+        collectionRef.document(documentIdToCheck)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    generateDocumentId(num + 1, collectionRef, callback)
+                } else {
+                    callback(documentIdToCheck)
+                }
+            }
+            .addOnFailureListener { exception ->
+                showError("Error getting document: ${exception.message}")
+            }
+    }
+
+    private fun openFragment(fragment: Fragment) {
         val intent = Intent(this, UserHomeActivity::class.java)
 
         // Optionally, pass data to the new activity (fragment)
         intent.putExtra("fragmentToOpen", "Activity")
         startActivity(intent)
         finish() // This will close the current activity
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showError(message: String) {
+        showToast("Error: $message")
     }
 }

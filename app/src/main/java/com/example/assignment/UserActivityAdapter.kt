@@ -78,7 +78,7 @@ class UserActivityAdapter(
         val totalRequired: TextView = itemView.findViewById(R.id.totalRequiredTextView)
         val userId: TextView = itemView.findViewById(R.id.userIdTextView)
         val editButton: TextView = itemView.findViewById(R.id.editActivityButton)
-        val deleteButton: TextView = itemView.findViewById(R.id.deleteActivityButton)
+
 
 
     }

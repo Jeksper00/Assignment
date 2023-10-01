@@ -144,7 +144,7 @@ class AdminActivityRetrieveActivity : AppCompatActivity() {
                 val intent = Intent(this, AdminActivityUpdateActivity::class.java)
 
                 intent.putExtra("activityId", activityId)
-
+                finish()
                 this.startActivity(intent)
 
             })

@@ -74,7 +74,7 @@ class AdminActivityUpdateActivity : AppCompatActivity() {
         userIdText = findViewById(R.id.userIdTextView)
         activityIdText = findViewById(R.id.activityIdTextView)
         totalReceiveText = findViewById(R.id.totalReceive)
-        statusText = findViewById(R.id.statusTextView)
+       // statusText = findViewById(R.id.statusTextView)
         updateButton = findViewById(R.id.updatebtn)
         imageButton = findViewById(R.id.imageButton)
 
@@ -104,7 +104,7 @@ class AdminActivityUpdateActivity : AppCompatActivity() {
                         userIdText.text = userId
                         activityIdText.text = id
                         nameText.setText(name)
-                        statusText.text = status
+                        //statusText.text = status
                         descriptionText.setText(description)
                         Glide.with(this)
                             .load(imageUrl)
@@ -269,7 +269,8 @@ class AdminActivityUpdateActivity : AppCompatActivity() {
 
         // Optionally, pass data to the new activity (fragment)
         intent.putExtra("fragmentToOpen", "Activity")
-        startActivity(intent)
         finish() // This will close the current activity
+        startActivity(intent)
+
     }
 }

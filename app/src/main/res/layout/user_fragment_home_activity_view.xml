@@ -28,6 +28,7 @@
             android:layout_marginStart="50dp"
             android:layout_marginTop="20dp"
             android:text="Name"
+            android:textSize="@dimen/smallTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/user_home_activityView_image" />
 
@@ -62,6 +63,7 @@
             android:layout_marginStart="50dp"
             android:layout_marginTop="15dp"
             android:text="@string/user_home_activityView_totalDonate_label"
+            android:textSize="@dimen/smallLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userActivityViewTtlRequiredText" />
 
@@ -122,6 +124,7 @@
             android:layout_marginStart="50dp"
             android:layout_marginTop="15dp"
             android:text="@string/user_home_activityView_totalRequired_label"
+            android:textSize="@dimen/smallLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userActivityViewDescriptionText" />
 

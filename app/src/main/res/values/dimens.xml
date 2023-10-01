@@ -4,4 +4,5 @@
     <dimen name="titleTextSize">25sp</dimen>
     <dimen name="smallTitle">20sp</dimen>
     <dimen name="errorMessage">10dp</dimen>
+    <dimen name="smallLabel">15sp</dimen>
 </resources>

@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/userListActivityNameView"
-            android:layout_width="66dp"
+            android:layout_width="wrap_content"
             android:layout_height="18dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="15dp"
@@ -114,11 +114,13 @@
 
         <TextView
             android:id="@+id/userListActivityDescriptionView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="1dp"
+            android:layout_marginEnd="20dp"
             android:text="Description"
+            card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/userListActivityNameView" />
 

@@ -58,14 +58,14 @@ class AdminHomeFragment : Fragment() {
         adapter                    = ActivityAdapter3(requireContext(),requireFragmentManager(), mutableListOf())
         recyclerView.adapter       = adapter
 
-        var num = 0
+        val activityControltext = view.findViewById<TextView>(R.id.adminActivityControlView)
 
         /// Fetch activity data from Firestore
         activityCollection.get()
             .addOnSuccessListener { querySnapshot ->
                 val activityList = mutableListOf<Activity>()
                 for (document in querySnapshot) {
-                    num++
+
                     val status = document.getString("status") ?: ""
                     if(status == "pending") {
                         val id                    = document.reference.id
@@ -91,17 +91,20 @@ class AdminHomeFragment : Fragment() {
 
                 adapter.activityList = activityList
                 adapter.notifyDataSetChanged()
+
+                if (activityList.isEmpty()) {
+                    activityControltext.visibility = View.VISIBLE
+                } else {
+                    activityControltext.visibility = View.GONE
+                }
+
             }
             .addOnFailureListener { exception ->
                 Log.e(ContentValues.TAG, "Error fetching Firestore data: $exception")
             }
 
-        val activityControltext = view.findViewById<TextView>(R.id.adminActivityControlView)
-        if(num > 1){
-            activityControltext.visibility = View.VISIBLE
-        }else{
-            activityControltext.visibility = View.GONE
-        }
+
+
         return view
     }
 

@@ -1,7 +1,9 @@
 package com.example.assignment
 
+import android.content.ContentValues
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.example.assignment.UserFragment.UserActivityFragment
 import com.example.assignment.UserFragment.UserHomeFragment
@@ -20,7 +22,22 @@ class UserHomeActivity : AppCompatActivity() {
         val userNotificationFragment = UserNotificationFragment()
         val userProfileFragment = UserProfileFragment()
 
-        makeCurrentFragment(userHomeFragment)
+        //makeCurrentFragment(userHomeFragment)
+
+        // Retrieve the data from the intent
+        val receivedData = intent.getStringExtra("fragmentToOpen")
+
+        // Check if the data is not null before using it
+        if (receivedData != null) {
+            if (receivedData == "Activity") {
+                // Now you can use the receivedData in your activity
+                makeCurrentFragment(userActivityFragment)
+                Log.e(ContentValues.TAG, "Success")
+            }
+        }else{
+            makeCurrentFragment(userHomeFragment)
+            Log.e(ContentValues.TAG, "Fails")
+        }
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.user_bottom_navigation)
         bottomNavigation.setOnItemSelectedListener {

@@ -13,6 +13,7 @@ import com.example.assignment.AdminFragment.AdminHomeFragment
 import com.example.assignment.AdminFragment.AdminManageUserFragment
 import com.example.assignment.AdminFragment.AdminProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import java.util.Objects
 
 class AdminHomeActivity : AppCompatActivity() {
@@ -35,6 +36,11 @@ class AdminHomeActivity : AppCompatActivity() {
         if (receivedData != null) {
             if (receivedData == "Activity") {
                 // Now you can use the receivedData in your activity
+
+//                // Assuming you have a NavigationView with an id of 'navigationView'
+//                val navigationView = findViewById<NavigationView>(R.id.admin_bottom_navigation)
+//                // Set the selected item by passing the ID of the menu item
+//                navigationView.setCheckedItem(R.id.admin_icon_activity)
                 makeCurrentFragment(adminActivityFragment)
                 Log.e(ContentValues.TAG, "Success")
             }
@@ -44,7 +50,7 @@ class AdminHomeActivity : AppCompatActivity() {
         }
 
 
-
+//        makeCurrentFragment(adminHomeFragment)
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.admin_bottom_navigation)
         bottomNavigation.setOnItemSelectedListener {

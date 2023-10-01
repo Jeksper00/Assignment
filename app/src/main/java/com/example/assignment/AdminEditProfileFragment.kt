@@ -52,7 +52,6 @@ class AdminEditProfileFragment : Fragment() {
         adminNameEditText = view.findViewById(R.id.adminUsername)
         adminEmailEditText = view.findViewById(R.id.adminEmailAddress)
         saveChangesButton = view.findViewById(R.id.saveChangesBtn)
-        deleteButton = view.findViewById(R.id.deleteBtn)
         adminProfileImage = view.findViewById(R.id.adminProfileImage)
         editIcon = view.findViewById(R.id.adminEditButton)
 

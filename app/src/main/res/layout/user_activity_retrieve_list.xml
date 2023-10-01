@@ -217,7 +217,7 @@
                 android:layout_below="@+id/notificationDescriptionView"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="10dp"
-                android:text="Edit" />
+                android:text="View" />
 
             <Button
                 android:id="@+id/deleteActivityButton"
@@ -226,7 +226,8 @@
                 android:layout_below="@+id/notificationDescriptionView"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="10dp"
-                android:text="Delete" />
+                android:text="Delete"
+                android:visibility="gone" />
 
         </LinearLayout>
 

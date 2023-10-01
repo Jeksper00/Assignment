@@ -63,12 +63,6 @@ class FeedbackAdapter(private val context: Context, private val fragmentManager:
                     Snackbar.LENGTH_LONG
                 )
 
-                // Add an action to undo the deletion
-                snackbar.setAction("Undo") {
-                    // Restore the deleted feedback to the list
-                    feedbackList.add(positionToDelete, feedbackToDelete)
-                    notifyItemInserted(positionToDelete)
-                }
 
                 // Add an action to dismiss the Snackbar
                 snackbar.setActionTextColor(context.resources.getColor(R.color.blue))
@@ -81,31 +75,12 @@ class FeedbackAdapter(private val context: Context, private val fragmentManager:
                 // Use the correct document ID to delete the specific feedback in Firestore
                 val feedbackIdToDelete = feedbackToDelete.id // Assuming id is the correct document ID
 
-                // Add a callback to detect when the Snackbar is dismissed
-                snackbar.addCallback(object : Snackbar.Callback() {
-                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                        super.onDismissed(transientBottomBar, event)
-
-                        // Check the event to see if the Snackbar was dismissed
-                        if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                            // Snackbar was dismissed automatically (not due to user action)
-
-                            // Perform actions when the Snackbar disappears
-                            // Delete the feedback from Firestore, for example
-                            val db = FirebaseFirestore.getInstance()
-                            val feedbackCollection = db.collection("feedback")
-
-                            // Use the correct document ID to delete the specific feedback in Firestore
-                            val feedbackIdToDelete = feedbackToDelete.id // Assuming id is the correct document ID
-
-                            feedbackCollection.document(feedbackIdToDelete)
-                                .delete()
-                                .addOnFailureListener { exception ->
-                                    Log.e(ContentValues.TAG, "Error deleting feedback from Firestore: $exception")
-                                }
-                        }
+                feedbackCollection.document(feedbackIdToDelete)
+                    .delete()
+                    .addOnFailureListener { exception ->
+                        Log.e(ContentValues.TAG, "Error deleting feedback from Firestore: $exception")
                     }
-                })
+
             }
 
             alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->

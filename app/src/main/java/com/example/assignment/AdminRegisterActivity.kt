@@ -33,6 +33,7 @@ class AdminRegisterActivity : AppCompatActivity() {
             val email = adminEmail.text.toString()
             val password = adminPassword.text.toString()
             val confirmPassword = adminConfirmPassword.text.toString()
+            val imageUrl = ""
 
             // Check if any of the fields are empty
             if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
@@ -60,7 +61,8 @@ class AdminRegisterActivity : AppCompatActivity() {
                             val adminData = hashMapOf(
                                 "id" to adminUid,
                                 "name" to name,
-                                "email" to email
+                                "email" to email,
+                                "profileImageURL" to imageUrl
                             )
 
                             firestore.collection("admin")
@@ -102,6 +104,6 @@ class AdminRegisterActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 // Handle any errors that may occur during data retrieval
                 Toast.makeText(this@AdminRegisterActivity, "Error generating admin ID: ${exception.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
+                }
+        }
 }

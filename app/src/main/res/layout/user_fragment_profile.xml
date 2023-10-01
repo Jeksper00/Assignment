@@ -2,9 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/Theme.User"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.User"
     tools:context=".UserFragment.UserProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -87,7 +87,11 @@
             android:id="@+id/editBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_media_previous"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/arrow_right"
+            app:layout_constraintStart_toEndOf="@+id/textEditDetails"
+            app:layout_constraintTop_toBottomOf="@+id/textProfileDetails"
             tools:ignore="MissingConstraints" />
 
         <Button
@@ -112,6 +116,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.209" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/icon_profile"
+            app:layout_constraintEnd_toStartOf="@+id/textProfileDetails"
+            app:layout_constraintTop_toBottomOf="@+id/textProfile" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

@@ -42,12 +42,7 @@ class AdminLoginActivity : AppCompatActivity() {
             // Use Firebase Authentication to sign in
             auth.signInWithEmailAndPassword(enteredEmail, enteredPassword)
                 .addOnCompleteListener(this) { task ->
-
-
                     if (task.isSuccessful) {
-//                        // Successful login, navigate to the admin home activity
-//                        val intent = Intent(this, AdminHomeActivity::class.java)
-//                        startActivity(intent)
                         adminCollection.get().addOnSuccessListener { querySnapshot ->
                             var emailFound = false
                             for (document in querySnapshot) {
@@ -66,7 +61,11 @@ class AdminLoginActivity : AppCompatActivity() {
                         }
                     } else {
                         // Display an error message if login fails
-                        Toast.makeText(this, "Login failed. Please check your credentials.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Login failed. Please check your credentials.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
         }

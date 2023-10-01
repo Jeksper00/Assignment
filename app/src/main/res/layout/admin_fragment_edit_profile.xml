@@ -25,17 +25,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.123" />
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="65dp"
-            android:layout_height="58dp"
-            android:src="@drawable/icon_add_photo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.194" />
-
         <TextView
             android:id="@+id/txtAdminName"
             android:layout_width="wrap_content"
@@ -84,34 +73,10 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.379" />
 
-        <TextView
-            android:id="@+id/txtadminPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Password"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.235"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.456" />
-
-        <TextView
-            android:id="@+id/adminPwd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.456" />
-
         <Button
             android:id="@+id/saveChangesBtn"
-            android:layout_width="166dp"
-            android:layout_height="42dp"
+            android:layout_width="172dp"
+            android:layout_height="45dp"
             android:text="SAVE CHANGES"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -120,17 +85,40 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.669" />
 
-        <TextView
-            android:id="@+id/changePwdPage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Change"
+        <Button
+            android:id="@+id/deleteBtn"
+            android:layout_width="211dp"
+            android:layout_height="51dp"
+            android:text="DELETE ACCOUNT"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.728"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.456" />
+            app:layout_constraintVertical_bias="0.794" />
+
+        <ImageView
+            android:id="@+id/adminProfileImage"
+            android:layout_width="63dp"
+            android:layout_height="60dp"
+            android:src="@drawable/icon_add_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.505"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.193" />
+
+        <ImageView
+            android:id="@+id/adminEditButton"
+            android:layout_width="26dp"
+            android:layout_height="32dp"
+            android:src="@drawable/icon_edit_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.607"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.241" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

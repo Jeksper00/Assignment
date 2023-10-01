@@ -36,7 +36,7 @@ class UserRegisterActivity : AppCompatActivity() {
             val confirmPassword = userConfirmPassword.text.toString()
             val contact = ""
             val gender = ""
-
+            val imageUrl = ""
 
             // Check if any of the fields are empty
             if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
@@ -66,7 +66,7 @@ class UserRegisterActivity : AppCompatActivity() {
                                 "email" to email,
                                 "contact" to contact,
                                 "gender" to gender,
-                                "password" to password
+                                "profileImageURL" to imageUrl
                             )
 
                             firestore.collection("user")
@@ -108,6 +108,6 @@ class UserRegisterActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 // Handle any errors that may occur during data retrieval
                 Toast.makeText(this@UserRegisterActivity, "Error generating user ID: ${exception.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
+                }
+        }
 }

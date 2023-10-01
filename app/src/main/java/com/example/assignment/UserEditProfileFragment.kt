@@ -1,49 +1,67 @@
 package com.example.assignment
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.example.assignment.R
+import com.example.assignment.UserFragment.UserProfileFragment
+import com.google.firebase.auth.FirebaseAuth
+import java.util.*
 
 class UserEditProfileFragment : Fragment() {
 
     private lateinit var firestore: FirebaseFirestore
+    private lateinit var storageRef: StorageReference
     private lateinit var userNameEditText: EditText
     private lateinit var userEmailEditText: TextView
     private lateinit var userContactEditText: EditText
     private lateinit var userGenderEditText: EditText
-    private lateinit var changePasswordTextView: TextView
     private lateinit var saveChangesButton: Button
+    private lateinit var userProfileImage: ImageView
+    private lateinit var editIcon: ImageView
+    private var uri: Uri? = null
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.user_fragment_edit_profile, container, false)
+        var username = ""
+        var email = ""
+        var contact = ""
+        var gender = ""
+        var profileImageURL = ""
 
         firestore = FirebaseFirestore.getInstance()
+        storageRef = FirebaseStorage.getInstance().reference
+        auth = FirebaseAuth.getInstance()
 
         userNameEditText = view.findViewById(R.id.userName)
         userEmailEditText = view.findViewById(R.id.userEmailAdd)
         userContactEditText = view.findViewById(R.id.userContact)
         userGenderEditText = view.findViewById(R.id.userGender)
-        changePasswordTextView = view.findViewById(R.id.changePasswordPage)
         saveChangesButton = view.findViewById(R.id.saveButton)
+        userProfileImage = view.findViewById(R.id.imageUserProfile)
+        editIcon = view.findViewById(R.id.iconEdit)
 
         // Retrieve the userId from the arguments
         var userId = arguments?.getString("userid")
-//        val userName = arguments?.getString("userName")
-//        val userEmail = arguments?.getString("userEmail")
-//        val userProfilePicUri = arguments?.getString("userProfilePicUri")
 
-//        userNameEditText.setText(userId)
         if (userId != null) {
             // Retrieve user data from Firestore
             firestore.collection("user")
@@ -52,68 +70,102 @@ class UserEditProfileFragment : Fragment() {
                 .addOnSuccessListener { documentSnapshot ->
                     if (documentSnapshot.exists()) {
                         // Get user data from Firestore
-                        val username = documentSnapshot.getString("name")
-                        val email = documentSnapshot.getString("email")
-                        val contact = documentSnapshot.getString("contact")
-                        val gender = documentSnapshot.getString("gender")
+                        username = documentSnapshot.getString("name").toString()
+                        email = documentSnapshot.getString("email").toString()
+                        contact = documentSnapshot.getString("contact").toString()
+                        gender = documentSnapshot.getString("gender").toString()
+                        profileImageURL = documentSnapshot.getString("profileImageURL").toString()
 
                         // Set retrieved data to the EditTexts
                         userNameEditText.setText(username)
                         userEmailEditText.setText(email)
                         userContactEditText.setText(contact)
                         userGenderEditText.setText(gender)
+
+                        var into: Any = Glide.with(this)
+                            .load(profileImageURL)
+                            .into(userProfileImage)
                     }
                 }
                 .addOnFailureListener { e ->
                     // Handle any errors that may occur during data retrieval
                 }
+
+            val galleryImage = registerForActivityResult(
+                ActivityResultContracts.GetContent()
+            ) {
+                it?.let {
+                    userProfileImage.setImageURI(it)
+                    uri = it
+                }
+            }
+
+            editIcon.setOnClickListener {
+                galleryImage.launch("image/*")
+            }
         }
 
-        changePasswordTextView.setOnClickListener {
-            // Create an instance of the UserChangePasswordFragment
-            val changePasswordFragment = UserChangePasswordFragment()
-
-            // Use the FragmentManager to replace the current fragment with the UserChangePasswordFragment
-            val fragmentManager = requireActivity().supportFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-
-            // Replace the current fragment with the UserChangePasswordFragment
-            transaction.replace(R.id.fragment_container, changePasswordFragment)
-
-            // Optional: Add the transaction to the back stack to enable back navigation
-            transaction.addToBackStack(null)
-
-            // Commit the transaction
-            transaction.commit()
-        }
-
-
-        // Handle the "Save Changes" button click
         saveChangesButton.setOnClickListener {
+            val userUid = auth.uid
             val newName = userNameEditText.text.toString()
             val newContact = userContactEditText.text.toString()
             val newGender = userGenderEditText.text.toString()
 
-
-            // Update user data in Firestore
-            if (userId != null) {
-                firestore.collection("user")
-                    .document(userId)
-                    .update(
-                        "name" ,newName,
-                        "contact", newContact,
-                        "gender", newGender
-                    )
-                    .addOnSuccessListener {
-                        Toast.makeText(context, "Updated Successfully.", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(context, "Updated Failed. Please try again.", Toast.LENGTH_SHORT).show()
-                    }
-            }
+            // Upload image and save data
+            uploadImageAndSaveData(userUid, newName,email, newContact, newGender)
         }
-
 
         return view
     }
+
+    private fun uploadImageAndSaveData(userUid: String?, name: String, email: String, contact: String, gender: String) {
+        if (uri != null && userUid != null) {
+            val imageFileName = "${userUid}_${UUID.randomUUID()}.jpg"
+            val imageRef = storageRef.child("profile/$imageFileName")
+
+            val uploadTask = imageRef.putFile(uri!!)
+
+            uploadTask.addOnSuccessListener { _ ->
+                imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                    val imageUrl = downloadUri.toString()
+
+                    val userData = hashMapOf(
+                        "id" to userUid,
+                        "name" to name,
+                        "email" to email,
+                        "contact" to contact,
+                        "gender" to gender,
+                        "profileImageURL" to imageUrl
+                    )
+
+                    // Retrieve the userId from the arguments
+                    var userId = arguments?.getString("userid").toString()
+
+                    if (userUid != null) {
+                        firestore.collection("user").document(userId).set(userData)
+                            .addOnSuccessListener {
+                                showToast("Profile update successfully")
+                                return@addOnSuccessListener
+                            }
+                            .addOnFailureListener { e ->
+                                showError("Error adding document: ${e.message}")
+                            }
+                    }
+                }
+            }
+                .addOnFailureListener { e ->
+                    showError("Error uploading image: ${e.message}")
+                }
+        } else {
+            showToast("Please select an image")
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showError(message: String) {
+        showToast(message)
+        }
 }

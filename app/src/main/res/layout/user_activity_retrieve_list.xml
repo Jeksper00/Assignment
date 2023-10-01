@@ -11,27 +11,11 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="40dp"
         android:layout_marginVertical="6dp"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
 
-
-            <TextView
-                android:id="@+id/activityIdTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Arya"
-                android:textColor="@color/black"
-                android:textSize="20sp"/>
-
-        </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,6 +28,14 @@
                 android:id="@+id/nameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Arya Stark"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/activityIdTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Arya"
                 android:textColor="@color/black"
@@ -57,22 +49,15 @@
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status : "
-                android:textColor="@color/black"
-                android:textSize="26sp"
-                android:textStyle="bold"/>
+
 
             <TextView
                 android:id="@+id/statusTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Stark"
-                android:textColor="@color/black"
-                android:textSize="20sp"/>
+                android:text="Status: Stark"
+                android:textSize="18sp"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -83,22 +68,12 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Description: "
-                android:textColor="@color/black"
-                android:textSize="26sp"
-                android:textStyle="bold"/>
-
-            <TextView
                 android:id="@+id/descriptionTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="20"
-                android:textColor="@color/black"
-                android:textSize="26sp"
-                android:textStyle="bold"/>
+                android:text="Description: The skilled assassin in the service of House Stark."
+                android:textSize="18sp"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -113,17 +88,17 @@
                 android:layout_height="wrap_content"
                 android:text="Due date "
                 android:textColor="@color/black"
-                android:textSize="26sp"
+                android:textSize="20sp"
                 android:textStyle="bold"/>
 
+            <!-- Due Date -->
             <TextView
                 android:id="@+id/dateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Arya"
-                android:textColor="@color/black"
-                android:textSize="20sp"/>
+                android:text="October"
+                android:textSize="18sp"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -161,13 +136,7 @@
             android:orientation="horizontal"
             android:visibility="gone">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="First Name: "
-                android:textColor="@color/black"
-                android:textSize="26sp"
-                android:textStyle="bold"/>
+
 
             <TextView
                 android:id="@+id/totalRequiredTextView"
@@ -186,13 +155,7 @@
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="userId: "
-                android:textColor="@color/black"
-                android:textSize="26sp"
-                android:textStyle="bold"/>
+
 
             <TextView
                 android:id="@+id/userIdTextView"
@@ -201,7 +164,8 @@
                 android:layout_marginStart="8dp"
                 android:text="Arya"
                 android:textColor="@color/black"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:visibility="gone"/>
 
         </LinearLayout>
         <LinearLayout
@@ -210,16 +174,20 @@
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/editActivityButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/notificationDescriptionView"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:text="View" />
-
         </LinearLayout>
+
+        <Button
+            android:id="@+id/editActivityButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/admin_button"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:text="View"
+            android:textColor="@android:color/white" />
 
 
     </LinearLayout>

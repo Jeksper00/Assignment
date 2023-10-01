@@ -24,18 +24,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.075" />
 
-        <ImageView
-            android:id="@+id/adminProfilePic"
-            android:layout_width="66dp"
-            android:layout_height="66dp"
-            android:src="@drawable/icon_add_photo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.159"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.148" />
-
         <TextView
             android:id="@+id/adminName"
             android:layout_width="wrap_content"
@@ -100,7 +88,11 @@
             android:id="@+id/editButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_media_previous"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/arrow_right"
+            app:layout_constraintStart_toEndOf="@+id/txtEditDetail"
+            app:layout_constraintTop_toBottomOf="@+id/textProfileDetail"
             tools:ignore="MissingConstraints" />
 
         <Button
@@ -114,5 +106,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.737" />
+
+        <ImageView
+            android:id="@+id/adminProfilePic"
+            android:layout_width="63dp"
+            android:layout_height="69dp"
+            android:src="@drawable/icon_add_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.183"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.166" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/icon_profile"
+            app:layout_constraintEnd_toStartOf="@+id/textProfileDetail"
+            app:layout_constraintTop_toBottomOf="@+id/txtProfile" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

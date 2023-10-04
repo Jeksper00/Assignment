@@ -217,8 +217,8 @@ class AdminActivityCreateActivity : AppCompatActivity() {
 
         // Optionally, pass data to the new activity (fragment)
         intent.putExtra("fragmentToOpen", "Activity")
-        finish() // This will close the current activity
         startActivity(intent)
+        finish() // This will close the current activity
 
     }
 }

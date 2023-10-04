@@ -51,6 +51,7 @@ class AdminLoginActivity : AppCompatActivity() {
                                     // Successful login, navigate to the admin home activity
                                     val intent = Intent(this, AdminHomeActivity::class.java)
                                     startActivity(intent)
+                                    finish()
                                     emailFound = true
                                     break
                                 }
@@ -74,5 +75,16 @@ class AdminLoginActivity : AppCompatActivity() {
             val intent = Intent(this, AdminRegisterActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Clear the text fields when the activity resumes
+        val adminEmail = findViewById<EditText>(R.id.adminEmail)
+        val adminPassword = findViewById<EditText>(R.id.adminPassword)
+
+        adminEmail.text.clear()
+        adminPassword.text.clear()
     }
 }

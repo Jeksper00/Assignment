@@ -57,5 +57,17 @@ class UserLoginActivity : AppCompatActivity() {
             val intent = Intent(this, UserRegisterActivity::class.java)
             startActivity(intent)
             }
+
         }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Clear the text fields when the activity resumes
+        val userEmail = findViewById<EditText>(R.id.userEmail)
+        val userPassword = findViewById<EditText>(R.id.userPassword)
+
+        userEmail.text.clear()
+        userPassword.text.clear()
+    }
 }

@@ -43,10 +43,8 @@ class AdminActivityFragment : Fragment(){
         }
 
         view.findViewById<Button>(R.id.createActivity).setOnClickListener {
-
-
-
             startActivity(intent)
+            requireActivity().finish()
         }
 
         activityRecyclerView = view.findViewById(R.id.activityList)

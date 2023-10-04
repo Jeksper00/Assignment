@@ -54,7 +54,7 @@ class UserHomeFragment : Fragment() {
             override fun handleOnBackPressed() {
                 // Use the NavController to navigate to the specified action
                 findNavController().navigate(R.id.action_userHomeFragment_to_userLoginActivity)
-
+                requireActivity().finish()
             }
         }
 

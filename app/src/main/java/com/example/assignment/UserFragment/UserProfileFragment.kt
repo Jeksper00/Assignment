@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import com.example.assignment.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -107,7 +108,9 @@ class UserProfileFragment : Fragment() {
         logoutBtn.setOnClickListener {
             auth.signOut()
             val intent = Intent(requireContext(), UserLoginActivity::class.java)
-            startActivity(intent)
+            //startActivity(intent)
+            findNavController().navigate(R.id.action_userProfileFragment_to_userLoginActivity)
+            requireActivity().finish()
         }
 
         return view

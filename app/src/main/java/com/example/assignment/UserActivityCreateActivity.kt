@@ -65,6 +65,9 @@ class UserActivityCreateActivity : AppCompatActivity() {
 
         val btnBack = findViewById<ImageButton>(R.id.btnBack)
         btnBack.setOnClickListener {
+            val intent = Intent(this, UserHomeActivity::class.java)
+            intent.putExtra("fragmentToOpen", "Activity")
+            startActivity(intent)
             finish() // Go back to the previous screen
         }
 
@@ -178,6 +181,7 @@ class UserActivityCreateActivity : AppCompatActivity() {
 
                                 // Notify the callback
                                 openFragment(UserActivityFragment())
+
                             }
                             .addOnFailureListener { e ->
                                 showError("Error adding document: ${e.message}")

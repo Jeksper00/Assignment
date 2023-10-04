@@ -109,6 +109,7 @@ class AdminProfileFragment : Fragment() {
             auth.signOut()
             val intent = Intent(requireContext(), AdminLoginActivity::class.java)
             startActivity(intent)
+            requireActivity().finish()
         }
 
         return view

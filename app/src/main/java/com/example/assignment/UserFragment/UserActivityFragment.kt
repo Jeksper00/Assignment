@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.Activity
@@ -32,9 +34,23 @@ class UserActivityFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.user_fragment_activity, container, false)
 
+        //Back button on screen
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Use the NavController to navigate to the specified action
+                findNavController().navigate(R.id.action_userActivityFragment_to_userLoginActivity)
+                requireActivity().finish()
+            }
+        }
+
+        // Add the callback to the fragment's lifecycle
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
+
+
         // Button to create a new activity
         view.findViewById<Button>(R.id.createActivity).setOnClickListener {
             startActivity(Intent(requireActivity(), UserActivityCreateActivity::class.java))
+            //requireActivity().finish()
         }
 
         // RecyclerView for activities

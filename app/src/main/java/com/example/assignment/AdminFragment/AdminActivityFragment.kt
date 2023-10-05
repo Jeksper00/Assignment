@@ -9,13 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.SearchView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.Activity
 import com.example.assignment.ActivityAdapter
 import com.example.assignment.AdminActivityCreateActivity
+import com.example.assignment.AdminLoginActivity
 import com.example.assignment.R
+import com.example.assignment.UserLoginActivity
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -29,6 +32,20 @@ class AdminActivityFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.admin_fragment_activity, container, false)
+
+        //Back button on screen
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Use the NavController to navigate to the specified action
+                val intent = Intent(requireActivity(), AdminLoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                requireActivity().startActivity(intent)
+            }
+        }
+
+        // Add the callback to the fragment's lifecycle
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
+
 
         var num = 0
 

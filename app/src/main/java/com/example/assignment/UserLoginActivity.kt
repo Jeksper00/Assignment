@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.google.firebase.auth.FirebaseAuth
 
 class UserLoginActivity : AppCompatActivity() {
@@ -15,6 +16,23 @@ class UserLoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_activity_login)
+
+        //Back button on screen
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Your custom logic here
+                // For example, navigate to a different activity
+                val intent = Intent(this@UserLoginActivity, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
+
+
+
 
         auth = FirebaseAuth.getInstance()
 

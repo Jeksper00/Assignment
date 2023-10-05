@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -58,6 +59,8 @@ class ActivityAdapter(
             intent.putExtra("activityId", currentitem.activityid)
 
             context.startActivity(intent)
+
+            (context as AppCompatActivity).finish()
 
         }
     }

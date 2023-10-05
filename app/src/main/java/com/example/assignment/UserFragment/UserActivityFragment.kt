@@ -16,9 +16,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.Activity
+import com.example.assignment.AdminActivityRetrieveActivity
 import com.example.assignment.R
 import com.example.assignment.UserActivityAdapter
 import com.example.assignment.UserActivityCreateActivity
+import com.example.assignment.UserLoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -38,8 +40,9 @@ class UserActivityFragment : Fragment() {
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 // Use the NavController to navigate to the specified action
-                findNavController().navigate(R.id.action_userActivityFragment_to_userLoginActivity)
-                requireActivity().finish()
+                val intent = Intent(requireActivity(), UserLoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                requireActivity().startActivity(intent)
             }
         }
 

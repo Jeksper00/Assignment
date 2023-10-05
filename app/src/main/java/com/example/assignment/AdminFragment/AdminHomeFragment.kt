@@ -1,6 +1,7 @@
 package com.example.assignment.AdminFragment
 
 import android.content.ContentValues
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.opengl.Visibility
 import android.os.Bundle
@@ -19,6 +20,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment.Adapter.ActivityAdapter2
 import com.example.assignment.Adapter.ActivityAdapter3
+import com.example.assignment.AdminLoginActivity
+import com.example.assignment.MainActivity
 import com.example.assignment.Model.Activity
 import com.example.assignment.Model.User2
 import com.example.assignment.R
@@ -41,8 +44,11 @@ class AdminHomeFragment : Fragment() {
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 // Use the NavController to navigate to the specified action
-                findNavController().navigate(R.id.action_adminHomeFragment_to_adminLoginActivity)
-
+//                findNavController().navigate(R.id.action_adminHomeFragment_to_adminLoginActivity)
+//                requireActivity().finish()
+                val intent = Intent(context, AdminLoginActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
             }
         }
 

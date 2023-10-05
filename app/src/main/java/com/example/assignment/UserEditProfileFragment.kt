@@ -145,7 +145,8 @@ class UserEditProfileFragment : Fragment() {
                         firestore.collection("user").document(userId).set(userData)
                             .addOnSuccessListener {
                                 showToast("Profile update successfully")
-                                return@addOnSuccessListener
+                                requireActivity().onBackPressed()
+//                                return@addOnSuccessListener
                             }
                             .addOnFailureListener { e ->
                                 showError("Error adding document: ${e.message}")

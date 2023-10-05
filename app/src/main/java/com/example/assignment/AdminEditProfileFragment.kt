@@ -47,7 +47,8 @@ class AdminEditProfileFragment : Fragment() {
 
         firestore = FirebaseFirestore.getInstance()
         storageRef = FirebaseStorage.getInstance().reference
-        admin = FirebaseAuth.getInstance().currentUser
+//        admin = FirebaseAuth.getInstance().currentUser
+        auth = FirebaseAuth.getInstance()
 
         adminNameEditText = view.findViewById(R.id.adminUsername)
         adminEmailEditText = view.findViewById(R.id.adminEmailAddress)
@@ -133,8 +134,9 @@ class AdminEditProfileFragment : Fragment() {
                     if (adminUid != null) {
                         firestore.collection("admin").document(adminId).set(adminData)
                             .addOnSuccessListener {
-                                showToast("Profile Image added successfully")
-                                return@addOnSuccessListener
+                                showToast("Profile update successfully")
+                                requireActivity().onBackPressed()
+//                                return@addOnSuccessListener
                             }
                             .addOnFailureListener { e ->
                                 showError("Error adding document: ${e.message}")

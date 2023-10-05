@@ -269,6 +269,7 @@ class UserActivityUpdateActivity : AppCompatActivity() {
 
         // Optionally, pass data to the new activity (fragment)
         intent.putExtra("fragmentToOpen", "Activity")
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         finish() // This will close the current activity
     }

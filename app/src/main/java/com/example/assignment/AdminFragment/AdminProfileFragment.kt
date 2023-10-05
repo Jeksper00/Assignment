@@ -64,7 +64,7 @@ class AdminProfileFragment : Fragment() {
                             adminNameTextView.text = document.getString("name")
                             adminEmailTextView.text = adminEmail
 
-                            val profileImageUrl = document.getString("profileImageUrl")
+                            val profileImageUrl = document.getString("profileImageURL")
                             if (profileImageUrl != null && profileImageUrl.isNotEmpty()) {
                                 // Load and display the profile picture using Glide
                                 var into: Any = Glide.with(this)

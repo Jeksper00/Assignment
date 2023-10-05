@@ -21,7 +21,6 @@ class UserLoginActivity : AppCompatActivity() {
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 // Your custom logic here
-                // For example, navigate to a different activity
                 val intent = Intent(this@UserLoginActivity, MainActivity::class.java)
                 startActivity(intent)
                 finish()

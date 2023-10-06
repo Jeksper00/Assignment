@@ -109,6 +109,7 @@ class UserProfileFragment : Fragment() {
             auth.signOut()
             val intent = Intent(requireContext(), UserLoginActivity::class.java)
             //startActivity(intent)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
             findNavController().navigate(R.id.action_userProfileFragment_to_userLoginActivity)
             requireActivity().finish()
         }
